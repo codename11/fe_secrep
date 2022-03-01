@@ -2,16 +2,15 @@ import ControlledTabs from './components/tabs';
 import RegisterCard from './components/register';
 import Container from 'react-bootstrap/Container';
 import React, { Component } from 'react'
+import { connect } from "react-redux";
+import { register } from "./actions/authActions"
+import PropTypes from "prop-types";
 
 class App extends Component {
 
   constructor(props) {
 
     super(props);
-
-    this.state = {
-      test: null
-    };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -41,32 +40,17 @@ class App extends Component {
     
   }
 
-  handleSubmit(event) {
-      event.preventDefault();
+  async handleSubmit(event) {
+    event.preventDefault();
 
-      let target = event.target;
-      let elements = target.elements;
-      let len1 = elements.length;
+    const data = {
+      name: this.state.name,
+      email: this.state.email,
+      password: this.state.password,
+      password_confirmation: this.state.password_confirmation
+    }
 
-      for(let i=0;i<len1;i++){
-
-        if(elements[i].value.length > 0 && (elements[i].type !== "checkbox" && elements[i].type !== "radio") && elements[i].type !== "submit"){
-
-          this.setState({
-            [elements[i].name]: elements[i].value
-          });
-
-        }
-
-        if(elements[i].value.length > 0 && (elements[i].type === "checkbox" || elements[i].type === "radio") && elements[i].checked === true && elements[i].type !== "submit"){
-
-          this.setState({
-            [elements[i].name]: elements[i].value
-          });
-
-        }
-
-      }
+    this.props.register(data);
 
   }
   
@@ -82,4 +66,14 @@ class App extends Component {
   }
 }
 
-export default App;
+register.propTypes = {
+  register: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) =>{ 
+
+  return ({auth: state.auth.auth,});
+
+};
+
+export default connect(mapStateToProps, { register })(App);
