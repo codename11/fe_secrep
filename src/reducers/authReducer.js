@@ -12,7 +12,7 @@ let user = null;
 let access_token = null;
 
 export default function(state = initialState, action){
-
+    
     switch(action.type){
 
         case REGISTER:
@@ -26,7 +26,7 @@ export default function(state = initialState, action){
                     access_token: access_token
                 },
             };
-
+            
             return myState;
 
         case LOGIN:
@@ -40,7 +40,7 @@ export default function(state = initialState, action){
                     access_token: access_token
                 }
             };
-
+           
             return myState;
 
         default:

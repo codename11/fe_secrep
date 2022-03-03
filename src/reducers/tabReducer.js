@@ -1,7 +1,7 @@
-import { REGISTER, LOGIN } from "../actions/types";
+import { REGISTER_TAB, LOGIN_TAB } from "../actions/types";
 
 const initialState = {
-    key: "register"
+    key: "register_tab"
 };
 
 let myState = null;
@@ -11,24 +11,24 @@ export default function(state = initialState, action){
     
     switch(action.type){
 
-        case REGISTER:
+        case REGISTER_TAB:
             
-            key = action.payload.toLowerCase();
+            key = action.payload;
             
             myState = {
-                tabKey: key,
+                tabKey: key
             };
-            console.log(myState);
+            
             return myState;
 
-        case LOGIN:
+        case LOGIN_TAB:
             
-            key = action.payload.toLowerCase();
+            key = action.payload
             
             myState = {
-                tabKey: key,
+                tabKey: key
             };
-            console.log(myState);
+           
             return myState;
 
         default:

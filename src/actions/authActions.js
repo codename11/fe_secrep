@@ -24,7 +24,6 @@ export const register = (data) => dispatch => {
     })// parses JSON response into native JavaScript objects
     .then((data) => {
         
-        console.log(data);
         dispatch({
             type: REGISTER,
             payload: data

@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import ControlledTabs from './components/tabs';
 import Register from './components/register';
 import Container from 'react-bootstrap/Container';
 import { connect } from "react-redux";
@@ -16,21 +15,21 @@ class App extends Component {
   }
 
   test(){
-    //console.log("test");
+    //console.log(this.props);
   }
 
   render() {
-    
+    console.log("app: ", this.props);
     let tabKey = this.props.tabKey;
     return (
       <Container className="container">
         
-        <Tabs id="controlled-tab-example" activeKey={tabKey} onSelect={(tabKey)=> this.props.setTab(tabKey)} className="mb-3">
+        <Tabs onClick={this.test} id="controlled-tab-example" activeKey={tabKey} onSelect={(tabKey)=> this.props.setTab(tabKey)} className="mb-3">
           
-          <Tab eventKey="register" title="Register">
+          <Tab eventKey="register_tab" title="Register">
             <Register/>
           </Tab>
-          <Tab eventKey="login" title="Login">
+          <Tab eventKey="login_tab" title="Login">
             test2
           </Tab>
           
@@ -42,7 +41,10 @@ class App extends Component {
 
 const mapStateToProps = (state) =>{ 
 
-  return ({tabKey: state.key.key});
+  return ({
+    tabKey: state.key.key,
+    auth: state.auth.auth,
+  });
 
 };
 

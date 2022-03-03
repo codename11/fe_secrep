@@ -1,4 +1,4 @@
-import { REGISTER, LOGIN} from "./types";
+import { REGISTER_TAB, LOGIN_TAB} from "./types";
 
 export const setTab = (tabKey) => dispatch => {
     

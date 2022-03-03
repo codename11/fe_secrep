@@ -55,6 +55,7 @@ class Register extends Component {
       }
 
     render() {
+        console.log("register: ", this.props);
         return (
             <Form onSubmit={this.handleSubmit}>
 
@@ -98,7 +99,10 @@ register.propTypes = {
 
 const mapStateToProps = (state) =>{ 
 
-    return ({auth: state.auth.auth,});
+    return ({
+        auth: state.auth.auth,
+        tabKey: state.key.key,
+    });
 
 };
 
