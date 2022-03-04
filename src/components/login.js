@@ -2,10 +2,10 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { Component } from 'react'
 import {connect} from "react-redux";
-import { register } from "../actions/authActions";
+import { login } from "../actions/authActions";
 import PropTypes from "prop-types";
 
-class Register extends Component {
+class Login extends Component {
 
     constructor(props) {
 
@@ -32,7 +32,7 @@ class Register extends Component {
         }
         else{
           
-          delete this.state[obj.key]; 
+          delete this.state[obj.key];
     
         }
         
@@ -42,28 +42,18 @@ class Register extends Component {
         event.preventDefault();
     
         const data = {
-          name: this.state.name,
           email: this.state.email,
-          password: this.state.password,
-          password_confirmation: this.state.password_confirmation
+          password: this.state.password
         }
     
-        this.props.register(data);
+        this.props.login(data);
     
       }
 
     render() {
-        console.log("register: ", this.props);
+        console.log("login: ", this.props);
         return (
             <Form onSubmit={this.handleSubmit}>
-
-                <Form.Group className="mb-3" controlId="name">
-                    <Form.Label>Enter name</Form.Label>
-                    <Form.Control type="text" placeholder="Enter name" name="name" onChange={this.handleChange}/>
-                    <Form.Text className="text-muted">
-                    Enter your name here.
-                    </Form.Text>
-                </Form.Group>
 
                 <Form.Group className="mb-3" controlId="email">
                     <Form.Label>Email address</Form.Label>
@@ -78,11 +68,6 @@ class Register extends Component {
                     <Form.Control type="password" placeholder="Password"  name="password" onChange={this.handleChange}/>
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="password_confirmation">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Confirm Password" name="password_confirmation" onChange={this.handleChange}/>
-                </Form.Group>
-
                 <Button variant="outline-primary" type="submit">
                     Submit
                 </Button>
@@ -91,8 +76,8 @@ class Register extends Component {
     }
 }
 
-register.propTypes = {
-    register: PropTypes.func.isRequired,
+login.propTypes = {
+    login: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) =>{ 
@@ -104,4 +89,4 @@ const mapStateToProps = (state) =>{
 
 };
 
-export default connect(mapStateToProps, { register })(Register);
+export default connect(mapStateToProps, { login })(Login);

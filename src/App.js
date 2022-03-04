@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import { setTab } from "./actions/tabActions";
+import Login from './components/login';
 
 class App extends Component {
 
@@ -30,7 +31,7 @@ class App extends Component {
             <Register/>
           </Tab>
           <Tab eventKey="login_tab" title="Login">
-            test2
+            <Login/>
           </Tab>
           
         </Tabs>

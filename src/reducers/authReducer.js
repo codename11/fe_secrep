@@ -17,7 +17,7 @@ export default function(state = initialState, action){
 
         case REGISTER:
             
-            user= action.payload.user;
+            user = action.payload.user;
             access_token = action.payload.access_token;
 
             myState = {
@@ -33,7 +33,7 @@ export default function(state = initialState, action){
             
             user = action.payload.user;
             access_token = action.payload.access_token;
-
+            
             myState = {
                 auth: {
                     user: user,
