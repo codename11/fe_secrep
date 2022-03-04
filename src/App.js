@@ -16,23 +16,26 @@ class App extends Component {
   }
 
   test(){
-    //console.log(this.props);
+    //console.log("test: ", this.props);
   }
 
   render() {
     console.log("app: ", this.props);
     let tabKey = this.props.tabKey;
+    let access_token = this.props.auth.access_token;
+
     return (
       <Container className="container">
         
         <Tabs onClick={this.test} id="controlled-tab-example" activeKey={tabKey} onSelect={(tabKey)=> this.props.setTab(tabKey)} className="mb-3">
           
-          <Tab eventKey="register_tab" title="Register">
+          {access_token===null ? <Tab eventKey="register_tab" title="Register">
             <Register/>
-          </Tab>
-          <Tab eventKey="login_tab" title="Login">
+          </Tab> : null}
+
+          {access_token===null ? <Tab eventKey="login_tab" title="Login">
             <Login/>
-          </Tab>
+          </Tab> : null}
           
         </Tabs>
       </Container>
@@ -43,7 +46,7 @@ class App extends Component {
 const mapStateToProps = (state) =>{ 
 
   return ({
-    tabKey: state.key.key,
+    tabKey: state.key.tabKey,
     auth: state.auth.auth,
   });
 

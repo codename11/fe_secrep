@@ -51,7 +51,7 @@ class Login extends Component {
       }
 
     render() {
-        console.log("login: ", this.props);
+        
         return (
             <Form onSubmit={this.handleSubmit}>
 

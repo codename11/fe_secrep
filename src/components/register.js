@@ -53,7 +53,7 @@ class Register extends Component {
       }
 
     render() {
-        console.log("register: ", this.props);
+        
         return (
             <Form onSubmit={this.handleSubmit}>
 

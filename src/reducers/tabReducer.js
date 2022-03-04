@@ -1,7 +1,7 @@
 import { REGISTER_TAB, LOGIN_TAB } from "../actions/types";
 
 const initialState = {
-    key: "register_tab"
+    tabKey: "register_tab"
 };
 
 let myState = null;
@@ -28,11 +28,10 @@ export default function(state = initialState, action){
             myState = {
                 tabKey: key
             };
-           
+            
             return myState;
 
         default:
-            
             return state;
 
     }
