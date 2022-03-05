@@ -2,10 +2,10 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { Component } from 'react'
 import {connect} from "react-redux";
-import { login } from "../actions/authActions";
+import { get_vehicles } from "../../actions/vehicles/vehicleActions";
 import PropTypes from "prop-types";
 
-class Login extends Component {
+class ListVehicles extends Component {
 
     constructor(props) {
 
@@ -22,7 +22,7 @@ class Login extends Component {
           key: target.name,
           value: target.value
         };
-    
+        
         if(obj.value.length > 0){
     
           this.setState({
@@ -41,32 +41,29 @@ class Login extends Component {
       async handleSubmit(event) {
         event.preventDefault();
     
-        const data = {
+        /*const data = {
           email: this.state.email,
           password: this.state.password
-        }
-    
-        this.props.login(data);
-    
+        }*/
+        
+        this.props.get_vehicles({
+          access_token: this.props.access_token
+        });
+        
       }
 
     render() {
         
+        let options = this.props.vehicles && this.props.vehicles.list_vehicles ? this.props.vehicles.list_vehicles.map((item, i) => {
+          return <option key={item.id} value={item.id}>{item.registration}</option>
+        }) : null;
+
         return (
             <Form onSubmit={this.handleSubmit}>
 
-                <Form.Group className="mb-3" controlId="email">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control type="email" placeholder="Enter email" name="email" onChange={this.handleChange}/>
-                    <Form.Text className="text-muted">
-                    We'll never share your email with anyone else.
-                    </Form.Text>
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="password">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password"  name="password" onChange={this.handleChange}/>
-                </Form.Group>
+                <Form.Select aria-label="Default select example" name="sel1" onChange={this.handleChange}>
+                  {options}
+                </Form.Select>
 
                 <Button variant="outline-primary" type="submit">
                     Submit
@@ -76,17 +73,18 @@ class Login extends Component {
     }
 }
 
-login.propTypes = {
-    login: PropTypes.func.isRequired,
+get_vehicles.propTypes = {
+  get_vehicles: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) =>{ 
-
+  
     return ({
         auth: state.auth.auth,
         tabKey: state.key.key,
+        vehicles: state.vehicles,
     });
 
 };
 
-export default connect(mapStateToProps, { login })(Login);
+export default connect(mapStateToProps, { get_vehicles })(ListVehicles);

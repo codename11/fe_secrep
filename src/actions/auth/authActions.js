@@ -1,4 +1,4 @@
-import { REGISTER, LOGIN} from "./types";
+import { REGISTER, LOGIN} from "../types";
 
 export const register = (data) => dispatch => {
     
