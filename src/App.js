@@ -7,7 +7,6 @@ import Tab from 'react-bootstrap/Tab';
 import { setTab } from "./actions/tabActions";
 import Login from './components/auth/login';
 import ListVehicles from './components/vehicles/list_vehicles';
-import { get_vehicles } from "./actions/vehicles/vehicleActions";
 
 class App extends Component {
 
@@ -36,7 +35,7 @@ class App extends Component {
     return (
       <Container className="container">
         
-        <Tabs onClick={this.test} id="controlled-tab-example" activeKey={tabKey} onSelect={(tabKey)=> this.props.setTab(tabKey)} className="mb-3">
+        <Tabs id="controlled-tab-example" activeKey={tabKey} onSelect={(tabKey)=> this.props.setTab(tabKey)} className="mb-3">
           
           <Tab eventKey="register_tab" title="Register">
             <Register/>
@@ -46,8 +45,8 @@ class App extends Component {
             <Login/>
           </Tab>
 
-          <Tab onClick={this.test} eventKey="list_vehicles_tab" title="List_Vehicles">
-            <ListVehicles access_token={access_token}/>
+          <Tab eventKey="list_vehicles_tab" title="List_Vehicles">
+            {access_token!==null ? <ListVehicles/> : null}
           </Tab>
 
         </Tabs>
@@ -62,8 +61,10 @@ const mapStateToProps = (state) =>{
     tabKey: state.key.tabKey,
     auth: state.auth.auth,
     vehicles: state.vehicles,
+    vehicle_types: state.list_vehicle_types,
+    work_organizations: state.list_work_organizations
   });
 
 };
 
-export default connect(mapStateToProps, { setTab, get_vehicles })(App);
+export default connect(mapStateToProps, { setTab })(App);

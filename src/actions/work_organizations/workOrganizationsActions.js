@@ -1,23 +1,22 @@
-import { LIST_VEHICLES } from "../types";
+import { LIST_WORK_ORGANIZATIONS } from "../types";
 import store from "../../store";
 
 let auth = null;
 
-export const get_vehicles = (data) => dispatch => {
-    
+export const list_work_organizations = (data) => dispatch => {
+
     auth = store.getState().auth.auth;
     
-    const url = "http://secrep.test/api/list_vehicles";
+    const url = "http://secrep.test/api/list_work_organizations";
     fetch(url, {
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        method: 'GET', // *GET, POST, PUT, DELETE, etc.
         crossDomain : true,
         headers: {
             "X-Requested-With": "XMLHttpRequest",
             "Content-Type": 'application/json',
-            "Accept": 'application/json',
             "Authorization": "Bearer " + auth.access_token
         },
-        body: JSON.stringify(data)
+        redirect: 'follow', // manual, *follow, erro
         
     })
     .then((response) => {
@@ -28,8 +27,8 @@ export const get_vehicles = (data) => dispatch => {
     .then((data) => {
         
         dispatch({
-            type: LIST_VEHICLES,
-            payload: [...data.vehicles]
+            type: LIST_WORK_ORGANIZATIONS,
+            payload: [...data.workOrganizations]
         });
 
     })
