@@ -4,11 +4,13 @@ import tabReducer from "./tabReducer";
 import vehicleReducer from "./vehicleReducer";
 import vehicleTypesReducer from "./vehicleTypesReducer";
 import workOrganizationsReducer from "./workOrganizationsReducer";
+import modalReducer from "./modalReducer";
 
 export default combineReducers({
     auth: authReducer,
     key: tabReducer,
     vehicles: vehicleReducer,
     list_vehicle_types: vehicleTypesReducer,
-    list_work_organizations: workOrganizationsReducer
+    list_work_organizations: workOrganizationsReducer,
+    modalState: modalReducer
 });

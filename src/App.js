@@ -18,17 +18,10 @@ class App extends Component {
 
   test(){
     //console.log("test: ", this.props);
-
-    if(this.props.auth.access_token){
-      this.props.get_vehicles({
-        access_token: this.props.auth.access_token
-      });
-    }
-    
   }
 
   render() {
-    console.log("app: ", this.props);
+    //console.log("app: ", this.props);
     let tabKey = this.props.tabKey;
     let access_token = this.props && this.props.auth && this.props.auth.access_token ? this.props.auth.access_token : null;
 
@@ -62,7 +55,8 @@ const mapStateToProps = (state) =>{
     auth: state.auth.auth,
     vehicles: state.vehicles,
     vehicle_types: state.list_vehicle_types,
-    work_organizations: state.list_work_organizations
+    work_organizations: state.list_work_organizations,
+    modalState: state.modalState
   });
 
 };
