@@ -57,7 +57,7 @@ class Register extends Component {
         return (
             <Form onSubmit={this.handleSubmit}>
 
-                <Form.Group className="mb-3" controlId="name">
+                <Form.Group className="mb-3" controlId="register-name">
                     <Form.Label>Enter name</Form.Label>
                     <Form.Control type="text" placeholder="Enter name" name="name" onChange={this.handleChange}/>
                     <Form.Text className="text-muted">
@@ -65,7 +65,7 @@ class Register extends Component {
                     </Form.Text>
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="email">
+                <Form.Group className="mb-3" controlId="register-email">
                     <Form.Label>Email address</Form.Label>
                     <Form.Control type="email" placeholder="Enter email" name="email" onChange={this.handleChange}/>
                     <Form.Text className="text-muted">
@@ -73,12 +73,12 @@ class Register extends Component {
                     </Form.Text>
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="password">
+                <Form.Group className="mb-3" controlId="register-password">
                     <Form.Label>Password</Form.Label>
                     <Form.Control type="password" placeholder="Password"  name="password" onChange={this.handleChange}/>
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="password_confirmation">
+                <Form.Group className="mb-3" controlId="register-confirm-password">
                     <Form.Label>Password</Form.Label>
                     <Form.Control type="password" placeholder="Confirm Password" name="password_confirmation" onChange={this.handleChange}/>
                 </Form.Group>

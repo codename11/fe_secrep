@@ -21,7 +21,7 @@ class App extends Component {
   }
 
   render() {
-    //console.log("app: ", this.props);
+    console.log("app: ", this.props);
     let tabKey = this.props.tabKey;
     let access_token = this.props && this.props.auth && this.props.auth.access_token ? this.props.auth.access_token : null;
 
@@ -56,7 +56,9 @@ const mapStateToProps = (state) =>{
     vehicles: state.vehicles,
     vehicle_types: state.list_vehicle_types,
     work_organizations: state.list_work_organizations,
-    modalState: state.modalState
+    modalState: state.modalState,
+    vehicleId: state.modalState.vehicleId,
+    deleted_vehicle_id: state.deleted_vehicle_id
   });
 
 };

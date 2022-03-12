@@ -55,7 +55,7 @@ class Login extends Component {
         return (
             <Form onSubmit={this.handleSubmit}>
 
-                <Form.Group className="mb-3" controlId="email">
+                <Form.Group className="mb-3" controlId="login-email">
                     <Form.Label>Email address</Form.Label>
                     <Form.Control type="email" placeholder="Enter email" name="email" onChange={this.handleChange}/>
                     <Form.Text className="text-muted">
@@ -63,7 +63,7 @@ class Login extends Component {
                     </Form.Text>
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="password">
+                <Form.Group className="mb-3" controlId="login-password">
                     <Form.Label>Password</Form.Label>
                     <Form.Control type="password" placeholder="Password"  name="password" onChange={this.handleChange}/>
                 </Form.Group>

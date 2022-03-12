@@ -78,7 +78,8 @@ class ListVehicles extends Component {
     }
 
     render() {
-      console.log("lista: ", this.props);
+      //console.log("lista: ", this.props);
+      
       let option1 = [<option key={""} value={""}>None</option>];
       let types = this.props.vehicle_types && this.props.vehicle_types.list_vehicle_types ? this.props.vehicle_types.list_vehicle_types.map((item, i) => {
         return <option key={item.id} value={item.name}>{item.name}</option>
@@ -101,10 +102,10 @@ class ListVehicles extends Component {
 
       }
 
-      let typesSelect = <Form.Select className="selectClass1" aria-label="Default select example" name="type">
+      let typesSelect = <Form.Select id="type" className="selectClass1" aria-label="Default select example" name="type">
         {option1}
       </Form.Select>;
-      let workOrgSelect = <Form.Select className="selectClass1" aria-label="Default select example" name="workOrg">
+      let workOrgSelect = <Form.Select id="workOrg" className="selectClass1" aria-label="Default select example" name="workOrg">
         {option2}
       </Form.Select>;
 
@@ -142,7 +143,7 @@ class ListVehicles extends Component {
             <td>{updated_at}</td>
             <td>
               {this.props && this.props.auth && this.props.auth.access_token ? 
-                <Button variant="outline-warning" itemID ={item.id} onClick={() => this.props.modalShow(true)}>Update</Button>
+                <Button variant="outline-warning" itemID ={item.id} onClick={() => this.props.modalShow([true, item.id])}>Update</Button>
                : null}
               <Button variant="outline-danger" itemID ={item.id}>Delete</Button>
             </td>
@@ -157,7 +158,7 @@ class ListVehicles extends Component {
         </Table>
 
       let myModal = this.props && this.props.auth && this.props.auth.access_token ? 
-        <CustomModal show={this.props.modalState} onClick={() => this.props.modalHide(false)}/> 
+        <CustomModal show={this.props.modalState} vehicleid={this.props.vehicleId} onClick={() => this.props.modalHide([false, this.props.vehicleId])}/> 
       : null;
 
       return (
@@ -202,14 +203,16 @@ modalHide.propTypes = {
 };
 
 const mapStateToProps = (state) =>{ 
-  
+    
     return ({
         auth: state.auth.auth,
-        tabKey: state.key.key,
+        tabKey: state.key.tabKey,
         vehicles: state.vehicles,
         vehicle_types: state.list_vehicle_types,
         work_organizations: state.list_work_organizations,
-        modalState: state.modalState.modalState
+        modalState: state.modalState.modalState,
+        vehicleId: state.modalState.vehicleId,
+        deleted_vehicle_id: state.deleted_vehicle_id
     });
 
 };
