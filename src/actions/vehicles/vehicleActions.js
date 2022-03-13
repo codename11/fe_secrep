@@ -44,7 +44,7 @@ export const deleteVehicle = (data) => dispatch => {
     let url = "http://secrep.test/api/delete_vehicle";
 
     auth = store.getState().auth.auth;
-    console.log("vehicleActionsDelete: ", data);
+
     fetch(url, {
         method: 'DELETE',
         crossDomain : true,
@@ -55,7 +55,7 @@ export const deleteVehicle = (data) => dispatch => {
             "Authorization": "Bearer " + auth.access_token
         },
         body: JSON.stringify({
-            id: data.vehicleid
+            id: data
         })
     })
     .then((response) => {
@@ -64,7 +64,7 @@ export const deleteVehicle = (data) => dispatch => {
 
     })
     .then((data) => {
-        console.log("ttt", data);
+        
         dispatch({
             type: DELETE_VEHICLE,
             payload: data
@@ -72,7 +72,7 @@ export const deleteVehicle = (data) => dispatch => {
 
     })
     .catch((error) => {
-            console.error('Error:', error);
+        console.error('Error:', error);
     });
 
 }

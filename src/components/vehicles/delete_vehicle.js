@@ -12,10 +12,20 @@ class DeleteVehicle extends Component {
     super(props);
 
     this.handleSubmit = this.handleSubmit.bind(this);
-    
+    this.handleClick = this.handleClick.bind(this);
   }
 
-  async handleSubmit(event) {
+  handleClick(event){
+
+    event.preventDefault();
+
+    let target = event.target;
+    let vehicleid = target.parentElement.elements["vehicleid"].value;
+    this.props.deleteVehicle(vehicleid);
+
+  }
+
+  handleSubmit(event) {
     event.preventDefault();
     let target = event.target;
     
@@ -30,18 +40,17 @@ class DeleteVehicle extends Component {
 
   render() {
     
-
     let vehicleId = this.props.vehicleid ? this.props.vehicleid : 0;
     
     return (
       
-        <Form onSubmit={this.handleSubmit}>
+        <Form>
             <Form.Group className="mb-3" controlId="vehicleid">
                 <Form.Label>Email address</Form.Label>
                 <Form.Control type="hidden" name="vehicleid" value={vehicleId}/>
             </Form.Group>
 
-            <Button variant="outline-primary" type="submit">
+            <Button onClick={this.handleClick} variant="outline-primary" type="submit">
                 Delete
             </Button>
         </Form>

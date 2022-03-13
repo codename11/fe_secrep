@@ -10,7 +10,7 @@ let modalState = null;
 let vehicleId = null;
 
 export default function(state = initialState, action){
-    //console.log("modalReducer: ", action);
+    
     switch(action.type){
 
         case MODAL_SHOW:
@@ -28,11 +28,10 @@ export default function(state = initialState, action){
         case MODAL_HIDE:
         
             modalState = action.payload[0];
-            vehicleId = action.payload[1];
             
             myState = {
                 modalState: modalState,
-                vehicleId: vehicleId
+                vehicleId: null
             };
             
             return myState;

@@ -78,7 +78,7 @@ class ListVehicles extends Component {
     }
 
     render() {
-      //console.log("lista: ", this.props);
+      console.log("lista: ", this.props);
       
       let option1 = [<option key={""} value={""}>None</option>];
       let types = this.props.vehicle_types && this.props.vehicle_types.list_vehicle_types ? this.props.vehicle_types.list_vehicle_types.map((item, i) => {
@@ -158,7 +158,7 @@ class ListVehicles extends Component {
         </Table>
 
       let myModal = this.props && this.props.auth && this.props.auth.access_token ? 
-        <CustomModal show={this.props.modalState} vehicleid={this.props.vehicleId} onClick={() => this.props.modalHide([false, this.props.vehicleId])}/> 
+        <CustomModal show={this.props.modalState} vehicleid={this.props.vehicleId} onClick={() => this.props.modalHide([false])}/> 
       : null;
 
       return (
