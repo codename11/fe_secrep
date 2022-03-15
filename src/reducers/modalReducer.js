@@ -2,12 +2,14 @@ import { MODAL_SHOW, MODAL_HIDE } from "../actions/types";
 
 const initialState = {
     modalState: false,
-    vehicleId: null
+    vehicleId: null,
+    modal_purpose: null
 };
 
 let myState = null;
 let modalState = null;
 let vehicleId = null;
+let modal_purpose = null;
 
 export default function(state = initialState, action){
     
@@ -17,10 +19,12 @@ export default function(state = initialState, action){
             
             modalState = action.payload[0];
             vehicleId = action.payload[1];
+            modal_purpose = action.payload[2];
 
             myState = {
                 modalState: modalState,
-                vehicleId: vehicleId
+                vehicleId: vehicleId,
+                modal_purpose: modal_purpose
             };
             
             return myState;
@@ -31,7 +35,8 @@ export default function(state = initialState, action){
             
             myState = {
                 modalState: modalState,
-                vehicleId: null
+                vehicleId: null,
+                modal_purpose: null
             };
             
             return myState;

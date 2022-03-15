@@ -50,7 +50,7 @@ class DeleteVehicle extends Component {
                 <Form.Control type="hidden" name="vehicleid" value={vehicleId}/>
             </Form.Group>
 
-            <Button onClick={this.handleClick} variant="outline-primary" type="submit">
+            <Button onClick={this.handleClick} variant="outline-danger" type="submit">
                 Delete
             </Button>
         </Form>

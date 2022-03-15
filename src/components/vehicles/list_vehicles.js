@@ -80,6 +80,10 @@ class ListVehicles extends Component {
     render() {
       console.log("lista: ", this.props);
       
+      let chosen_vehicle = this.props && this.props.vehicles && this.props.vehicles && this.props.vehicles.list_vehicles && this.props.vehicles.list_vehicles.length > 0 && this.props.vehicleId ? this.props.vehicles.list_vehicles.find((item, i) => {
+        return this.props.vehicleId===item.id;
+      }) : null;
+
       let option1 = [<option key={""} value={""}>None</option>];
       let types = this.props.vehicle_types && this.props.vehicle_types.list_vehicle_types ? this.props.vehicle_types.list_vehicle_types.map((item, i) => {
         return <option key={item.id} value={item.name}>{item.name}</option>
@@ -102,10 +106,10 @@ class ListVehicles extends Component {
 
       }
 
-      let typesSelect = <Form.Select id="type" className="selectClass1" aria-label="Default select example" name="type">
+      let typesSelect = <Form.Select id="type" className="ms-1" aria-label="Default select example" name="type">
         {option1}
       </Form.Select>;
-      let workOrgSelect = <Form.Select id="workOrg" className="selectClass1" aria-label="Default select example" name="workOrg">
+      let workOrgSelect = <Form.Select id="workOrg" className="ms-1" aria-label="Default select example" name="workOrg">
         {option2}
       </Form.Select>;
 
@@ -141,11 +145,13 @@ class ListVehicles extends Component {
             <td>{item.work_organization.name}</td>
             <td>{created_at}</td>
             <td>{updated_at}</td>
-            <td>
+            <td className="grid-container">
+              
+              <Button variant="outline-warning m-1" itemID ={item.id}>Update</Button>
               {this.props && this.props.auth && this.props.auth.access_token ? 
-                <Button variant="outline-warning" itemID ={item.id} onClick={() => this.props.modalShow([true, item.id])}>Update</Button>
+                <Button variant="outline-danger m-1" itemID ={item.id} onClick={() => this.props.modalShow([true, item.id, "delete"])}>Delete</Button>
                : null}
-              <Button variant="outline-danger" itemID ={item.id}>Delete</Button>
+
             </td>
           </tr>
 
@@ -158,12 +164,12 @@ class ListVehicles extends Component {
         </Table>
 
       let myModal = this.props && this.props.auth && this.props.auth.access_token ? 
-        <CustomModal show={this.props.modalState} vehicleid={this.props.vehicleId} onClick={() => this.props.modalHide([false])}/> 
+        <CustomModal chosen_vehicle={chosen_vehicle} show={this.props.modalState} vehicleid={this.props.vehicleId} purpose={this.props.modal_purpose} onClick={() => this.props.modalHide([false])}/> 
       : null;
 
       return (
         <div>
-          <Form onSubmit={this.handleSubmit} className="formClass1">
+          <Form onSubmit={this.handleSubmit} className="m-1">
 
               {typesSelect}
               {workOrgSelect}
@@ -212,7 +218,8 @@ const mapStateToProps = (state) =>{
         work_organizations: state.list_work_organizations,
         modalState: state.modalState.modalState,
         vehicleId: state.modalState.vehicleId,
-        deleted_vehicle_id: state.deleted_vehicle_id
+        deleted_vehicle_id: state.deleted_vehicle_id,
+        modal_purpose: state.modalState.modal_purpose
     });
 
 };
