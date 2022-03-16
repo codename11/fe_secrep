@@ -172,7 +172,7 @@ class ListVehicles extends Component {
       }
 
       let myModal = this.props && this.props.auth && this.props.auth.access_token ? 
-        <CustomModal modalHeaderText={modalHeaderText} modalBodyText={modalBodyText} form={form} chosen_vehicle={chosen_vehicle} show={this.props.modalState} vehicleid={this.props.vehicleId} purpose={this.props.modal_purpose} onClick={() => this.props.modalHide([false])}/> 
+        <CustomModal modalHeaderText={modalHeaderText} modalBodyText={modalBodyText} form={form} chosen_vehicle={chosen_vehicle} show={this.props.modalState} vehicleid={this.props.vehicleId} purpose={this.props.modal_purpose} onHide={() => this.props.modalHide([false])}/> 
       : null;
 
       return (

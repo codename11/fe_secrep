@@ -19,6 +19,7 @@ class CustomModal extends Component {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
@@ -31,7 +32,7 @@ class CustomModal extends Component {
 
         </Modal.Body>
         <Modal.Footer>
-          <Button>Close</Button>
+          <Button onClick={this.props.onHide}>Close</Button>
         </Modal.Footer>
       </Modal>
     )
