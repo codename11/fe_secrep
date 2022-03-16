@@ -1,13 +1,15 @@
-import { LIST_VEHICLES, DELETE_VEHICLE } from "../actions/types";
+import { LIST_VEHICLES, DELETE_VEHICLE, UPDATE_VEHICLE } from "../actions/types";
 
 const initialState = {
     list_vehicles: null,
-    deleted_vehicle_id: null
+    deleted_vehicle_id: null,
+    updated_vehicle_id: null
 };
 
 let myState = null;
 let list_vehicles = null;
 let deleted_vehicle_id = null;
+let updated_vehicle_id = null;
 
 export default function(state = initialState, action){
 
@@ -31,6 +33,18 @@ export default function(state = initialState, action){
             myState = {
                 list_vehicles: list_vehicles,
                 deleted_vehicle_id: deleted_vehicle_id
+            }
+
+            return myState;
+
+        case UPDATE_VEHICLE:
+        
+            updated_vehicle_id = action.payload.vehicle.id;
+            list_vehicles = action.payload.vehicles;
+            
+            myState = {
+                list_vehicles: list_vehicles,
+                updated_vehicle_id: updated_vehicle_id
             }
 
             return myState;

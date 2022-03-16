@@ -10,6 +10,8 @@ import CustomModal from '../subcomponents/CustomModal';
 import { modalShow } from "../../actions/modalActions";
 import { modalHide } from "../../actions/modalActions";
 import PropTypes from "prop-types";
+import DeleteVehicle from '../vehicles/delete_vehicle';
+import UpdateVehicle from '../vehicles/update_vehicle';
 
 class ListVehicles extends Component {
 
@@ -17,16 +19,7 @@ class ListVehicles extends Component {
 
         super(props);
 
-        this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.setModalShow = this.setModalShow.bind(this);
-    }
-
-    setModalShow(){
-
-      this.setState({
-        modalShow: !this.state.modalShow
-      });
 
     }
 
@@ -34,28 +27,6 @@ class ListVehicles extends Component {
       this.props.get_vehicle_types();
       this.props.list_work_organizations();
       this.props.get_vehicles();
-    }
-
-    handleChange(event) {
-        const target = event.target;
-        let obj = {//Dynamic state name
-          key: target.name,
-          value: target.value
-        };
-        
-        if(obj.value.length > 0){
-    
-          this.setState({
-            [obj.key]: obj.value
-          });
-    
-        }
-        else{
-          
-          delete this.state[obj.key];
-    
-        }
-        
     }
     
     async handleSubmit(event) {
@@ -106,26 +77,26 @@ class ListVehicles extends Component {
 
       }
 
-      let typesSelect = <Form.Select id="type" className="ms-1" aria-label="Default select example" name="type">
+      let typesSelect = <Form.Select id="type" className="m-1" aria-label="Default select example" name="type">
         {option1}
       </Form.Select>;
-      let workOrgSelect = <Form.Select id="workOrg" className="ms-1" aria-label="Default select example" name="workOrg">
+      let workOrgSelect = <Form.Select id="workOrg" className="m-1" aria-label="Default select example" name="workOrg">
         {option2}
       </Form.Select>;
 
       let vehicles = this.props && this.props.vehicles && this.props.vehicles.list_vehicles ? this.props.vehicles.list_vehicles : null;
       let vehicle_thead = <tr>
-      <th>registration</th>
-      <th>type</th>
-      <th>work_organization.name</th>
-      <th>created_at</th>
-      <th>updated_at</th>
-      <th>actions</th>
-      </tr>;
+        <th>registration</th>
+        <th>type</th>
+        <th>work_organization.name</th>
+        <th>created_at</th>
+        <th>updated_at</th>
+        <th>actions</th>
+        </tr>;
 
-      let thead = <thead>{vehicle_thead}</thead>;
+        let thead = <thead>{vehicle_thead}</thead>;
 
-      let vehicle_tbody = vehicles ? vehicles.map((item, i) => {
+        let vehicle_tbody = vehicles ? vehicles.map((item, i) => {
 
         let x1 = new Date(item.created_at);
         let d1Day = x1.getDate();
@@ -147,7 +118,10 @@ class ListVehicles extends Component {
             <td>{updated_at}</td>
             <td className="grid-container">
               
-              <Button variant="outline-warning m-1" itemID ={item.id}>Update</Button>
+              {this.props && this.props.auth && this.props.auth.access_token ? 
+                <Button variant="outline-warning m-1" itemID={item.id} onClick={() => this.props.modalShow([true, item.id, "update"])}>Update</Button>
+              : null}
+              
               {this.props && this.props.auth && this.props.auth.access_token ? 
                 <Button variant="outline-danger m-1" itemID ={item.id} onClick={() => this.props.modalShow([true, item.id, "delete"])}>Delete</Button>
                : null}
@@ -163,8 +137,42 @@ class ListVehicles extends Component {
           {tbody}
         </Table>
 
+      let modalHeaderText = "";
+      let modalBodyText = "";
+      let form = null;
+
+      if(this.props && this.props.modal_purpose){
+
+        if(this.props.modal_purpose === "delete"){
+
+          let modalHeaderTextDeleteVehicle = this.props && this.props.modal_purpose && this.props.modal_purpose === "delete" ? "You are trying to delete an item: " : "";
+          let modalBodyTextDeleteVehicle = this.props && this.props.modal_purpose && this.props.modal_purpose === "delete" && chosen_vehicle ? <div><h6>An vehicle: </h6> 
+            <div>
+              <div><strong>Name:</strong> {chosen_vehicle.registration}</div>
+              <div><strong>Type:</strong> {chosen_vehicle.type.name}</div>
+              <div><strong>Organization:</strong> {chosen_vehicle.work_organization.name}</div>
+              <div><strong>Created_at:</strong> {chosen_vehicle.created_at}</div>
+              <div><strong>Updated_at:</strong> {chosen_vehicle.updated_at}</div>
+            </div>
+          </div>
+          : "";
+          modalHeaderText = modalHeaderTextDeleteVehicle;
+          console.log("modalHeaderText: ", modalHeaderText);
+          modalBodyText = modalBodyTextDeleteVehicle;
+          form = this.props && this.props.modal_purpose && this.props.modal_purpose==="delete" ? <DeleteVehicle vehicleid={this.props.vehicleid}/> : null;
+
+        }
+
+        if(this.props.modal_purpose === "update"){
+
+          form = this.props && this.props.modal_purpose && this.props.modal_purpose==="update" ? <UpdateVehicle vehicle={chosen_vehicle}/> : null;
+
+        }
+
+      }
+
       let myModal = this.props && this.props.auth && this.props.auth.access_token ? 
-        <CustomModal chosen_vehicle={chosen_vehicle} show={this.props.modalState} vehicleid={this.props.vehicleId} purpose={this.props.modal_purpose} onClick={() => this.props.modalHide([false])}/> 
+        <CustomModal modalHeaderText={modalHeaderText} modalBodyText={modalBodyText} form={form} chosen_vehicle={chosen_vehicle} show={this.props.modalState} vehicleid={this.props.vehicleId} purpose={this.props.modal_purpose} onClick={() => this.props.modalHide([false])}/> 
       : null;
 
       return (
@@ -174,7 +182,7 @@ class ListVehicles extends Component {
               {typesSelect}
               {workOrgSelect}
             
-              <Button variant="outline-primary" type="submit">
+              <Button variant="outline-primary" type="submit" className="m-1">
                   Submit
               </Button>
           </Form>
@@ -219,7 +227,8 @@ const mapStateToProps = (state) =>{
         modalState: state.modalState.modalState,
         vehicleId: state.modalState.vehicleId,
         deleted_vehicle_id: state.deleted_vehicle_id,
-        modal_purpose: state.modalState.modal_purpose
+        modal_purpose: state.modalState.modal_purpose,
+        updated_vehicle_id: state.updated_vehicle_id
     });
 
 };

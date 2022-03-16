@@ -11,7 +11,6 @@ class DeleteVehicle extends Component {
 
     super(props);
 
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.handleClick = this.handleClick.bind(this);
   }
 
@@ -25,19 +24,6 @@ class DeleteVehicle extends Component {
 
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-    let target = event.target;
-    
-    const data = {
-        vehicleid: target.elements["vehicleid"].value
-    }
-    console.log("value: ", target.elements["vehicleid"].value);
-    console.log("DeleteVehicle: ", this.props.vehicleid);
-    this.props.deleteVehicle(data);
-
-  }
-
   render() {
     
     let vehicleId = this.props.vehicleid ? this.props.vehicleid : 0;
@@ -46,11 +32,11 @@ class DeleteVehicle extends Component {
       
         <Form>
             <Form.Group className="mb-3" controlId="vehicleid">
-                <Form.Label>Email address</Form.Label>
+                <Form.Label>Vehicle with internal id of "{vehicleId}" will be deleted.</Form.Label>
                 <Form.Control type="hidden" name="vehicleid" value={vehicleId}/>
             </Form.Group>
 
-            <Button onClick={this.handleClick} variant="outline-danger" type="submit">
+            <Button onClick={this.handleClick} variant="outline-danger" type="button">
                 Delete
             </Button>
         </Form>
