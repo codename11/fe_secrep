@@ -38,7 +38,7 @@ export default function(state = initialState, action){
             return myState;
 
         case UPDATE_VEHICLE:
-        
+            
             updated_vehicle_id = action.payload.vehicle.id;
             list_vehicles = action.payload.vehicles;
             

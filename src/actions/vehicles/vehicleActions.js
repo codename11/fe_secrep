@@ -82,8 +82,8 @@ export const updateVehicle = (data) => dispatch => {
     let url = "http://secrep.test/api/update_vehicle";
 
     auth = store.getState().auth.auth;
-
-    /*fetch(url, {
+    
+    fetch(url, {
         method: 'PATCH',
         crossDomain : true,
         headers: {
@@ -92,9 +92,7 @@ export const updateVehicle = (data) => dispatch => {
             "Accept": 'application/json',
             "Authorization": "Bearer " + auth.access_token
         },
-        body: JSON.stringify({
-            id: data
-        })
+        body: JSON.stringify(data)
     })
     .then((response) => {
 
@@ -111,6 +109,6 @@ export const updateVehicle = (data) => dispatch => {
     })
     .catch((error) => {
         console.error('Error:', error);
-    });*/
+    });
 
 }

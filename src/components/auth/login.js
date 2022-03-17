@@ -11,42 +11,23 @@ class Login extends Component {
 
         super(props);
     
-        this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     
     }
-
-    handleChange(event) {
-        const target = event.target;
-        let obj = {//Dynamic state name
-          key: target.name,
-          value: target.value
-        };
-    
-        if(obj.value.length > 0){
-    
-          this.setState({
-            [obj.key]: obj.value
-          });
-    
-        }
-        else{
-          
-          delete this.state[obj.key];
-    
-        }
-        
-      }
     
       async handleSubmit(event) {
         event.preventDefault();
     
+        let target = event.target;
         const data = {
-          email: this.state.email,
-          password: this.state.password
+          email: target.elements["email"].value,
+          password: target.elements["password"].value
         }
-    
+        
         this.props.login(data);
+
+        target.elements["email"].value = "";
+        target.elements["password"].value = "";
     
       }
 
@@ -57,7 +38,7 @@ class Login extends Component {
 
                 <Form.Group className="mb-3" controlId="login-email">
                     <Form.Label>Email address</Form.Label>
-                    <Form.Control type="email" placeholder="Enter email" name="email" onChange={this.handleChange}/>
+                    <Form.Control type="email" placeholder="Enter email" name="email"/>
                     <Form.Text className="text-muted">
                     We'll never share your email with anyone else.
                     </Form.Text>
@@ -65,7 +46,7 @@ class Login extends Component {
 
                 <Form.Group className="mb-3" controlId="login-password">
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password"  name="password" onChange={this.handleChange}/>
+                    <Form.Control type="password" placeholder="Password"  name="password"/>
                 </Form.Group>
 
                 <Button variant="outline-primary" type="submit">

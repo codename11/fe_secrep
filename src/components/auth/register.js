@@ -41,13 +41,19 @@ class Register extends Component {
       async handleSubmit(event) {
         event.preventDefault();
     
+        let target = event.target;
         const data = {
-          name: this.state.name,
-          email: this.state.email,
-          password: this.state.password,
-          password_confirmation: this.state.password_confirmation
+          name: target.elements["name"].value,
+          email: target.elements["email"].value,
+          password: target.elements["password"].value,
+          password_confirmation: target.elements["password_confirmation"].value
         }
-    
+
+        target.elements["name"].value = "";
+        target.elements["email"].value = "";
+        target.elements["password"].value = "";
+        target.elements["password_confirmation"].value = "";
+
         this.props.register(data);
     
       }

@@ -11,7 +11,7 @@ class CustomModal extends Component {
   }
 
   render() {
-    console.log("modal: ", this.props);
+    //console.log("modal: ", this.props);
 
     return (
       <Modal
@@ -22,12 +22,13 @@ class CustomModal extends Component {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            {this.props.modalHeaderText}
+            {this.props.modalheadertext}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           
-          {this.props.modalBodyText}
+          {this.props.modalbodytext}
+          {this.props.form}
 
         </Modal.Body>
         <Modal.Footer>

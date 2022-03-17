@@ -49,7 +49,7 @@ class ListVehicles extends Component {
     }
 
     render() {
-      console.log("lista: ", this.props);
+      //console.log("lista: ", this.props);
       
       let chosen_vehicle = this.props && this.props.vehicles && this.props.vehicles && this.props.vehicles.list_vehicles && this.props.vehicles.list_vehicles.length > 0 && this.props.vehicleId ? this.props.vehicles.list_vehicles.find((item, i) => {
         return this.props.vehicleId===item.id;
@@ -157,7 +157,7 @@ class ListVehicles extends Component {
           </div>
           : "";
           modalHeaderText = modalHeaderTextDeleteVehicle;
-          console.log("modalHeaderText: ", modalHeaderText);
+          
           modalBodyText = modalBodyTextDeleteVehicle;
           form = this.props && this.props.modal_purpose && this.props.modal_purpose==="delete" ? <DeleteVehicle vehicleid={this.props.vehicleid}/> : null;
 
@@ -172,7 +172,7 @@ class ListVehicles extends Component {
       }
 
       let myModal = this.props && this.props.auth && this.props.auth.access_token ? 
-        <CustomModal modalHeaderText={modalHeaderText} modalBodyText={modalBodyText} form={form} chosen_vehicle={chosen_vehicle} show={this.props.modalState} vehicleid={this.props.vehicleId} purpose={this.props.modal_purpose} onHide={() => this.props.modalHide([false])}/> 
+        <CustomModal modalheadertext={modalHeaderText} modalbodytext={modalBodyText} form={form} chosen_vehicle={chosen_vehicle} show={this.props.modalState} vehicleid={this.props.vehicleId} purpose={this.props.modal_purpose} onHide={() => this.props.modalHide([false])}/> 
       : null;
 
       return (
