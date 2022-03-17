@@ -1,4 +1,4 @@
-import { LIST_VEHICLES, DELETE_VEHICLE, UPDATE_VEHICLE } from "../types";
+import { LIST_VEHICLES, DELETE_VEHICLE, UPDATE_VEHICLE, CREATE_VEHICLE } from "../types";
 import store from "../../store";
 
 let auth = null;
@@ -103,6 +103,42 @@ export const updateVehicle = (data) => dispatch => {
         
         dispatch({
             type: UPDATE_VEHICLE,
+            payload: data
+        });
+
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+
+}
+
+export const createVehicle = (data) => dispatch => {
+
+    let url = "http://secrep.test/api/create_vehicle";
+
+    auth = store.getState().auth.auth;
+    
+    fetch(url, {
+        method: 'POST',
+        crossDomain : true,
+        headers: {
+            "X-Requested-With": "XMLHttpRequest",
+            "Content-Type": 'application/json',
+            "Accept": 'application/json',
+            "Authorization": "Bearer " + auth.access_token
+        },
+        body: JSON.stringify(data)
+    })
+    .then((response) => {
+
+        return response.json();
+
+    })
+    .then((data) => {
+        
+        dispatch({
+            type: CREATE_VEHICLE,
             payload: data
         });
 

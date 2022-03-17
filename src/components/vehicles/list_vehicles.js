@@ -49,7 +49,7 @@ class ListVehicles extends Component {
     }
 
     render() {
-      //console.log("lista: ", this.props);
+      console.log("lista: ", this.props);
       
       let chosen_vehicle = this.props && this.props.vehicles && this.props.vehicles && this.props.vehicles.list_vehicles && this.props.vehicles.list_vehicles.length > 0 && this.props.vehicleId ? this.props.vehicles.list_vehicles.find((item, i) => {
         return this.props.vehicleId===item.id;
@@ -159,7 +159,7 @@ class ListVehicles extends Component {
           modalHeaderText = modalHeaderTextDeleteVehicle;
           
           modalBodyText = modalBodyTextDeleteVehicle;
-          form = this.props && this.props.modal_purpose && this.props.modal_purpose==="delete" ? <DeleteVehicle vehicleid={this.props.vehicleid}/> : null;
+          form = this.props && this.props.modal_purpose && this.props.modal_purpose==="delete" ? <DeleteVehicle vehicleid={this.props.vehicleId}/> : null;
 
         }
 
