@@ -11,6 +11,7 @@ import CreateVehicle from './components/vehicles/create_vehicle';
 import { get_vehicles } from "./actions/vehicles/vehicleActions";
 import { get_vehicle_types } from "./actions/vehicle_types/vehicleTypesActions";
 import { list_work_organizations } from "./actions/work_organizations/workOrganizationsActions";
+import ListWorkOrgs from './components/work_organizations/list_work_organizations';
 import PropTypes from "prop-types";
 
 class App extends Component {
@@ -53,15 +54,24 @@ class App extends Component {
             <Login/>
           </Tab>
 
-          <Tab eventKey="list_vehicles_tab" title="List_Vehicles">
-            {access_token!==null ? <ListVehicles/> : null}
-          </Tab>
+          {access_token!==null ? 
+            <Tab eventKey="list_vehicles_tab" title="List_Vehicles">
+              <ListVehicles/>
+            </Tab> 
+          : null}
 
-          <Tab eventKey="create_vehicle_tab" title="Create_Vehicle">
-            {access_token!==null ? <CreateVehicle/> : null}
-          </Tab>
+          {access_token!==null ? 
+            <Tab eventKey="create_vehicle_tab" title="Create_Vehicle">
+              <CreateVehicle/>
+            </Tab> 
+          : null}
+
+          <Tab eventKey="list_workorg_tab" title="List_Work_Organizations">
+            <ListWorkOrgs/>
+          </Tab> 
 
         </Tabs>
+
       </Container>
     )
   }

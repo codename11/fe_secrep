@@ -1,4 +1,4 @@
-import { REGISTER_TAB, LOGIN_TAB, LIST_VEHICLES_TAB, CREATE_VEHICLE_TAB } from "../actions/types";
+import { REGISTER_TAB, LOGIN_TAB, LIST_VEHICLES_TAB, CREATE_VEHICLE_TAB, LIST_WORKORG_TAB } from "../actions/types";
 
 const initialState = {
     tabKey: "register_tab"
@@ -43,6 +43,16 @@ export default function(state = initialState, action){
 
         case CREATE_VEHICLE_TAB:
     
+            key = action.payload
+            
+            myState = {
+                tabKey: key
+            };
+            
+            return myState;
+
+        case LIST_WORKORG_TAB:
+
             key = action.payload
             
             myState = {

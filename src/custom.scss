@@ -18,3 +18,10 @@
     display: grid;
     grid-template-columns: auto auto;
 }
+
+.frame1{
+    border: 1px dotted whitesmoke;
+    border-radius: 7px;
+    width: 100% !important;
+    margin-bottom: 10px;
+}
