@@ -1,4 +1,4 @@
-import { LIST_WORK_ORGANIZATIONS, CREATE_WORK_ORGANIZATION } from "../types";
+import { LIST_WORK_ORGANIZATIONS, CREATE_WORK_ORGANIZATION, UPDATE_WORK_ORGANIZATION } from "../types";
 import store from "../../store";
 
 let auth = null;
@@ -64,6 +64,42 @@ export const create_work_organization = (data) => dispatch => {
         
         dispatch({
             type: CREATE_WORK_ORGANIZATION,
+            payload: data
+        });
+
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+
+}
+
+export const update_work_organization = (data) => dispatch => {
+
+    let url = "http://secrep.test/api/update_work_organizations";
+
+    auth = store.getState().auth.auth;
+    
+    fetch(url, {
+        method: 'POST',
+        crossDomain : true,
+        headers: {
+            "X-Requested-With": "XMLHttpRequest",
+            "Content-Type": 'application/json',
+            "Accept": 'application/json',
+            "Authorization": "Bearer " + auth.access_token
+        },
+        body: JSON.stringify(data)
+    })
+    .then((response) => {
+
+        return response.json();
+
+    })
+    .then((data) => {
+        
+        dispatch({
+            type: UPDATE_WORK_ORGANIZATION,
             payload: data
         });
 

@@ -51,8 +51,8 @@ class ListVehicles extends Component {
     render() {
       console.log("lista: ", this.props);
       
-      let chosen_vehicle = this.props && this.props.vehicles && this.props.vehicles && this.props.vehicles.list_vehicles && this.props.vehicles.list_vehicles.length > 0 && this.props.vehicleId ? this.props.vehicles.list_vehicles.find((item, i) => {
-        return this.props.vehicleId===item.id;
+      let chosen_vehicle = this.props && this.props.vehicles && this.props.vehicles && this.props.vehicles.list_vehicles && this.props.vehicles.list_vehicles.length > 0 && this.props.itemId ? this.props.vehicles.list_vehicles.find((item, i) => {
+        return this.props.itemId===item.id;
       }) : null;
 
       let option1 = [<option key={""} value={""}>None</option>];
@@ -159,7 +159,7 @@ class ListVehicles extends Component {
           modalHeaderText = modalHeaderTextDeleteVehicle;
           
           modalBodyText = modalBodyTextDeleteVehicle;
-          form = this.props && this.props.modal_purpose && this.props.modal_purpose==="delete" ? <DeleteVehicle vehicleid={this.props.vehicleId}/> : null;
+          form = this.props && this.props.modal_purpose && this.props.modal_purpose==="delete" ? <DeleteVehicle vehicleid={this.props.itemId}/> : null;
 
         }
 
@@ -172,7 +172,7 @@ class ListVehicles extends Component {
       }
 
       let myModal = this.props && this.props.auth && this.props.auth.access_token ? 
-        <CustomModal modalheadertext={modalHeaderText} modalbodytext={modalBodyText} form={form} chosen_vehicle={chosen_vehicle} show={this.props.modalState} vehicleid={this.props.vehicleId} purpose={this.props.modal_purpose} onHide={() => this.props.modalHide([false])}/> 
+        <CustomModal modalheadertext={modalHeaderText} modalbodytext={modalBodyText} form={form} chosen_vehicle={chosen_vehicle} show={this.props.modalState} vehicleid={this.props.itemId} purpose={this.props.modal_purpose} onHide={() => this.props.modalHide([false])}/> 
       : null;
 
       return (
@@ -225,7 +225,7 @@ const mapStateToProps = (state) =>{
         vehicle_types: state.list_vehicle_types,
         work_organizations: state.list_work_organizations,
         modalState: state.modalState.modalState,
-        vehicleId: state.modalState.vehicleId,
+        itemId: state.modalState.itemId,
         deleted_vehicle_id: state.deleted_vehicle_id,
         modal_purpose: state.modalState.modal_purpose,
         updated_vehicle_id: state.updated_vehicle_id

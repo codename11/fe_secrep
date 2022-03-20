@@ -5,6 +5,12 @@ import { Component } from 'react'
 import {connect} from "react-redux";
 import { list_work_organizations } from "../../actions/work_organizations/workOrganizationsActions";
 import { create_work_organization } from "../../actions/work_organizations/workOrganizationsActions";
+import { update_work_organization } from "../../actions/work_organizations/workOrganizationsActions";
+import UpdatetWorkOrgs from '../work_organizations/update_work_organization';
+import { modalShow } from "../../actions/modalActions";
+import { modalHide } from "../../actions/modalActions";
+import CustomModal from '../subcomponents/CustomModal';
+
 import PropTypes from "prop-types";
 
 class ListWorkOrgs extends Component {
@@ -68,11 +74,11 @@ class ListWorkOrgs extends Component {
             <td className="grid-container">
               
               {this.props && this.props.auth && this.props.auth.access_token ? 
-                <Button variant="outline-warning m-1" itemID={item.id} onClick={() => console.log("Update")}>Update</Button>
+                <Button variant="outline-warning m-1" itemID={item.id} onClick={() => this.props.modalShow([true, item.id, "update"])}>Update</Button>
               : null}
               
               {this.props && this.props.auth && this.props.auth.access_token ? 
-                <Button variant="outline-danger m-1" itemID ={item.id} onClick={() => console.log("Delete")}>Delete</Button>
+                <Button variant="outline-danger m-1" itemID ={item.id} onClick={() => this.props.modalShow([true, item.id, "delete"])}>Delete</Button>
                : null}
 
             </td>
@@ -86,11 +92,32 @@ class ListWorkOrgs extends Component {
           {thead}
           {tbody}
         </Table>
-      
+
+        let modalHeaderText = "";
+        let modalBodyText = "";
+        let form = null;
+
+        if(this.props && this.props.modal_purpose){
+
+            if(this.props.modal_purpose === "delete"){
+
+            }
+
+            if(this.props.modal_purpose === "update"){
+                
+            }
+
+        }
+
+        let myModal = this.props && this.props.auth && this.props.auth.access_token ? 
+            <CustomModal modalheadertext={"modalHeaderTextWorkOrg"} modalbodytext={"modalBodyTextWorkOrg"} form={"formWorkOrg"} show={this.props.modalState} purpose={this.props.modal_purpose} onHide={() => this.props.modalHide([false])}/> 
+        : null;
+
         return (
             <div>
                 <div className="frame1 container">
                     <h5>Enter new work organization</h5>
+                    <hr/>
                     <Form onSubmit={this.handleSubmit} className="m-1">
                         
                         <Form.Group className="mb-1" controlId="workOrgName">
@@ -105,7 +132,11 @@ class ListWorkOrgs extends Component {
 
                 </div>
 
+                <h5>Listed work organizations</h5>
+                <hr/>
                 {workOrgs_table}
+
+                {myModal}
 
             </div>
         )
@@ -120,16 +151,29 @@ create_work_organization.propTypes = {
     create_work_organization: PropTypes.func.isRequired,
 };
 
+modalShow.propTypes = {
+    modalShow: PropTypes.func.isRequired,
+};
+  
+modalHide.propTypes = {
+    modalHide: PropTypes.func.isRequired,
+};
+
 const mapStateToProps = (state) =>{ 
     
     return ({
         auth: state.auth.auth,
         work_organizations: state.list_work_organizations,
+        modalState: state.modalState.modalState,
+        tabKey: state.key.tabKey,
+        modal_purpose: state.modalState.modal_purpose,
     });
 
 };
 
 export default connect(mapStateToProps, { 
     list_work_organizations, 
-    create_work_organization
+    create_work_organization,
+    modalShow,
+    modalHide
 })(ListWorkOrgs);

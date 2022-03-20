@@ -28,7 +28,7 @@ class CustomModal extends Component {
         <Modal.Body>
           
           {this.props.modalbodytext}
-          {this.props.form}
+          {this.props.form ? this.props.form : ""}
 
         </Modal.Body>
         <Modal.Footer>

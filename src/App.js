@@ -56,18 +56,18 @@ class App extends Component {
 
           {access_token!==null ? 
             <Tab eventKey="list_vehicles_tab" title="List_Vehicles">
-              <ListVehicles/>
+              {tabKey==="list_vehicles_tab" ? <ListVehicles/> : null}
             </Tab> 
           : null}
 
           {access_token!==null ? 
             <Tab eventKey="create_vehicle_tab" title="Create_Vehicle">
-              <CreateVehicle/>
+              {tabKey==="create_vehicle_tab" ? <CreateVehicle/> : null}
             </Tab> 
           : null}
 
-          <Tab eventKey="list_workorg_tab" title="List_Work_Organizations">
-            <ListWorkOrgs/>
+          <Tab eventKey="work_organization_tab" title="Work_Organizations">
+            {tabKey==="work_organization_tab" ? <ListWorkOrgs/> : null}
           </Tab> 
 
         </Tabs>
@@ -98,7 +98,7 @@ const mapStateToProps = (state) =>{
     vehicle_types: state.list_vehicle_types,
     work_organizations: state.list_work_organizations,
     modalState: state.modalState,
-    vehicleId: state.modalState.vehicleId,
+    itemId: state.modalState.itemId,
     deleted_vehicle_id: state.deleted_vehicle_id
   });
 

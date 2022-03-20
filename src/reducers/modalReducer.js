@@ -2,13 +2,13 @@ import { MODAL_SHOW, MODAL_HIDE } from "../actions/types";
 
 const initialState = {
     modalState: false,
-    vehicleId: null,
+    itemId: null,
     modal_purpose: null
 };
 
 let myState = null;
 let modalState = null;
-let vehicleId = null;
+let itemId = null;
 let modal_purpose = null;
 
 export default function(state = initialState, action){
@@ -18,12 +18,12 @@ export default function(state = initialState, action){
         case MODAL_SHOW:
             
             modalState = action.payload[0];
-            vehicleId = action.payload[1];
+            itemId = action.payload[1];
             modal_purpose = action.payload[2];
 
             myState = {
                 modalState: modalState,
-                vehicleId: vehicleId,
+                itemId: itemId,
                 modal_purpose: modal_purpose
             };
             
@@ -35,7 +35,7 @@ export default function(state = initialState, action){
             
             myState = {
                 modalState: modalState,
-                vehicleId: null,
+                itemId: null,
                 modal_purpose: null
             };
             
