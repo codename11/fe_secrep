@@ -6,11 +6,12 @@ import {connect} from "react-redux";
 import { list_work_organizations } from "../../actions/work_organizations/workOrganizationsActions";
 import { create_work_organization } from "../../actions/work_organizations/workOrganizationsActions";
 import { update_work_organization } from "../../actions/work_organizations/workOrganizationsActions";
-import UpdatetWorkOrgs from '../work_organizations/update_work_organization';
+import UpdateWorkOrgs from '../work_organizations/update_work_organization';
 import { modalShow } from "../../actions/modalActions";
 import { modalHide } from "../../actions/modalActions";
 import CustomModal from '../subcomponents/CustomModal';
 import { select_option } from "../../actions/custom_actions/selectOptionActions";
+import DeleteWorkOrgs from '../work_organizations/delete_work_organization';
 import PropTypes from "prop-types";
 
 class ListWorkOrgs extends Component {
@@ -138,13 +139,19 @@ class ListWorkOrgs extends Component {
 
             if(this.props.modal_purpose === "delete"){
 
+                modalHeaderText = <h5>Delete work organization</h5>;
+                modalFooterText = <p className="foot1">You are about to delete</p>;
+
+                form = this.props && this.props.modal_purpose && this.props.modal_purpose==="delete" ? <DeleteWorkOrgs sec_id={this.props.auth.user.id}/> : null;
+
             }
 
             if(this.props.modal_purpose === "update"){
+
                 modalHeaderText = <h5>Update work organization</h5>;
                 modalFooterText = <p className="foot1">You are about to update</p>;
 
-                form = this.props && this.props.modal_purpose && this.props.modal_purpose==="update" ? <UpdatetWorkOrgs workOrgSelect={workOrgSelect} sec_id={this.props.auth.user.id}/> : null;
+                form = this.props && this.props.modal_purpose && this.props.modal_purpose==="update" ? <UpdateWorkOrgs sec_id={this.props.auth.user.id}/> : null;
 
             }
 

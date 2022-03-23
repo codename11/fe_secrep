@@ -4,11 +4,11 @@ import Table from 'react-bootstrap/Table';
 import { Component } from 'react'
 import {connect} from "react-redux";
 import { list_work_organizations } from "../../actions/work_organizations/workOrganizationsActions";
-import { update_work_organization } from "../../actions/work_organizations/workOrganizationsActions";
+import { delete_work_organization } from "../../actions/work_organizations/workOrganizationsActions";
 import { modalHide } from "../../actions/modalActions";
 import PropTypes from "prop-types";
 
-class UpdateWorkOrgs extends Component {
+class DeleteWorkOrgs extends Component {
 
     constructor(props) {
 
@@ -26,29 +26,26 @@ class UpdateWorkOrgs extends Component {
         event.preventDefault();
         let forma = event.target; 
         let elements = forma.elements;
-        let len1 = elements.length;
 
         let selectedWorkOrg = this.props && this.props.work_organizations && this.props.work_organizations.list_work_organizations ? this.props.work_organizations.list_work_organizations.find((item, i) => {
             return this.props.itemId===item.id;
         }) : null;
 
         const data = {
-            id: selectedWorkOrg.id,
-            name: elements["name"].value,
-            sec_id: this.props.sec_id
+            id: elements["workorgid"].value
         }
-        this.props.update_work_organization(data);
+        console.log("data: ", data);
+        this.props.delete_work_organization(data);
         this.props.modalHide([false]);
     }
 
     render() {
-        console.log("updworkOrgs: ", this.props);
+        console.log("delworkOrgs: ", this.props);
         
         let selectedWorkOrg = this.props && this.props.work_organizations && this.props.work_organizations.list_work_organizations ? this.props.work_organizations.list_work_organizations.find((item, i) => {
             return this.props.itemId===item.id;
         }) : null;
         console.log("selectedWorkOrg: ", selectedWorkOrg);
-        
         return (
 
             <div className="frame1 container updateWorkOrgs">
@@ -56,13 +53,8 @@ class UpdateWorkOrgs extends Component {
                 <Form onSubmit={this.handleSubmit} className="m-1">
                     
                     <Form.Group className="mb-1" controlId="workorgid">
-                        <Form.Label>Work organization with internal id of "{selectedWorkOrg.id}" will be updated.</Form.Label>
+                        <Form.Label>Work organization with internal id of "{selectedWorkOrg.id}" will be deleted.</Form.Label>
                         <Form.Control type="hidden" name="workorgid" value={selectedWorkOrg.id}/>
-                    </Form.Group>
-
-                    <Form.Group className="mb-1" controlId="workOrgName" key={selectedWorkOrg.name}>
-                        <Form.Label>Name</Form.Label>
-                        <Form.Control type="text" name="name" placeholder="Enter new work organization" defaultValue={selectedWorkOrg.name}/>
                     </Form.Group>
 
                     <Button variant="outline-warning" type="submit" className="m-1">
@@ -75,8 +67,12 @@ class UpdateWorkOrgs extends Component {
     }
 }
 
-update_work_organization.propTypes = {
-    update_work_organization: PropTypes.func.isRequired,
+list_work_organizations.propTypes = {
+    list_work_organizations: PropTypes.func.isRequired,
+};
+
+delete_work_organization.propTypes = {
+    delete_work_organization: PropTypes.func.isRequired,
 };
 
 modalHide.propTypes = {
@@ -97,6 +93,6 @@ const mapStateToProps = (state) =>{
 
 export default connect(mapStateToProps, { 
     list_work_organizations, 
-    update_work_organization,
-    modalHide,
-})(UpdateWorkOrgs);
+    delete_work_organization, 
+    modalHide
+})(DeleteWorkOrgs);

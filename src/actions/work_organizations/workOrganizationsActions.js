@@ -1,4 +1,4 @@
-import { LIST_WORK_ORGANIZATIONS, CREATE_WORK_ORGANIZATION, UPDATE_WORK_ORGANIZATION } from "../types";
+import { LIST_WORK_ORGANIZATIONS, CREATE_WORK_ORGANIZATION, UPDATE_WORK_ORGANIZATION, DELETE_WORK_ORGANIZATION } from "../types";
 import store from "../../store";
 
 let auth = null;
@@ -100,6 +100,42 @@ export const update_work_organization = (data) => dispatch => {
         
         dispatch({
             type: UPDATE_WORK_ORGANIZATION,
+            payload: data
+        });
+
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+
+}
+
+export const delete_work_organization = (data) => dispatch => {
+    console.log("delete_work_organization: ", data);
+    let url = "http://secrep.test/api/delete_work_organization";
+
+    auth = store.getState().auth.auth;
+    
+    fetch(url, {
+        method: 'DELETE',
+        crossDomain : true,
+        headers: {
+            "X-Requested-With": "XMLHttpRequest",
+            "Content-Type": 'application/json',
+            "Accept": 'application/json',
+            "Authorization": "Bearer " + auth.access_token
+        },
+        body: JSON.stringify(data)
+    })
+    .then((response) => {
+
+        return response.json();
+
+    })
+    .then((data) => {
+        
+        dispatch({
+            type: DELETE_WORK_ORGANIZATION,
             payload: data
         });
 
