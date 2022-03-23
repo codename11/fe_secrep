@@ -75,13 +75,13 @@ export const create_work_organization = (data) => dispatch => {
 }
 
 export const update_work_organization = (data) => dispatch => {
-
-    let url = "http://secrep.test/api/update_work_organizations";
+    console.log("update_work_organization: ", data);
+    let url = "http://secrep.test/api/update_work_organization";
 
     auth = store.getState().auth.auth;
     
     fetch(url, {
-        method: 'POST',
+        method: 'PATCH',
         crossDomain : true,
         headers: {
             "X-Requested-With": "XMLHttpRequest",

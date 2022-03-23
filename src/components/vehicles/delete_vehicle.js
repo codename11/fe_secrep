@@ -27,7 +27,7 @@ class DeleteVehicle extends Component {
   }
 
   render() {
-    console.log("delete_vehicle: ", this.props);
+    //console.log("delete_vehicle: ", this.props);
     let vehicleId = this.props.vehicleid ? this.props.vehicleid : 0;
     
     return (

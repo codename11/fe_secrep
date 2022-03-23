@@ -32,6 +32,7 @@ class CustomModal extends Component {
 
         </Modal.Body>
         <Modal.Footer>
+        {this.props.modalfootertext}
           <Button onClick={this.props.onHide}>Close</Button>
         </Modal.Footer>
       </Modal>

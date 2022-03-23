@@ -5,6 +5,7 @@ import vehicleReducer from "./vehicleReducer";
 import vehicleTypesReducer from "./vehicleTypesReducer";
 import workOrganizationsReducer from "./workOrganizationsReducer";
 import modalReducer from "./modalReducer";
+import customReducer from "./customReducer";
 
 export default combineReducers({
     auth: authReducer,
@@ -12,5 +13,6 @@ export default combineReducers({
     vehicles: vehicleReducer,
     list_vehicle_types: vehicleTypesReducer,
     list_work_organizations: workOrganizationsReducer,
-    modalState: modalReducer
+    modalState: modalReducer,
+    form: customReducer
 });

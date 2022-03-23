@@ -10,7 +10,7 @@ import UpdatetWorkOrgs from '../work_organizations/update_work_organization';
 import { modalShow } from "../../actions/modalActions";
 import { modalHide } from "../../actions/modalActions";
 import CustomModal from '../subcomponents/CustomModal';
-
+import { select_option } from "../../actions/custom_actions/selectOptionActions";
 import PropTypes from "prop-types";
 
 class ListWorkOrgs extends Component {
@@ -20,11 +20,30 @@ class ListWorkOrgs extends Component {
         super(props);
 
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
 
     }
 
     componentDidMount(){
       this.props.list_work_organizations();
+    }
+
+    handleChange(event){
+
+        let target = event.target;
+
+        if(target.value){
+            let obj = JSON.parse(target.value);
+
+            let data = {
+                value: obj.id,
+                name: obj.name,
+                purpose: this.props.modal_purpose,
+            };
+            
+            this.props.select_option(data);
+        }
+
     }
     
     async handleSubmit(event) {
@@ -41,7 +60,7 @@ class ListWorkOrgs extends Component {
     }
 
     render() {
-        console.log("workOrgs: ", this.props);
+        console.log("listworkOrgs: ", this.props);
 
         let workOrgs = this.props.work_organizations.list_work_organizations;
         let workOrg_thead = <tr>
@@ -95,7 +114,25 @@ class ListWorkOrgs extends Component {
 
         let modalHeaderText = "";
         let modalBodyText = "";
+        let modalFooterText = "";
         let form = null;
+        let list_work_organizations = this.props && this.props.work_organizations && this.props.work_organizations.list_work_organizations ? this.props.work_organizations.list_work_organizations : null;
+
+        let option2 = [<option key={""} value={""}>None</option>];
+        let work_Orgs = list_work_organizations ? list_work_organizations.map((item, i) => {
+            let obj = JSON.stringify({id: item.id, name: item.name});
+            return <option key={item.id} value={obj}>{item.name}</option>
+        }) : null;
+        
+        if(work_Orgs && work_Orgs.length > 0){
+
+            option2.push(...work_Orgs);
+
+        }
+
+        let workOrgSelect = <Form.Select id="workOrg" className="m-1" aria-label="Default select example" name="workOrg" onChange={this.handleChange}>
+            {option2}
+        </Form.Select>;
 
         if(this.props && this.props.modal_purpose){
 
@@ -104,13 +141,17 @@ class ListWorkOrgs extends Component {
             }
 
             if(this.props.modal_purpose === "update"){
-                
+                modalHeaderText = <h5>Update work organization</h5>;
+                modalFooterText = <p className="foot1">You are about to update</p>;
+
+                form = this.props && this.props.modal_purpose && this.props.modal_purpose==="update" ? <UpdatetWorkOrgs workOrgSelect={workOrgSelect} sec_id={this.props.auth.user.id}/> : null;
+
             }
 
         }
 
         let myModal = this.props && this.props.auth && this.props.auth.access_token ? 
-            <CustomModal modalheadertext={"modalHeaderTextWorkOrg"} modalbodytext={"modalBodyTextWorkOrg"} form={"formWorkOrg"} show={this.props.modalState} purpose={this.props.modal_purpose} onHide={() => this.props.modalHide([false])}/> 
+            <CustomModal modalheadertext={modalHeaderText} modalbodytext={modalBodyText} modalfootertext={modalFooterText} form={form} show={this.props.modalState} purpose={this.props.modal_purpose} onHide={() => this.props.modalHide([false])}/> 
         : null;
 
         return (
@@ -159,6 +200,14 @@ modalHide.propTypes = {
     modalHide: PropTypes.func.isRequired,
 };
 
+select_option.propTypes = {
+    select_option: PropTypes.func.isRequired,
+};
+
+update_work_organization.propTypes = {
+    update_work_organization: PropTypes.func.isRequired,
+};
+
 const mapStateToProps = (state) =>{ 
     
     return ({
@@ -167,6 +216,7 @@ const mapStateToProps = (state) =>{
         modalState: state.modalState.modalState,
         tabKey: state.key.tabKey,
         modal_purpose: state.modalState.modal_purpose,
+        select_option: state.form.select_option
     });
 
 };
@@ -175,5 +225,6 @@ export default connect(mapStateToProps, {
     list_work_organizations, 
     create_work_organization,
     modalShow,
-    modalHide
+    modalHide,
+    select_option
 })(ListWorkOrgs);

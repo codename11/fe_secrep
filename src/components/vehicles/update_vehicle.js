@@ -35,7 +35,7 @@ class UpdateVehicle extends Component {
   }
 
   render() {
-    console.log("update_vehicle: ", this.props);
+    //console.log("update_vehicle: ", this.props);
     let vehicle = this.props.vehicle ? this.props.vehicle : "";
     
     let option1 = [<option key={""} value={""}>None</option>];

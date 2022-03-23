@@ -22,41 +22,47 @@ class UpdatetWorkOrgs extends Component {
     }
     
     async handleSubmit(event) {
-      event.preventDefault();
-      let forma = event.target; 
-      let elements = forma.elements;
-      let len1 = elements.length;
+        event.preventDefault();
+        let forma = event.target; 
+        let elements = forma.elements;
+        let len1 = elements.length;
 
-      const data = {
-            name: elements["name"].value
-      };
-      
-      this.props.update_work_organization(data);
+        /*const data = {
+                name: elements["name"].value,
+                sec_id: this.props.sec_id,
+                select_option: this.props && this.props.select_option ? this.props.select_option : null
+        };*/
+        const data = {
+            id: this.props.select_option.value,
+            name: elements["name"].value,
+            sec_id: this.props.sec_id
+        }
+        this.props.update_work_organization(data);
     }
 
     render() {
-        console.log("workOrgs: ", this.props);
+        //console.log("updworkOrgs: ", this.props);
 
-        let workOrgs = this.props.work_organizations.list_work_organizations;
+        let workOrgs = this.props.listWorkOrgs;
+        let option_value = this.props && this.props.select_option && this.props.select_option.name ? this.props.select_option.name : "";
         
         return (
-            <div>
-                <div className="frame1 container">
-                    <h5>Update work organization</h5>
-                    <hr/>
-                    <Form onSubmit={this.handleSubmit} className="m-1">
-                        
-                        <Form.Group className="mb-1" controlId="workOrgName">
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control type="text" name="name" placeholder="Enter new work organization" />
-                        </Form.Group>
 
-                        <Button variant="outline-primary" type="submit" className="m-1">
-                            Submit
-                        </Button>
-                    </Form>
+            <div className="frame1 container updateWorkOrgs">
+                
+                <Form onSubmit={this.handleSubmit} className="m-1">
+                    
+                    {this.props.workOrgSelect}
 
-                </div>
+                    <Form.Group className="mb-1" controlId="workOrgName" key={option_value}>
+                        <Form.Label>Name</Form.Label>
+                        <Form.Control type="text" name="name" placeholder="Enter new work organization" defaultValue={option_value}/>
+                    </Form.Group>
+
+                    <Button variant="outline-warning" type="submit" className="m-1">
+                        Submit
+                    </Button>
+                </Form>
 
             </div>
         )
@@ -72,6 +78,7 @@ const mapStateToProps = (state) =>{
     return ({
         auth: state.auth.auth,
         work_organizations: state.list_work_organizations,
+        select_option: state.form.select_option
     });
 
 };

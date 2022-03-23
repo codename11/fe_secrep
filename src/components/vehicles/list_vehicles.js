@@ -49,7 +49,7 @@ class ListVehicles extends Component {
     }
 
     render() {
-      console.log("lista: ", this.props);
+      //console.log("lista: ", this.props);
       
       let chosen_vehicle = this.props && this.props.vehicles && this.props.vehicles && this.props.vehicles.list_vehicles && this.props.vehicles.list_vehicles.length > 0 && this.props.itemId ? this.props.vehicles.list_vehicles.find((item, i) => {
         return this.props.itemId===item.id;
