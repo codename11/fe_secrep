@@ -43,7 +43,7 @@ export const create_work_organization = (data) => dispatch => {
     let url = "http://secrep.test/api/create_work_organizations";
 
     auth = store.getState().auth.auth;
-    
+
     fetch(url, {
         method: 'POST',
         crossDomain : true,
@@ -61,7 +61,7 @@ export const create_work_organization = (data) => dispatch => {
 
     })
     .then((data) => {
-        
+
         dispatch({
             type: CREATE_WORK_ORGANIZATION,
             payload: data
@@ -75,9 +75,12 @@ export const create_work_organization = (data) => dispatch => {
 }
 
 export const update_work_organization = (data) => dispatch => {
-    console.log("update_work_organization: ", data);
-    let url = "http://secrep.test/api/update_work_organization";
+    
+    let data1 = null;
+    let data2 = null;
 
+    let url = "http://secrep.test/api/update_work_organization";
+    data1 = data;
     auth = store.getState().auth.auth;
     
     fetch(url, {
@@ -97,12 +100,29 @@ export const update_work_organization = (data) => dispatch => {
 
     })
     .then((data) => {
+
+        data2 = data;
+
+        let list = data2.workOrganizations;
+        let index = list.findIndex((item, i) => {
+            
+            return data1.id === item.id;
+        });
         
-        dispatch({
-            type: UPDATE_WORK_ORGANIZATION,
-            payload: data
+        let updatedWorkOrgs = list.map((item, i) => {
+            
+            if(i===index){
+                
+                item = list[i];
+            }
+            return item;
         });
 
+        dispatch({
+            type: UPDATE_WORK_ORGANIZATION,
+            payload: updatedWorkOrgs
+        });
+        
     })
     .catch((error) => {
         console.error('Error:', error);
@@ -110,10 +130,14 @@ export const update_work_organization = (data) => dispatch => {
 
 }
 
-export const delete_work_organization = (data) => dispatch => {
-    console.log("delete_work_organization: ", data);
-    let url = "http://secrep.test/api/delete_work_organization";
 
+export const delete_work_organization = (data) => dispatch => {
+    
+    let data1 = null;
+    let data2 = null;
+
+    let url = "http://secrep.test/api/delete_work_organization";
+    data1 = data;
     auth = store.getState().auth.auth;
     
     fetch(url, {
@@ -134,9 +158,17 @@ export const delete_work_organization = (data) => dispatch => {
     })
     .then((data) => {
         
+        data2 = data;
+        
+        let list = data2.workOrganizations;
+        let workOrgs = list.splice((item, i) => {
+            
+            return data1.id === item.id;
+        });
+
         dispatch({
             type: DELETE_WORK_ORGANIZATION,
-            payload: data
+            payload: workOrgs
         });
 
     })

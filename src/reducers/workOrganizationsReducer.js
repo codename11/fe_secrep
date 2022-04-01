@@ -9,7 +9,7 @@ let myState = null;
 let list_work_organizations = null;
 
 export default function(state = initialState, action){
-    //console.log("workOrgReducer: ", action);
+    
     switch(action.type){
 
         case LIST_WORK_ORGANIZATIONS:
@@ -33,8 +33,8 @@ export default function(state = initialState, action){
             return myState;
 
         case UPDATE_WORK_ORGANIZATION:
-        
-            list_work_organizations = action.payload.workOrganizations;
+            
+            list_work_organizations = action.payload;
             
             myState = {
                 list_work_organizations: list_work_organizations,
@@ -43,8 +43,8 @@ export default function(state = initialState, action){
             return myState;
 
         case DELETE_WORK_ORGANIZATION:
-    
-            list_work_organizations = action.payload.workOrganizations;
+            
+            list_work_organizations = action.payload;
             
             myState = {
                 list_work_organizations: list_work_organizations,
