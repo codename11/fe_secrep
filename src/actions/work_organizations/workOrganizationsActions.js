@@ -76,11 +76,10 @@ export const create_work_organization = (data) => dispatch => {
 
 export const update_work_organization = (data) => dispatch => {
     
-    let data1 = null;
-    let data2 = null;
+    let list_work_organizations = store.getState().list_work_organizations.list_work_organizations;
 
     let url = "http://secrep.test/api/update_work_organization";
-    data1 = data;
+    
     auth = store.getState().auth.auth;
     
     fetch(url, {
@@ -100,22 +99,21 @@ export const update_work_organization = (data) => dispatch => {
 
     })
     .then((data) => {
-
-        data2 = data;
-
-        let list = data2.workOrganizations;
-        let index = list.findIndex((item, i) => {
+        
+        let index = list_work_organizations.findIndex((item, i) => {
             
-            return data1.id === item.id;
+            return data.workOrganization.id === item.id;
         });
         
-        let updatedWorkOrgs = list.map((item, i) => {
+        let updatedWorkOrgs = list_work_organizations.map((item, i) => {
             
             if(i===index){
-                
-                item = list[i];
+                return data.workOrganization;
             }
-            return item;
+            else{
+                return item;
+            }
+           
         });
 
         dispatch({
@@ -133,11 +131,9 @@ export const update_work_organization = (data) => dispatch => {
 
 export const delete_work_organization = (data) => dispatch => {
     
-    let data1 = null;
-    let data2 = null;
+    let list_work_organizations = store.getState().list_work_organizations.list_work_organizations;
 
     let url = "http://secrep.test/api/delete_work_organization";
-    data1 = data;
     auth = store.getState().auth.auth;
     
     fetch(url, {
@@ -158,12 +154,8 @@ export const delete_work_organization = (data) => dispatch => {
     })
     .then((data) => {
         
-        data2 = data;
-        
-        let list = data2.workOrganizations;
-        let workOrgs = list.splice((item, i) => {
-            
-            return data1.id === item.id;
+        let workOrgs = list_work_organizations.filter((item, i) => {
+            return data.workOrganization.id !== item.id;
         });
 
         dispatch({
