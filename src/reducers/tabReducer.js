@@ -1,4 +1,4 @@
-import { REGISTER_TAB, LOGIN_TAB, LIST_VEHICLES_TAB, CREATE_VEHICLE_TAB, WORK_ORGANIZATION_TAB } from "../actions/types";
+import { REGISTER_TAB, LOGIN_TAB, VEHICLES_TAB, WORK_ORGANIZATION_TAB, EMPLOYEES_TAB } from "../actions/types";
 
 const initialState = {
     tabKey: "register_tab"
@@ -31,7 +31,7 @@ export default function(state = initialState, action){
             
             return myState;
             
-        case LIST_VEHICLES_TAB:
+        case VEHICLES_TAB:
         
             key = action.payload
             
@@ -41,8 +41,8 @@ export default function(state = initialState, action){
             
             return myState;
 
-        case CREATE_VEHICLE_TAB:
-    
+        case WORK_ORGANIZATION_TAB:
+
             key = action.payload
             
             myState = {
@@ -50,8 +50,8 @@ export default function(state = initialState, action){
             };
             
             return myState;
-
-        case WORK_ORGANIZATION_TAB:
+            
+        case EMPLOYEES_TAB:
 
             key = action.payload
             

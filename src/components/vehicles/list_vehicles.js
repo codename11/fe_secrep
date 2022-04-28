@@ -12,6 +12,7 @@ import { modalHide } from "../../actions/modalActions";
 import PropTypes from "prop-types";
 import DeleteVehicle from '../vehicles/delete_vehicle';
 import UpdateVehicle from '../vehicles/update_vehicle';
+import CreateVehicle from '../vehicles/create_vehicle';
 
 class ListVehicles extends Component {
 
@@ -177,7 +178,10 @@ class ListVehicles extends Component {
 
       return (
         <div>
-          <Form onSubmit={this.handleSubmit} className="m-1">
+          <CreateVehicle/><hr/>
+
+          <h4>List vehicles</h4>
+          <Form onSubmit={this.handleSubmit}>
 
               {typesSelect}
               {workOrgSelect}

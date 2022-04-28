@@ -7,12 +7,12 @@ import Tab from 'react-bootstrap/Tab';
 import { setTab } from "./actions/tabActions";
 import Login from './components/auth/login';
 import ListVehicles from './components/vehicles/list_vehicles';
-import CreateVehicle from './components/vehicles/create_vehicle';
 import { get_vehicles } from "./actions/vehicles/vehicleActions";
 import { get_vehicle_types } from "./actions/vehicle_types/vehicleTypesActions";
 import { list_work_organizations } from "./actions/work_organizations/workOrganizationsActions";
 import ListWorkOrgs from './components/work_organizations/list_work_organizations';
 import PropTypes from "prop-types";
+import ListEmployees from './components/employees/list_employees';
 
 class App extends Component {
 
@@ -24,7 +24,7 @@ class App extends Component {
 
   handleSelect(tabKey){
 
-    if(this.props && this.props.auth && this.props.auth.access_token && tabKey==="list_vehicles_tab"){
+    if(this.props && this.props.auth && this.props.auth.access_token && tabKey==="vehicles_tab"){
 
       this.props.get_vehicles(); 
       this.props.get_vehicle_types(); 
@@ -55,20 +55,20 @@ class App extends Component {
           </Tab>
 
           {access_token!==null ? 
-            <Tab eventKey="list_vehicles_tab" title="List_Vehicles">
-              {tabKey==="list_vehicles_tab" ? <ListVehicles/> : null}
+            <Tab eventKey="vehicles_tab" title="Vehicles">
+              {tabKey==="vehicles_tab" ? <ListVehicles/> : null}
             </Tab> 
           : null}
 
-          {access_token!==null ? 
-            <Tab eventKey="create_vehicle_tab" title="Create_Vehicle">
-              {tabKey==="create_vehicle_tab" ? <CreateVehicle/> : null}
+          {access_token!==null ?
+            <Tab eventKey="work_organization_tab" title="Work_Organizations">
+              {tabKey==="work_organization_tab" ? <ListWorkOrgs/> : null}
             </Tab> 
           : null}
 
-          <Tab eventKey="work_organization_tab" title="Work_Organizations">
-            {tabKey==="work_organization_tab" ? <ListWorkOrgs/> : null}
-          </Tab> 
+            <Tab eventKey="employees_tab" title="Employees">
+              {tabKey==="employees_tab" ? <ListEmployees/> : null}
+            </Tab> 
 
         </Tabs>
 
