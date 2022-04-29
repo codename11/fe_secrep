@@ -8,6 +8,7 @@ import Table from 'react-bootstrap/Table';
 import { modalShow } from "../../actions/modalActions";
 import { modalHide } from "../../actions/modalActions";
 import CustomModal from '../subcomponents/CustomModal';
+import CreateEmployee from './create_employee';
 
 class ListEmployees extends Component {
 
@@ -41,7 +42,7 @@ class ListEmployees extends Component {
     }
 
     render() {
-      console.log("employees: ", this.props);
+      console.log("list_employees: ", this.props);
 
       let employee_thead = <tr>
         <th>avatar</th>
@@ -59,39 +60,41 @@ class ListEmployees extends Component {
         
         let employee_tbody = this.props && this.props.list_employees && this.props.list_employees.length>0 ? this.props.list_employees.map((item, i) => {
 
-            let x1 = new Date(item.created_at);
-            let d1Day = x1.getDate();
-            let d1Month = x1.getMonth();
-            let d1Year = x1.getFullYear();
-            let created_at = d1Day+"/"+d1Month+"/"+d1Year;
+            if(item){
+                let x1 = new Date(item.created_at);
+                let d1Day = x1.getDate();
+                let d1Month = x1.getMonth();
+                let d1Year = x1.getFullYear();
+                let created_at = d1Day+"/"+d1Month+"/"+d1Year;
 
-            let x2 = new Date(item.updated_at);
-            let d2Day = x2.getDate();
-            let d2Month = x2.getMonth();
-            let d2Year = x2.getFullYear();
-            let updated_at = d2Day+"/"+d2Month+"/"+d2Year;
-            
-            return <tr key={item.id}>
-                <td className="avatarTd"><img src={"http://secrep.test/storage/Stefanovic1_Veljko1/"+item.avatar} alt={"avatar"+i} className="avatar"/></td>
-                <td>{item.firstName}</td>
-                <td>{item.lastName}</td>
-                <td>{created_at}</td>
-                <td>{updated_at}</td>
-                <td>{item.deliveries.length}</td>
-                <td>{item.entered_by.name}</td>
-                <td>{item.work_organization.name}</td>
-                <td className="grid-container actionsContainer">
-                    
-                    {this.props && this.props.auth && this.props.auth.access_token ? 
-                        <Button variant="outline-warning m-1" itemID={item.id} onClick={() => this.props.modalShow([true, item.id, "update"])}>Update</Button>
-                    : null}
-                    
-                    {this.props && this.props.auth && this.props.auth.access_token ? 
-                        <Button variant="outline-danger m-1" itemID ={item.id} onClick={() => this.props.modalShow([true, item.id, "delete"])}>Delete</Button>
-                    : null}
+                let x2 = new Date(item.updated_at);
+                let d2Day = x2.getDate();
+                let d2Month = x2.getMonth();
+                let d2Year = x2.getFullYear();
+                let updated_at = d2Day+"/"+d2Month+"/"+d2Year;
+                
+                return <tr key={item.id}>
+                    <td className="avatarTd"><img src={"http://secrep.test/storage/"+item.lastName+"_"+item.firstName+"/"+item.avatar} alt={"avatar"+i} className="avatar"/></td>
+                    <td>{item.firstName}</td>
+                    <td>{item.lastName}</td>
+                    <td>{created_at}</td>
+                    <td>{updated_at}</td>
+                    <td>{item.deliveries ? item.deliveries.length : null}</td>
+                    <td>{item.entered_by ? item.entered_by.name : null}</td>
+                    <td>{item.work_organization.name}</td>
+                    <td className="grid-container actionsContainer">
+                        
+                        {this.props && this.props.auth && this.props.auth.access_token ? 
+                            <Button variant="outline-warning m-1" itemID={item.id} onClick={() => this.props.modalShow([true, item.id, "update"])}>Update</Button>
+                        : null}
+                        
+                        {this.props && this.props.auth && this.props.auth.access_token ? 
+                            <Button variant="outline-danger m-1" itemID ={item.id} onClick={() => this.props.modalShow([true, item.id, "delete"])}>Delete</Button>
+                        : null}
 
-                </td>
-            </tr>
+                    </td>
+                </tr>
+            }
 
         }) : null;
         let tbody = <tbody>{employee_tbody}</tbody>;
@@ -163,6 +166,7 @@ class ListEmployees extends Component {
             <h4>List employees</h4>
             {employee_table}
             <hr/>
+            <CreateEmployee authId={this.props.auth.user.id} employees={this.props.list_employees}/>
             {myModal}
         </div>
         )
@@ -189,7 +193,7 @@ const mapStateToProps = (state) =>{
         list_employees: state.employees.list_employees,
         modalState: state.modalState.modalState,
         itemId: state.modalState.itemId,
-        modal_purpose: state.modalState.modal_purpose,
+        modal_purpose: state.modalState.modal_purpose
     });
 
 };

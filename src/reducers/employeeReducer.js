@@ -1,4 +1,4 @@
-import { LIST_EMPLOYEES } from "../actions/types";
+import { LIST_EMPLOYEES, CREATE_EMPLOYEE } from "../actions/types";
 
 const initialState = {
     list_employees: null
@@ -19,6 +19,16 @@ export default function(state = initialState, action){
             };
             
             return myState;
+
+        /*case CREATE_EMPLOYEE:
+            console.log("CREATE_EMPLOYEE: ", action.payload);
+            list_employees = action.payload;
+            
+            myState = {
+                list_employees: list_employees,
+            };
+            
+            return myState;*/
 
         default:
             return state;
