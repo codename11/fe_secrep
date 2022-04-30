@@ -1,10 +1,8 @@
-import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import { Component } from 'react'
 import {connect} from "react-redux";
 import { list_work_organizations } from "../../actions/work_organizations/workOrganizationsActions";
-import { create_work_organization } from "../../actions/work_organizations/workOrganizationsActions";
 import { update_work_organization } from "../../actions/work_organizations/workOrganizationsActions";
 import UpdateWorkOrgs from '../work_organizations/update_work_organization';
 import { modalShow } from "../../actions/modalActions";
@@ -13,6 +11,7 @@ import CustomModal from '../subcomponents/CustomModal';
 import { select_option } from "../../actions/custom_actions/selectOptionActions";
 import DeleteWorkOrgs from '../work_organizations/delete_work_organization';
 import PropTypes from "prop-types";
+import CreateWorkOrgs from '../work_organizations/create_work_organization';
 
 class ListWorkOrgs extends Component {
 
@@ -51,7 +50,6 @@ class ListWorkOrgs extends Component {
       event.preventDefault();
       let forma = event.target; 
       let elements = forma.elements;
-      let len1 = elements.length;
 
       const data = {
             name: elements["name"].value
@@ -131,10 +129,6 @@ class ListWorkOrgs extends Component {
 
         }
 
-        let workOrgSelect = <Form.Select id="workOrg" className="m-1" aria-label="Default select example" name="workOrg" onChange={this.handleChange}>
-            {option2}
-        </Form.Select>;
-
         if(this.props && this.props.modal_purpose){
 
             if(this.props.modal_purpose === "delete"){
@@ -163,23 +157,8 @@ class ListWorkOrgs extends Component {
 
         return (
             <div>
-                <div className="frame1 container">
-                    <h5>Enter new work organization</h5>
-                    <hr/>
-                    <Form onSubmit={this.handleSubmit} className="m-1">
-                        
-                        <Form.Group className="mb-1" controlId="workOrgName">
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control type="text" name="name" placeholder="Enter new work organization" />
-                        </Form.Group>
-
-                        <Button variant="outline-primary" type="submit" className="m-1">
-                            Submit
-                        </Button>
-                    </Form>
-
-                </div>
-
+                <CreateWorkOrgs/>
+                <hr/>
                 <h5>Listed work organizations</h5>
                 <hr/>
                 {workOrgs_table}
@@ -193,10 +172,6 @@ class ListWorkOrgs extends Component {
 
 list_work_organizations.propTypes = {
     list_work_organizations: PropTypes.func.isRequired,
-};
-
-create_work_organization.propTypes = {
-    create_work_organization: PropTypes.func.isRequired,
 };
 
 modalShow.propTypes = {
@@ -229,8 +204,7 @@ const mapStateToProps = (state) =>{
 };
 
 export default connect(mapStateToProps, { 
-    list_work_organizations, 
-    create_work_organization,
+    list_work_organizations,
     modalShow,
     modalHide,
     select_option

@@ -1,6 +1,5 @@
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import Table from 'react-bootstrap/Table';
 import { Component } from 'react'
 import {connect} from "react-redux";
 import { list_work_organizations } from "../../actions/work_organizations/workOrganizationsActions";
@@ -26,7 +25,6 @@ class UpdateWorkOrgs extends Component {
         event.preventDefault();
         let forma = event.target; 
         let elements = forma.elements;
-        let len1 = elements.length;
 
         let selectedWorkOrg = this.props && this.props.work_organizations && this.props.work_organizations.list_work_organizations ? this.props.work_organizations.list_work_organizations.find((item, i) => {
             return this.props.itemId===item.id;

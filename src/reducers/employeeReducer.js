@@ -1,4 +1,4 @@
-import { LIST_EMPLOYEES, CREATE_EMPLOYEE } from "../actions/types";
+import { LIST_EMPLOYEES, CREATE_EMPLOYEE, UPDATE_EMPLOYEE } from "../actions/types";
 
 const initialState = {
     list_employees: null

@@ -2,13 +2,13 @@ import { Component } from 'react'
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import { get_employees } from "../../actions/employees/employeeActions";
-import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import { modalShow } from "../../actions/modalActions";
 import { modalHide } from "../../actions/modalActions";
 import CustomModal from '../subcomponents/CustomModal';
 import CreateEmployee from './create_employee';
+import UpdateEmployee from './update_employee';
 
 class ListEmployees extends Component {
 
@@ -60,41 +60,40 @@ class ListEmployees extends Component {
         
         let employee_tbody = this.props && this.props.list_employees && this.props.list_employees.length>0 ? this.props.list_employees.map((item, i) => {
 
-            if(item){
-                let x1 = new Date(item.created_at);
-                let d1Day = x1.getDate();
-                let d1Month = x1.getMonth();
-                let d1Year = x1.getFullYear();
-                let created_at = d1Day+"/"+d1Month+"/"+d1Year;
+            let x1 = new Date(item.created_at);
+            let d1Day = x1.getDate();
+            let d1Month = x1.getMonth();
+            let d1Year = x1.getFullYear();
+            let created_at = d1Day+"/"+d1Month+"/"+d1Year;
 
-                let x2 = new Date(item.updated_at);
-                let d2Day = x2.getDate();
-                let d2Month = x2.getMonth();
-                let d2Year = x2.getFullYear();
-                let updated_at = d2Day+"/"+d2Month+"/"+d2Year;
-                
-                return <tr key={item.id}>
-                    <td className="avatarTd"><img src={"http://secrep.test/storage/"+item.lastName+"_"+item.firstName+"/"+item.avatar} alt={"avatar"+i} className="avatar"/></td>
-                    <td>{item.firstName}</td>
-                    <td>{item.lastName}</td>
-                    <td>{created_at}</td>
-                    <td>{updated_at}</td>
-                    <td>{item.deliveries ? item.deliveries.length : null}</td>
-                    <td>{item.entered_by ? item.entered_by.name : null}</td>
-                    <td>{item.work_organization.name}</td>
-                    <td className="grid-container actionsContainer">
-                        
-                        {this.props && this.props.auth && this.props.auth.access_token ? 
-                            <Button variant="outline-warning m-1" itemID={item.id} onClick={() => this.props.modalShow([true, item.id, "update"])}>Update</Button>
-                        : null}
-                        
-                        {this.props && this.props.auth && this.props.auth.access_token ? 
-                            <Button variant="outline-danger m-1" itemID ={item.id} onClick={() => this.props.modalShow([true, item.id, "delete"])}>Delete</Button>
-                        : null}
+            let x2 = new Date(item.updated_at);
+            let d2Day = x2.getDate();
+            let d2Month = x2.getMonth();
+            let d2Year = x2.getFullYear();
+            let updated_at = d2Day+"/"+d2Month+"/"+d2Year;
+            
+            return <tr key={item.id}>
+                <td className="avatarTd"><img src={"http://secrep.test/storage/"+item.lastName+"_"+item.firstName+"/"+item.avatar} alt={"avatar"+i} className="avatar"/></td>
+                <td>{item.firstName}</td>
+                <td>{item.lastName}</td>
+                <td>{created_at}</td>
+                <td>{updated_at}</td>
+                <td>{item.deliveries ? item.deliveries.length : null}</td>
+                <td>{item.entered_by ? item.entered_by.name : null}</td>
+                <td>{item.work_organization.name}</td>
+                <td className="grid-container actionsContainer">
+                    
+                    {this.props && this.props.auth && this.props.auth.access_token ? 
+                        <Button variant="outline-warning m-1" itemID={item.id} onClick={() => this.props.modalShow([true, item.id, "update"])}>Update</Button>
+                    : null}
+                    
+                    {this.props && this.props.auth && this.props.auth.access_token ? 
+                        <Button variant="outline-danger m-1" itemID ={item.id} onClick={() => this.props.modalShow([true, item.id, "delete"])}>Delete</Button>
+                    : null}
 
-                    </td>
-                </tr>
-            }
+                </td>
+            </tr>;
+            
 
         }) : null;
         let tbody = <tbody>{employee_tbody}</tbody>;
@@ -136,22 +135,13 @@ class ListEmployees extends Component {
 
             if(this.props.modal_purpose === "update"){
                 
-                let modalHeaderTextUpdateEmployee = this.props && this.props.modal_purpose && this.props.modal_purpose === "update" ? "You are trying to update an item: " : "";
-                let modalBodyTextUpdateEmployee = this.props && this.props.modal_purpose && this.props.modal_purpose === "update" && chosen_employee ? <div><h6>An employee: </h6> 
-                <div>
-                    <div><strong>Name:</strong> {chosen_employee.firstName}</div>
-                    <div><strong>Type:</strong> {chosen_employee.lastName}</div>
-                    <div><strong>Organization:</strong> {chosen_employee.work_organization.name}</div>
-                    <div><strong>Created_at:</strong> {chosen_employee.created_at}</div>
-                    <div><strong>Updated_at:</strong> {chosen_employee.updated_at}</div>
-                </div>
-                </div>
-                : "";
+                let modalHeaderTextUpdateEmployee = this.props && this.props.modal_purpose && this.props.modal_purpose === "update" ? "You are trying to update an employee with an id of: "+chosen_employee.id : "";
+                let modalBodyTextUpdateEmployee = "";
                 modalHeaderText = modalHeaderTextUpdateEmployee;
                 
                 modalBodyText = modalBodyTextUpdateEmployee;
 
-                //form = this.props && this.props.modal_purpose && this.props.modal_purpose==="update" ? <UpdateVehicle vehicle={chosen_vehicle}/> : null;
+                form = this.props && this.props.modal_purpose && this.props.modal_purpose==="update" ? <UpdateEmployee authId={this.props.auth.user.id} chosen_employee ={chosen_employee} employees={this.props.list_employees}/> : null;
 
             }
 
@@ -167,6 +157,7 @@ class ListEmployees extends Component {
             {employee_table}
             <hr/>
             <CreateEmployee authId={this.props.auth.user.id} employees={this.props.list_employees}/>
+            
             {myModal}
         </div>
         )
