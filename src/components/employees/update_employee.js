@@ -5,6 +5,8 @@ import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import { update_employee } from "../../actions/employees/employeeActions";
 import { list_work_organizations } from "../../actions/work_organizations/workOrganizationsActions";
+import Errors from '../subcomponents/errors';
+import { modalHide } from "../../actions/modalActions";
 
 class UpdateEmployee extends Component {
 
@@ -26,15 +28,16 @@ class UpdateEmployee extends Component {
         let target = event.target;
         let elements = target.elements;
         const data = {
-            id: this.props && this.props.chosen_employee && this.props.chosen_employee.id ? this.props.chosen_employee.id : null,
+            id: elements["id"].value && elements["id"].value.length > 0 ? elements["id"].value : null,
             firstName: elements["firstName"].value && elements["firstName"].value.length > 0 ? elements["firstName"].value : null,
             lastName: elements["lastName"].value && elements["lastName"].value.length > 0 ? elements["lastName"].value : null,
             work_org_id: elements["workOrg"].value && elements["workOrg"].value.length > 0 ? elements["workOrg"].value : null,
             sec_id: this.props.authId,
             avatar: elements["avatar"] && elements["avatar"].files[0] ? elements["avatar"].files[0] : null,
         }
-        console.log("data: ", data);
+        
         let formData = new FormData();
+        formData.append('_method', "PATCH");
         formData.append('id', data.id);
         formData.append('firstName', data.firstName);
         formData.append('lastName', data.lastName);
@@ -43,7 +46,8 @@ class UpdateEmployee extends Component {
         formData.append('avatar', data.avatar);
 
         this.props.update_employee(formData);
-        //"http://secrep.test/storage/"
+        this.props.modalHide([false]);
+        
     }
 
   render() {
@@ -72,10 +76,14 @@ class UpdateEmployee extends Component {
             {option1}
         </Form.Select>;
 
+        let chosen_employee_id = this.props && this.props.chosen_employee && this.props.chosen_employee.id ? this.props.chosen_employee.id : null;
+
     return (
       <div>
         <Form onSubmit={this.handleSubmit} name="myForm" encType="multipart/form-data">
 
+            <Form.Control type="hidden" name="id" value={chosen_employee_id} required/>
+            
             <Form.Group className="mb-1" controlId="firstName">
                 <Form.Label>Name</Form.Label>
                 <Form.Control type="text" name="firstName" placeholder="Enter first name" defaultValue={chosen_employee.firstName}/>
@@ -100,6 +108,7 @@ class UpdateEmployee extends Component {
             </Button>
         </Form>
         
+        <Errors errors={this.props.errors}/>
     </div>
     )
   }
@@ -116,13 +125,18 @@ list_work_organizations.propTypes = {
 const mapStateToProps = (state) =>{ 
   
     return ({
+        list_employees: state.employees.list_employees,
         updated_employee: state.employees.updated_employees,
-        work_organizations: state.list_work_organizations
+        work_organizations: state.list_work_organizations,
+        errors: state.errors,
+        modalState: state.modalState.modalState,
+        itemId: state.modalState.itemId
     });
 
 };
 
 export default connect(mapStateToProps, { 
     update_employee,
-    list_work_organizations
+    list_work_organizations,
+    modalHide
 })(UpdateEmployee);

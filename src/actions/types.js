@@ -20,3 +20,4 @@ export const EMPLOYEES_TAB = "EMPLOYEES_TAB";
 export const LIST_EMPLOYEES = "LIST_EMPLOYEES";
 export const CREATE_EMPLOYEE = "CREATE_EMPLOYEE";
 export const UPDATE_EMPLOYEE = "UPDATE_EMPLOYEE";
+export const ERRORS = "ERRORS";

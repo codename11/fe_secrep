@@ -55,3 +55,23 @@
 .actionsContainer{
     padding-bottom: 7% !important;
 }
+
+@keyframes myAnimation{
+    0%{
+        display: none;
+        opacity: 0;
+    }
+    50%{
+        opacity: 0.5;
+    }
+    100%{
+        opacity: 1;
+    }
+}
+  
+.temporary{
+    display: block !important;
+    animation-name: myAnimation;
+    animation-duration: 2000ms;
+    animation-fill-mode: forwards;
+}

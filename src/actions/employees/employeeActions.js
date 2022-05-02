@@ -1,4 +1,4 @@
-import { LIST_EMPLOYEES, CREATE_EMPLOYEE, UPDATE_EMPLOYEE } from "../types";
+import { LIST_EMPLOYEES, CREATE_EMPLOYEE, UPDATE_EMPLOYEE, ERRORS } from "../types";
 import store from "../../store";
 
 let auth = null;
@@ -80,14 +80,11 @@ export const update_employee = (data) => dispatch => {
 
     let url = "http://secrep.test/api/update_employee";
     
-    for(var pair of data.entries()) {
-        console.log(pair[0]+ ', '+ pair[1]);
-     }
     auth = store.getState().auth.auth;
     let list_employees = store.getState().employees.list_employees;
     
     fetch(url, {
-        method: 'PATCH',
+        method: 'POST',
         crossDomain : true,
         headers: {
             "X-Requested-With": "XMLHttpRequest",
@@ -102,8 +99,26 @@ export const update_employee = (data) => dispatch => {
 
     })
     .then((data) => {
-        console.log(data, list_employees);
-        /*list_employees.push(data.employee);
+
+        let errors = null;
+        if("errors" in data){
+            let flattenedObj = (obj) => Object.keys(obj).reduce((acc, cur) => typeof obj[cur] === 'object' ? { ...acc, ...flattenedObj(obj[cur]) } : { ...acc, [cur]: obj[cur] } , {});
+            errors = {
+                origin: "update_employee",
+                messages: Object.values(flattenedObj(data))
+            };
+            dispatch({
+                type: ERRORS,
+                payload: errors
+            });
+        }
+        else{
+            dispatch({
+                type: ERRORS,
+                payload: null
+            });
+        }
+        
         let index = list_employees.findIndex((item, i) => {
             return data.employee.id === item.id;
         });
@@ -111,18 +126,19 @@ export const update_employee = (data) => dispatch => {
         let updatedEmployees = list_employees.map((item, i) => {
             
             if(i===index){
-                return data.list_employees;
+                
+                return data.employee;
             }
             else{
                 return item;
             }
            
         });
-
+        
         dispatch({
             type: LIST_EMPLOYEES,
             payload: [...updatedEmployees]
-        });*/
+        });
 
     })
     .catch((error) => {

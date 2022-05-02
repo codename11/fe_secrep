@@ -7,6 +7,7 @@ import workOrganizationsReducer from "./workOrganizationsReducer";
 import modalReducer from "./modalReducer";
 import customReducer from "./customReducer";
 import employeeReducer from "./employeeReducer";
+import errorReducer from "./errorReducer";
 
 export default combineReducers({
     auth: authReducer,
@@ -16,5 +17,6 @@ export default combineReducers({
     list_work_organizations: workOrganizationsReducer,
     modalState: modalReducer,
     form: customReducer,
-    employees: employeeReducer
+    employees: employeeReducer,
+    errors: errorReducer
 });

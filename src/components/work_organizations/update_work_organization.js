@@ -96,5 +96,5 @@ const mapStateToProps = (state) =>{
 export default connect(mapStateToProps, { 
     list_work_organizations, 
     update_work_organization,
-    modalHide,
+    modalHide
 })(UpdateWorkOrgs);
