@@ -8,6 +8,7 @@ import modalReducer from "./modalReducer";
 import customReducer from "./customReducer";
 import employeeReducer from "./employeeReducer";
 import errorReducer from "./errorReducer";
+import alertReducer from "./alertReducer";
 
 export default combineReducers({
     auth: authReducer,
@@ -18,5 +19,6 @@ export default combineReducers({
     modalState: modalReducer,
     form: customReducer,
     employees: employeeReducer,
-    errors: errorReducer
+    errors: errorReducer,
+    alert: alertReducer
 });

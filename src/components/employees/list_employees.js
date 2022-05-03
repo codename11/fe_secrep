@@ -184,7 +184,9 @@ const mapStateToProps = (state) =>{
         list_employees: state.employees.list_employees,
         modalState: state.modalState.modalState,
         itemId: state.modalState.itemId,
-        modal_purpose: state.modalState.modal_purpose
+        modal_purpose: state.modalState.modal_purpose,
+        alertState: state.alert.alertState,
+        alert_purpose: state.alert.alert_purpose
     });
 
 };

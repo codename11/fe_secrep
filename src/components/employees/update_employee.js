@@ -5,8 +5,11 @@ import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import { update_employee } from "../../actions/employees/employeeActions";
 import { list_work_organizations } from "../../actions/work_organizations/workOrganizationsActions";
-import Errors from '../subcomponents/errors';
 import { modalHide } from "../../actions/modalActions";
+import Alert from 'react-bootstrap/Alert';
+import { alertShow } from "../../actions/alertActions";
+import { alertHide } from "../../actions/alertActions";
+import ListGroup from 'react-bootstrap/ListGroup';
 
 class UpdateEmployee extends Component {
 
@@ -46,7 +49,6 @@ class UpdateEmployee extends Component {
         formData.append('avatar', data.avatar);
 
         this.props.update_employee(formData);
-        this.props.modalHide([false]);
         
     }
 
@@ -77,6 +79,7 @@ class UpdateEmployee extends Component {
         </Form.Select>;
 
         let chosen_employee_id = this.props && this.props.chosen_employee && this.props.chosen_employee.id ? this.props.chosen_employee.id : null;
+        let errors = this.props && this.props.errors && this.props.errors.errors && this.props.errors.errors.messages ? this.props.errors.errors.messages : null;
 
     return (
       <div>
@@ -108,7 +111,16 @@ class UpdateEmployee extends Component {
             </Button>
         </Form>
         
-        <Errors errors={this.props.errors}/>
+        <Alert className="mt-2" variant="danger" show={this.props.alertState} onClick={() => this.props.alertHide([false])} dismissible>
+            <Alert.Heading>There were {errors && errors.length ? "errors:" : null}</Alert.Heading>
+            
+            <ListGroup variant="flush">
+                {errors && errors.length>0 ? errors.map((item, i) => {
+                    return <ListGroup.Item variant="danger" key={i}>{item}</ListGroup.Item>;
+                }) : null}
+            </ListGroup>
+        </Alert>
+
     </div>
     )
   }
@@ -122,6 +134,14 @@ list_work_organizations.propTypes = {
     list_work_organizations: PropTypes.func.isRequired,
 };
 
+alertShow.propTypes = {
+    alertShow: PropTypes.func.isRequired,
+};
+
+alertHide.propTypes = {
+    alertHide: PropTypes.func.isRequired,
+};
+
 const mapStateToProps = (state) =>{ 
   
     return ({
@@ -130,7 +150,9 @@ const mapStateToProps = (state) =>{
         work_organizations: state.list_work_organizations,
         errors: state.errors,
         modalState: state.modalState.modalState,
-        itemId: state.modalState.itemId
+        itemId: state.modalState.itemId,
+        alertState: state.alert.alertState,
+        alert_purpose: state.alert.alert_purpose
     });
 
 };
@@ -138,5 +160,7 @@ const mapStateToProps = (state) =>{
 export default connect(mapStateToProps, { 
     update_employee,
     list_work_organizations,
-    modalHide
+    modalHide,
+    alertShow,
+    alertHide
 })(UpdateEmployee);

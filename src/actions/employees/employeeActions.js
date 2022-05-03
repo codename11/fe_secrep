@@ -1,4 +1,4 @@
-import { LIST_EMPLOYEES, CREATE_EMPLOYEE, UPDATE_EMPLOYEE, ERRORS } from "../types";
+import { LIST_EMPLOYEES, CREATE_EMPLOYEE, UPDATE_EMPLOYEE, ERRORS, ALERT_SHOW, ALERT_HIDE } from "../types";
 import store from "../../store";
 
 let auth = null;
@@ -61,9 +61,9 @@ export const create_employee = (data) => dispatch => {
 
     })
     .then((data) => {
-        console.log("emp1: ", data);
+        
         list_employees.push(data.employee);
-        console.log("emp2: ", list_employees);
+        
         dispatch({
             type: LIST_EMPLOYEES,
             payload: [...list_employees]
@@ -111,34 +111,48 @@ export const update_employee = (data) => dispatch => {
                 type: ERRORS,
                 payload: errors
             });
+            
+            dispatch({
+                type: ALERT_SHOW,
+                payload: {
+                    alertState: true,
+                    alert_purpose: "update_employee"
+                }
+            });
+            
         }
         else{
-            dispatch({
-                type: ERRORS,
-                payload: null
-            });
-        }
-        
-        let index = list_employees.findIndex((item, i) => {
-            return data.employee.id === item.id;
-        });
-        
-        let updatedEmployees = list_employees.map((item, i) => {
             
-            if(i===index){
+            let index = list_employees.findIndex((item, i) => {
+                return data.employee.id === item.id;
+            });
+            
+            let updatedEmployees = list_employees.map((item, i) => {
                 
-                return data.employee;
-            }
-            else{
-                return item;
-            }
-           
-        });
-        
-        dispatch({
-            type: LIST_EMPLOYEES,
-            payload: [...updatedEmployees]
-        });
+                if(i===index){
+                    
+                    return data.employee;
+                }
+                else{
+                    return item;
+                }
+               
+            });
+            
+            dispatch({
+                type: LIST_EMPLOYEES,
+                payload: [...updatedEmployees]
+            });
+
+            dispatch({
+                type: ALERT_HIDE,
+                payload: {
+                    alertState: false,
+                    alert_purpose: null
+                }
+            });
+
+        }
 
     })
     .catch((error) => {
