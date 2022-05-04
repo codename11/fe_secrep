@@ -22,7 +22,7 @@ class DeleteVehicle extends Component {
     let target = event.target;
     let vehicleid = target.parentElement.elements["vehicleid"].value;
     this.props.deleteVehicle(vehicleid);
-    this.props.modalHide([false])
+    this.props.modalHide([false]);
 
   }
 

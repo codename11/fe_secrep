@@ -49,7 +49,7 @@ class UpdateEmployee extends Component {
         formData.append('avatar', data.avatar);
 
         this.props.update_employee(formData);
-        
+        this.props.modalHide([false]);
     }
 
   render() {

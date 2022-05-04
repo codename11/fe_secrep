@@ -41,6 +41,9 @@ class CreateEmployee extends Component {
 
         this.props.create_employee(formData);
         console.log("create_employee: ", this.props);
+        for(let i=0;i<elements.length;i++){
+            elements[i].value = "";
+        }
     }
 
   render() {

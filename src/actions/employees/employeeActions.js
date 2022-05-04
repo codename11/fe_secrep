@@ -1,4 +1,4 @@
-import { LIST_EMPLOYEES, CREATE_EMPLOYEE, UPDATE_EMPLOYEE, ERRORS, ALERT_SHOW, ALERT_HIDE } from "../types";
+import { LIST_EMPLOYEES, CREATE_EMPLOYEE, UPDATE_EMPLOYEE, ERRORS, ALERT_SHOW, ALERT_HIDE, DELETE_EMPLOYEE } from "../types";
 import store from "../../store";
 
 let auth = null;
@@ -153,6 +153,47 @@ export const update_employee = (data) => dispatch => {
             });
 
         }
+
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+
+}
+
+export const delete_employee = (data) => dispatch => {
+    
+    auth = store.getState().auth.auth;
+    let list_employees = store.getState().employees.list_employees;
+
+    const url = "http://secrep.test/api/delete_employee";
+    fetch(url, {
+        method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
+        crossDomain : true,
+        headers: {
+            "X-Requested-With": "XMLHttpRequest",
+            "Content-Type": 'application/json',
+            "Accept": 'application/json',
+            "Authorization": "Bearer " + auth.access_token
+        },
+        body: JSON.stringify(data)
+        
+    })
+    .then((response) => {
+
+        return response.json();
+
+    })// parses JSON response into native JavaScript objects
+    .then((data) => {
+        
+        let employees = list_employees.filter((item, i) => {
+            return data.employee.id !== item.id;
+        });
+
+        dispatch({
+            type: LIST_EMPLOYEES,
+            payload: [...employees]
+        });
 
     })
     .catch((error) => {

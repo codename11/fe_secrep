@@ -9,6 +9,7 @@ import { modalHide } from "../../actions/modalActions";
 import CustomModal from '../subcomponents/CustomModal';
 import CreateEmployee from './create_employee';
 import UpdateEmployee from './update_employee';
+import DeleteEmployee from './delete_employee';
 
 class ListEmployees extends Component {
 
@@ -129,7 +130,7 @@ class ListEmployees extends Component {
                 modalHeaderText = modalHeaderTextDeleteEmployee;
                 
                 modalBodyText = modalBodyTextDeleteEmployee;
-                //form = this.props && this.props.modal_purpose && this.props.modal_purpose==="delete" ? <DeleteVehicle vehicleid={this.props.itemId}/> : null;
+                form = this.props && this.props.modal_purpose && this.props.modal_purpose==="delete" ? <DeleteEmployee authId={this.props.auth.user.id} chosen_employee={chosen_employee}/> : null;
 
             }
 

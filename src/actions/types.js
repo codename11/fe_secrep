@@ -23,3 +23,4 @@ export const UPDATE_EMPLOYEE = "UPDATE_EMPLOYEE";
 export const ERRORS = "ERRORS";
 export const ALERT_SHOW = "ALERT_SHOW";
 export const ALERT_HIDE = "ALERT_HIDE";
+export const DELETE_EMPLOYEE = "DELETE_EMPLOYEE";
