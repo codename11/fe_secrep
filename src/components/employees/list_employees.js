@@ -11,7 +11,7 @@ import CreateEmployee from './create_employee';
 import UpdateEmployee from './update_employee';
 import DeleteEmployee from './delete_employee';
 
-class ListEmployees extends Component {
+class Employees extends Component {
 
     constructor(props) {
 
@@ -196,4 +196,4 @@ export default connect(mapStateToProps, {
     get_employees,
     modalShow,
     modalHide
-})(ListEmployees);
+})(Employees);

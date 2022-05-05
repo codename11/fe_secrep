@@ -6,13 +6,14 @@ import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import { setTab } from "./actions/tabActions";
 import Login from './components/auth/login';
-import ListVehicles from './components/vehicles/list_vehicles';
+import Vehicles from './components/vehicles/list_vehicles';
 import { get_vehicles } from "./actions/vehicles/vehicleActions";
 import { get_vehicle_types } from "./actions/vehicle_types/vehicleTypesActions";
 import { list_work_organizations } from "./actions/work_organizations/workOrganizationsActions";
-import ListWorkOrgs from './components/work_organizations/list_work_organizations';
+import WorkOrgs from './components/work_organizations/list_work_organizations';
 import PropTypes from "prop-types";
-import ListEmployees from './components/employees/list_employees';
+import Employees from './components/employees/list_employees';
+import Deliveries from './components/deliveries/list_deliveries';
 
 class App extends Component {
 
@@ -56,21 +57,25 @@ class App extends Component {
 
           {access_token!==null ? 
             <Tab eventKey="vehicles_tab" title="Vehicles">
-              {tabKey==="vehicles_tab" ? <ListVehicles/> : null}
+              {tabKey==="vehicles_tab" ? <Vehicles/> : null}
             </Tab> 
           : null}
 
           {access_token!==null ?
             <Tab eventKey="work_organization_tab" title="Work_Organizations">
-              {tabKey==="work_organization_tab" ? <ListWorkOrgs/> : null}
+              {tabKey==="work_organization_tab" ? <WorkOrgs/> : null}
             </Tab> 
           : null}
 
           {access_token!==null ?
             <Tab eventKey="employees_tab" title="Employees">
-              {tabKey==="employees_tab" ? <ListEmployees/> : null}
+              {tabKey==="employees_tab" ? <Employees/> : null}
             </Tab> 
           : null}
+
+          <Tab eventKey="deliveries_tab" title="Deliveries">
+              {tabKey==="deliveries_tab" ? <Deliveries/> : null}
+            </Tab> 
           
         </Tabs>
 

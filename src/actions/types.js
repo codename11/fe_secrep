@@ -24,3 +24,4 @@ export const ERRORS = "ERRORS";
 export const ALERT_SHOW = "ALERT_SHOW";
 export const ALERT_HIDE = "ALERT_HIDE";
 export const DELETE_EMPLOYEE = "DELETE_EMPLOYEE";
+export const DELIVERIES_TAB = "DELIVERIES_TAB";

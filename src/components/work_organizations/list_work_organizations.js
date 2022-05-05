@@ -13,7 +13,7 @@ import DeleteWorkOrgs from '../work_organizations/delete_work_organization';
 import PropTypes from "prop-types";
 import CreateWorkOrgs from '../work_organizations/create_work_organization';
 
-class ListWorkOrgs extends Component {
+class WorkOrgs extends Component {
 
     constructor(props) {
 
@@ -59,7 +59,7 @@ class ListWorkOrgs extends Component {
     }
 
     render() {
-        console.log("listworkOrgs: ", this.props);
+        console.log("workOrgs: ", this.props);
 
         let workOrgs = this.props.work_organizations.list_work_organizations;
         let workOrg_thead = <tr>
@@ -208,4 +208,4 @@ export default connect(mapStateToProps, {
     modalShow,
     modalHide,
     select_option
-})(ListWorkOrgs);
+})(WorkOrgs);

@@ -14,7 +14,7 @@ import DeleteVehicle from '../vehicles/delete_vehicle';
 import UpdateVehicle from '../vehicles/update_vehicle';
 import CreateVehicle from '../vehicles/create_vehicle';
 
-class ListVehicles extends Component {
+class Vehicles extends Component {
 
     constructor(props) {
 
@@ -243,4 +243,4 @@ export default connect(mapStateToProps, {
   list_work_organizations, 
   modalShow,
   modalHide
-})(ListVehicles);
+})(Vehicles);
