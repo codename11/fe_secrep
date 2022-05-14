@@ -75,7 +75,7 @@ class App extends Component {
 
           <Tab eventKey="deliveries_tab" title="Deliveries">
               {tabKey==="deliveries_tab" ? <Deliveries/> : null}
-            </Tab> 
+          </Tab> 
           
         </Tabs>
 

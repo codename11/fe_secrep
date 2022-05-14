@@ -66,7 +66,7 @@ class CreateVehicle extends Component {
     
     return (
       <div>
-        <h4>Create vehicle</h4>
+        
         <Form onSubmit={this.handleSubmit} name="myForm">
 
             <Form.Group className="mb-1" controlId="formBasicRegistration">

@@ -33,22 +33,18 @@ class CreateWorkOrgs extends Component {
 
         return (
             <div>
-                <div className="frame1 container">
-                    <h5>Enter new work organization</h5>
-                    <hr/>
-                    <Form onSubmit={this.handleSubmit} className="m-1">
-                        
-                        <Form.Group className="mb-1" controlId="workOrgName">
-                            <Form.Label>Name</Form.Label>
-                            <Form.Control type="text" name="name" placeholder="Enter new work organization" />
-                        </Form.Group>
 
-                        <Button variant="outline-primary" type="submit" className="m-1">
-                            Submit
-                        </Button>
-                    </Form>
+                <Form onSubmit={this.handleSubmit} className="m-1">
+                    
+                    <Form.Group className="mb-1" controlId="workOrgName">
+                        <Form.Label>Name</Form.Label>
+                        <Form.Control type="text" name="name" placeholder="Enter new work organization" />
+                    </Form.Group>
 
-                </div>
+                    <Button variant="outline-primary" type="submit" className="m-1">
+                        Submit
+                    </Button>
+                </Form>
 
             </div>
         )

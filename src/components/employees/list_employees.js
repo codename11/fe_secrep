@@ -10,6 +10,7 @@ import CustomModal from '../subcomponents/CustomModal';
 import CreateEmployee from './create_employee';
 import UpdateEmployee from './update_employee';
 import DeleteEmployee from './delete_employee';
+import Accordion from 'react-bootstrap/Accordion';
 
 class Employees extends Component {
 
@@ -59,7 +60,7 @@ class Employees extends Component {
 
         let thead = <thead>{employee_thead}</thead>;
         
-        let employee_tbody = this.props && this.props.list_employees && this.props.list_employees.length>0 ? this.props.list_employees.map((item, i) => {
+        let employee_tbody = this.props && this.props.employees && this.props.employees.list_employees && this.props.employees.list_employees.length>0 ? this.props.employees.list_employees.map((item, i) => {
 
             let x1 = new Date(item.created_at);
             let d1Day = x1.getDate();
@@ -154,11 +155,27 @@ class Employees extends Component {
 
         return (
         <div>
-            <h4>List employees</h4>
-            {employee_table}
-            <hr/>
-            <CreateEmployee authId={this.props.auth.user.id} employees={this.props.list_employees}/>
             
+            <Accordion defaultActiveKey="0">
+                <Accordion.Item eventKey="0">
+                    <Accordion.Header>Create new employee</Accordion.Header>
+                    <Accordion.Body>
+
+                        <CreateEmployee authId={this.props.auth.user.id} employees={this.props.list_employees}/>
+
+                    </Accordion.Body>
+                </Accordion.Item>
+
+                <Accordion.Item eventKey="1">
+                    <Accordion.Header>List employees</Accordion.Header>
+                    <Accordion.Body>
+
+                        {employee_table}
+
+                    </Accordion.Body>
+                </Accordion.Item>
+
+            </Accordion>
             {myModal}
         </div>
         )
@@ -182,7 +199,7 @@ const mapStateToProps = (state) =>{
     return ({
         auth: state.auth.auth,
         tabKey: state.key.tabKey,
-        list_employees: state.employees.list_employees,
+        employees: state.employees,
         modalState: state.modalState.modalState,
         itemId: state.modalState.itemId,
         modal_purpose: state.modalState.modal_purpose,

@@ -145,7 +145,7 @@ alertHide.propTypes = {
 const mapStateToProps = (state) =>{ 
   
     return ({
-        list_employees: state.employees.list_employees,
+        employees: state.employees.list_employees,
         updated_employee: state.employees.updated_employees,
         work_organizations: state.list_work_organizations,
         errors: state.errors,

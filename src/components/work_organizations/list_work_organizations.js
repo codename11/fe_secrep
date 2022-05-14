@@ -12,6 +12,7 @@ import { select_option } from "../../actions/custom_actions/selectOptionActions"
 import DeleteWorkOrgs from '../work_organizations/delete_work_organization';
 import PropTypes from "prop-types";
 import CreateWorkOrgs from '../work_organizations/create_work_organization';
+import Accordion from 'react-bootstrap/Accordion';
 
 class WorkOrgs extends Component {
 
@@ -106,7 +107,7 @@ class WorkOrgs extends Component {
 
         let tbody = <tbody>{workOrgs_tbody}</tbody>;
 
-        let workOrgs_table = <Table striped bordered hover size="sm" responsive="sm">
+        let workOrgs_table = <Table striped bordered hover size="sm" responsive="md">
           {thead}
           {tbody}
         </Table>
@@ -157,14 +158,28 @@ class WorkOrgs extends Component {
 
         return (
             <div>
-                <CreateWorkOrgs/>
-                <hr/>
-                <h5>Listed work organizations</h5>
-                <hr/>
-                {workOrgs_table}
+                <Accordion defaultActiveKey="0">
 
+                    <Accordion.Item eventKey="0">
+                        <Accordion.Header>Create new work organization</Accordion.Header>
+                        <Accordion.Body>
+
+                            <CreateWorkOrgs/>
+
+                        </Accordion.Body>
+                    </Accordion.Item>
+
+                    <Accordion.Item eventKey="1">
+                        <Accordion.Header>List work organizations</Accordion.Header>
+                        <Accordion.Body>
+                            {workOrgs_table}
+                        </Accordion.Body>
+                    </Accordion.Item>
+
+                    
+
+                </Accordion>
                 {myModal}
-
             </div>
         )
     }

@@ -65,7 +65,7 @@ class CreateEmployee extends Component {
     
     return (
       <div>
-        <h4>Create employee</h4>
+        
         <Form onSubmit={this.handleSubmit} name="myForm" encType="multipart/form-data">
 
             <Form.Group className="mb-1" controlId="firstName">
@@ -110,7 +110,7 @@ const mapStateToProps = (state) =>{
     return ({
         work_organizations: state.list_work_organizations,
         latest_employee: state.latest_employee,
-        list_employees: state.employees.list_employees,
+        employees: state.employees.list_employees,
     });
 
 };

@@ -13,6 +13,7 @@ import PropTypes from "prop-types";
 import DeleteVehicle from '../vehicles/delete_vehicle';
 import UpdateVehicle from '../vehicles/update_vehicle';
 import CreateVehicle from '../vehicles/create_vehicle';
+import Accordion from 'react-bootstrap/Accordion';
 
 class Vehicles extends Component {
 
@@ -133,7 +134,7 @@ class Vehicles extends Component {
       }) : null;
       let tbody = <tbody>{vehicle_tbody}</tbody>;
 
-      let vehicle_table = <Table striped bordered hover size="sm" responsive="sm">
+      let vehicle_table = <Table striped bordered hover size="sm" responsive="md">
           {thead}
           {tbody}
         </Table>
@@ -178,23 +179,37 @@ class Vehicles extends Component {
 
       return (
         <div>
-          <CreateVehicle/><hr/>
+          <Accordion defaultActiveKey="0">
 
-          <h4>List vehicles</h4>
-          <Form onSubmit={this.handleSubmit}>
+            <Accordion.Item eventKey="0">
+              <Accordion.Header>Create new vehicle</Accordion.Header>
+              <Accordion.Body>
+                
+                <CreateVehicle/>
+              
+              </Accordion.Body>
+            </Accordion.Item>
 
-              {typesSelect}
-              {workOrgSelect}
-            
-              <Button variant="outline-primary" type="submit" className="m-1">
-                  Submit
-              </Button>
-          </Form>
+            <Accordion.Item eventKey="1">
+              <Accordion.Header>List vehicles</Accordion.Header>
+              <Accordion.Body>
+              
+                <Form onSubmit={this.handleSubmit}>
 
-          {vehicle_table}
+                    {typesSelect}
+                    {workOrgSelect}
+                  
+                    <Button variant="outline-primary" type="submit" className="m-1">
+                        Submit
+                    </Button>
+                </Form><br/>
+                {vehicle_table}
+                
+              </Accordion.Body>
+            </Accordion.Item>
 
+          </Accordion>
           {myModal}
-
         </div>
       )
   }
