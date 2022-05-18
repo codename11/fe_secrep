@@ -21,15 +21,34 @@ class Deliveries extends Component {
     constructor(props) {
 
         super(props);
-
+        this.state = {
+          cnt: 0,
+        };
         this.handleSubmit = this.handleSubmit.bind(this);
-
+        this.addNoteField = this.addNoteField.bind(this);
+        this.removeNoteField = this.removeNoteField.bind(this);
     }
 
     componentDidMount(){
       //this.props.get_vehicle_types();
-      //this.props.list_work_organizations();
-      //this.props.get_vehicles();
+      this.props.get_employees();
+      this.props.get_vehicles();
+    }
+
+    removeNoteField(e){
+
+      this.setState({
+        cnt: this.state.cnt-1
+      });
+
+    }
+
+    addNoteField(e){
+      
+      this.setState({
+          cnt: this.state.cnt+1
+      });
+      
     }
     
     async handleSubmit(event) {
@@ -42,11 +61,20 @@ class Deliveries extends Component {
         return item.className === "form-check-input" && item.checked ? item : null;
       }).map((item, i) => JSON.parse(item.value));
 
+      let delivery_notes = [];
+      for(let i=0;i<=this.state.cnt;i++){
+
+        delivery_notes.push({
+          [elements["delivery_note"+i].name]: elements["delivery_note"+i].value
+        });
+
+      }
+
       const data = {
         operator_id: elements["employees"].value,
-        vehicles: vehicles
+        vehicles: vehicles,
+        delivery_note: delivery_notes,
       };
-      
       
       console.log("test: ", data);
 
@@ -66,7 +94,7 @@ class Deliveries extends Component {
 
       }
 
-      let employeeSelect = <Form.Select id="employees" className="m-1" aria-label="Default select example" name="employees">
+      let employeeSelect = <Form.Select id="employees" className="item1" aria-label="Default select example" name="employees">
         {option1}
       </Form.Select>;
 
@@ -92,15 +120,28 @@ class Deliveries extends Component {
 
       }
 
-      let vehicleSelect = <Dropdown autoClose="outside">
+      let vehicleSelect = <Dropdown autoClose="outside" className="item1">
           <Dropdown.Toggle variant="basic" id="dropdown-basic">
             Choose vehicles
           </Dropdown.Toggle>
           <Dropdown.Menu id="vehicles" className="m-1">
             {option2}
           </Dropdown.Menu>
-        </Dropdown>;
+      </Dropdown>;
       
+      let delivery_notes_arr = [];
+
+      for(let i=0;i<=this.state.cnt;i++){
+
+        delivery_notes_arr.push(<Form.Group className="item3 item3Custom">
+          <Form.Control id={"delivery_note"+i} key={i} placeholder="Enter new delivery note"  name={"delivery_note"+i}/>
+          </Form.Group>
+        );
+
+      }
+      
+      console.log("delivery_note: ", this.state);
+
       return (
         <div>
           
@@ -108,14 +149,22 @@ class Deliveries extends Component {
 
             <Accordion.Item eventKey="0">
                 <Accordion.Header>Create new delivery</Accordion.Header>
-                <Accordion.Body>
+                <Accordion.Body className="accordion-custom">
 
-                <Form onSubmit={this.handleSubmit}>
+                <Form onSubmit={this.handleSubmit} className="grid-container">
 
                   {employeeSelect}
                   {vehicleSelect}
+                  {delivery_notes_arr}
+                  <Button variant="outline-info" className="item4" onClick={this.addNoteField}>
+                      Add note
+                  </Button>
 
-                  <Button variant="outline-primary" type="submit" className="m-1">
+                  <Button variant="outline-info" className="item4" onClick={this.removeNoteField}>
+                      Remove note
+                  </Button>
+
+                  <Button variant="outline-primary" type="submit" className="item5">
                       Submit
                   </Button>
                 </Form>

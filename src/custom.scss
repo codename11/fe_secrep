@@ -79,5 +79,36 @@
 #dropdown-basic{
     border: 1px solid #cccccc;
     width: 99.5%;
-    margin: 0.35rem;
+}
+
+.grid-container{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+    padding: 5px;
+}
+
+.item1, .item2{
+    grid-column: 1 / span 2;
+}
+
+.item3{
+    grid-column: 1 / span 2;
+}
+
+.item3Custom{
+    
+}
+
+.item4{
+    grid-row: 3/3;
+    
+}
+
+.item5{
+    grid-column: 1 / span 2;
+}
+
+.accordion-custom{
+    padding: 0.25rem !important;
 }
