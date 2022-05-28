@@ -84,8 +84,9 @@
 .grid-container{
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 5px;
+    gap: 10px;
     padding: 5px;
+    justify-content: space-evenly;
 }
 
 .item1, .item2{
@@ -102,7 +103,6 @@
 
 .item4{
     grid-row: 3/3;
-    
 }
 
 .item5{
@@ -111,4 +111,13 @@
 
 .accordion-custom{
     padding: 0.25rem !important;
+}
+
+.item6{
+    grid-column: 1 / span 2;
+}
+
+.datepickerCustom{
+    width: 100%;
+    padding-left: 5px;
 }

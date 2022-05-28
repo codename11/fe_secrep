@@ -73,9 +73,11 @@ class App extends Component {
             </Tab> 
           : null}
 
-          <Tab eventKey="deliveries_tab" title="Deliveries">
-              {tabKey==="deliveries_tab" ? <Deliveries/> : null}
-          </Tab> 
+          {access_token!==null ?
+            <Tab eventKey="deliveries_tab" title="Deliveries">
+                {tabKey==="deliveries_tab" ? <Deliveries/> : null}
+            </Tab> 
+          : null}
           
         </Tabs>
 

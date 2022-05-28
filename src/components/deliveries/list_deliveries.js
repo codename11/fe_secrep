@@ -15,6 +15,8 @@ import PropTypes from "prop-types";
 //import CreateVehicle from '../vehicles/create_vehicle';
 import Accordion from 'react-bootstrap/Accordion';
 import Dropdown from 'react-bootstrap/Dropdown';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 class Deliveries extends Component {
 
@@ -23,16 +25,26 @@ class Deliveries extends Component {
         super(props);
         this.state = {
           cnt: 0,
+          date: new Date()
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.addNoteField = this.addNoteField.bind(this);
         this.removeNoteField = this.removeNoteField.bind(this);
+        this.setDate = this.setDate.bind(this);
     }
 
     componentDidMount(){
       //this.props.get_vehicle_types();
       this.props.get_employees();
       this.props.get_vehicles();
+    }
+
+    setDate(date){
+
+      this.setState({
+        date: date
+      });
+
     }
 
     removeNoteField(e){
@@ -70,10 +82,18 @@ class Deliveries extends Component {
 
       }
 
+      let sec_id = this.props && this.props.auth && this.props.auth.user? this.props.auth.user.id : null;
+      
       const data = {
         operator_id: elements["employees"].value,
         vehicles: vehicles,
         delivery_note: delivery_notes,
+        sec_id: sec_id,
+        time_in: elements["time_in"].value,
+        time_out: elements["time_out"].value,
+        comment: elements["comment"].value,
+        load_place: elements["load_place"].value,
+        unload_place: elements["unload_place"].value,
       };
       
       console.log("test: ", data);
@@ -133,7 +153,7 @@ class Deliveries extends Component {
 
       for(let i=0;i<=this.state.cnt;i++){
 
-        delivery_notes_arr.push(<Form.Group className="item3 item3Custom">
+        delivery_notes_arr.push(<Form.Group className="item3 item3Custom" key={"delivery-notes"+i}>
           <Form.Control id={"delivery_note"+i} key={i} placeholder="Enter new delivery note"  name={"delivery_note"+i}/>
           </Form.Group>
         );
@@ -141,7 +161,7 @@ class Deliveries extends Component {
       }
       
       console.log("delivery_note: ", this.state);
-
+      
       return (
         <div>
           
@@ -163,6 +183,38 @@ class Deliveries extends Component {
                   <Button variant="outline-info" className="item4" onClick={this.removeNoteField}>
                       Remove note
                   </Button>
+
+                  <Form.Group className="" controlId="load_place">
+                    <Form.Control type="text" placeholder="Load place" name="load_place" />
+                  </Form.Group>
+
+                  <Form.Group className="" controlId="unload_place">
+                    <Form.Control type="text" placeholder="Unload place" name="unload_place" />
+                  </Form.Group>
+
+                  <DatePicker
+                    selected={this.state.date}
+                    onChange={(date) => this.setDate(date)}
+                    showTimeSelect
+                    dateFormat="dd/MM/yyyy HH:MM"
+                    name="time_in"
+                    shouldCloseOnSelect={false}
+                    className="datepickerCustom"
+                  />
+
+                  <DatePicker
+                    selected={this.state.date}
+                    onChange={(date) => this.setDate(date)}
+                    showTimeSelect
+                    dateFormat="dd/MM/yyyy HH:MM"
+                    name="time_out"
+                    shouldCloseOnSelect={false}
+                    className="datepickerCustom"
+                    />
+
+                  <Form.Group className="item6" controlId="comment">
+                    <Form.Control as="textarea" rows={3} name="comment" placeholder="Comment"/>
+                  </Form.Group>
 
                   <Button variant="outline-primary" type="submit" className="item5">
                       Submit
