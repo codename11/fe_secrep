@@ -75,7 +75,7 @@ class Employees extends Component {
             let updated_at = d2Day+"/"+d2Month+"/"+d2Year;
             
             return <tr key={item.id}>
-                <td className="avatarTd"><img src={"http://secrep.test/storage/"+item.lastName+"_"+item.firstName+"/"+item.avatar} alt={"avatar"+i} className="avatar"/></td>
+                <td className="avatarTd">{item.id+" "}<img src={"http://secrep.test/storage/"+item.lastName+"_"+item.firstName+"/"+item.avatar} alt={"avatar"+i} className="avatar"/></td>
                 <td>{item.firstName}</td>
                 <td>{item.lastName}</td>
                 <td>{created_at}</td>
@@ -108,13 +108,14 @@ class Employees extends Component {
         let modalHeaderText = "";
         let modalBodyText = "";
         let form = null;
-
-        let chosen_employee = this.props && this.props.list_employees && this.props.list_employees.length>0 && this.props.itemId ? this.props.list_employees.find((item, i) => {
+        
+        let chosen_employee = this.props && this.props.employees && this.props.employees.list_employees && this.props.employees.list_employees.length>0 && this.props.itemId ? this.props.employees.list_employees.find((item, i) => {
+            
             return this.props.itemId===item.id;
         }) : null;
-
+        
         if(this.props && this.props.modal_purpose){
-
+            
             if(this.props.modal_purpose === "delete"){
 
                 let modalHeaderTextDeleteEmployee = this.props && this.props.modal_purpose && this.props.modal_purpose === "delete" ? "You are trying to delete an item: " : "";
@@ -134,7 +135,7 @@ class Employees extends Component {
                 form = this.props && this.props.modal_purpose && this.props.modal_purpose==="delete" ? <DeleteEmployee authId={this.props.auth.user.id} chosen_employee={chosen_employee}/> : null;
 
             }
-
+            
             if(this.props.modal_purpose === "update"){
                 
                 let modalHeaderTextUpdateEmployee = this.props && this.props.modal_purpose && this.props.modal_purpose === "update" ? "You are trying to update an employee with an id of: "+chosen_employee.id : "";

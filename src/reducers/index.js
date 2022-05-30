@@ -9,6 +9,7 @@ import customReducer from "./customReducer";
 import employeeReducer from "./employeeReducer";
 import errorReducer from "./errorReducer";
 import alertReducer from "./alertReducer";
+import deliveryReducer from "./deliveryReducer";
 
 export default combineReducers({
     auth: authReducer,
@@ -20,5 +21,6 @@ export default combineReducers({
     form: customReducer,
     employees: employeeReducer,
     errors: errorReducer,
-    alert: alertReducer
+    alert: alertReducer,
+    deliveries: deliveryReducer
 });

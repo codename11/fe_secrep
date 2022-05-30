@@ -111,7 +111,7 @@ class UpdateEmployee extends Component {
             </Button>
         </Form>
         
-        <Alert className="mt-2" variant="danger" show={this.props.alertState} onClick={() => this.props.alertHide([false])} dismissible>
+        {errors && errors.length ? <Alert className="mt-2" variant="danger" show={this.props.alertState} onClick={() => this.props.alertHide([false])} dismissible>
             <Alert.Heading>There were {errors && errors.length ? "errors:" : null}</Alert.Heading>
             
             <ListGroup variant="flush">
@@ -119,7 +119,7 @@ class UpdateEmployee extends Component {
                     return <ListGroup.Item variant="danger" key={i}>{item}</ListGroup.Item>;
                 }) : null}
             </ListGroup>
-        </Alert>
+        </Alert> : null}
 
     </div>
     )

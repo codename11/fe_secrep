@@ -17,6 +17,12 @@ import Accordion from 'react-bootstrap/Accordion';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { create_delivery } from "../../actions/delivery/deliveryActions";
+import { get_deliveries } from "../../actions/delivery/deliveryActions";
+import ListGroup from 'react-bootstrap/ListGroup';
+import Alert from 'react-bootstrap/Alert';
+import { alertShow } from "../../actions/alertActions";
+import { alertHide } from "../../actions/alertActions";
 
 class Deliveries extends Component {
 
@@ -25,18 +31,37 @@ class Deliveries extends Component {
         super(props);
         this.state = {
           cnt: 0,
-          date: new Date()
+          date: new Date(),
+          labelId: null
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.addNoteField = this.addNoteField.bind(this);
         this.removeNoteField = this.removeNoteField.bind(this);
         this.setDate = this.setDate.bind(this);
+        this.labelCheck = this.labelCheck.bind(this);
+        this.handleChange = this.handleChange.bind(this);
     }
 
     componentDidMount(){
-      //this.props.get_vehicle_types();
       this.props.get_employees();
       this.props.get_vehicles();
+      this.props.get_deliveries();
+    }
+
+    handleChange(itemId){
+
+      this.setState({
+        labelId: this.state.labelId ? null : itemId
+      });
+
+    }
+
+    labelCheck(itemId){
+
+      this.setState({
+        labelId: this.state.labelId ? null : itemId
+      });
+      
     }
 
     setDate(date){
@@ -71,7 +96,13 @@ class Deliveries extends Component {
 
       let vehicles = Object.values(elements).filter((item, i) => {
         return item.className === "form-check-input" && item.checked ? item : null;
-      }).map((item, i) => JSON.parse(item.value));
+      }).map((item, i) => {
+
+        for(const [key, value] of Object.entries(JSON.parse(item.value))) {
+          return value;
+        }
+
+      });
 
       let delivery_notes = [];
       for(let i=0;i<=this.state.cnt;i++){
@@ -82,21 +113,46 @@ class Deliveries extends Component {
 
       }
 
-      let sec_id = this.props && this.props.auth && this.props.auth.user? this.props.auth.user.id : null;
+      let sec_id = this.props && this.props.auth && this.props.auth.user ? this.props.auth.user.id : null;
       
       const data = {
-        operator_id: elements["employees"].value,
-        vehicles: vehicles,
-        delivery_note: delivery_notes,
-        sec_id: sec_id,
-        time_in: elements["time_in"].value,
-        time_out: elements["time_out"].value,
-        comment: elements["comment"].value,
-        load_place: elements["load_place"].value,
-        unload_place: elements["unload_place"].value,
+        operator_id: elements["employees"].value ? elements["employees"].value : null,
+        vehicles: vehicles ? vehicles : null,
+        delivery_note: delivery_notes ? delivery_notes : null,
+        sec_id: sec_id ? sec_id : null,
+        time_in: elements["time_in"].value ? elements["time_in"].value : null,
+        time_out: elements["time_out"].value ? elements["time_out"].value : null,
+        comment: elements["comment"].value ? elements["comment"].value : null,
+        load_place: elements["load_place"].value ? elements["load_place"].value : null,
+        unload_place: elements["unload_place"].value ? elements["unload_place"].value : null,
+      };
+
+      let errors = {
+        type: "validation",
+        origin: "create_delivery",
+        messages: []
       };
       
-      console.log("test: ", data);
+      for(const [key, value] of Object.entries(data)){
+
+        if(value){
+
+          
+
+        }
+        else{
+
+          errors.messages.push([`${key}`+" is required"]);
+
+        }
+        
+      }
+
+      
+
+      let tmp = errors ? errors : data;
+      console.log("dataxxx: ", data);
+      this.props.create_delivery(data);
 
     }
 
@@ -126,8 +182,8 @@ class Deliveries extends Component {
         });
         return <Dropdown.Item key={item.id} href={"#"+item.id}>
           <div class="form-check">
-            <input className="form-check-input" type="checkbox" key={"x"+item.id} value={obj}/>
-            <label key={"y"+item.id} class="form-check-label" for="flexCheckDefault">
+            <input className="form-check-input" type="checkbox" key={"x"+item.id} value={obj} checked={this.state.labelId===item.id ? true : false} onChange={() => this.handleChange(item.id)}/>
+            <label key={"y"+item.id} class="form-check-label" for="flexCheckDefault" onClick={() => this.labelCheck(item.id)}>
               {item.registration}
             </label>
           </div>
@@ -160,6 +216,8 @@ class Deliveries extends Component {
 
       }
       
+      let errors = this.props && this.props.errors && this.props.errors.errors && this.props.errors.errors.messages ? this.props.errors.errors.messages : null;
+
       console.log("delivery_note: ", this.state);
       
       return (
@@ -235,6 +293,17 @@ class Deliveries extends Component {
 
             </Accordion>
 
+            {errors && errors.length ? <Alert className="mt-2" variant="danger" show={this.props.alertState} onClick={() => this.props.alertHide([false])} dismissible>
+            <Alert.Heading>There were {errors && errors.length ? "errors:" : null}</Alert.Heading>
+            
+            <ListGroup variant="flush">
+                {errors && errors.length>0 ? errors.map((item, i) => {
+                    return <ListGroup.Item variant="danger" key={i}>{item}</ListGroup.Item>;
+                }) : null}
+            </ListGroup>
+            </Alert> : null}
+
+
         </div>
       )
   }
@@ -242,6 +311,22 @@ class Deliveries extends Component {
 
 get_vehicles.propTypes = {
   get_vehicles: PropTypes.func.isRequired,
+};
+
+create_delivery.propTypes = {
+  get_deliveries: PropTypes.func.isRequired,
+};
+
+get_deliveries.propTypes = {
+  list_deliveries: PropTypes.func.isRequired,
+};
+
+alertShow.propTypes = {
+  alertShow: PropTypes.func.isRequired,
+};
+
+alertHide.propTypes = {
+  alertHide: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) =>{ 
@@ -253,12 +338,20 @@ const mapStateToProps = (state) =>{
       modalState: state.modalState.modalState,
       itemId: state.modalState.itemId,
       modal_purpose: state.modalState.modal_purpose,
-      employees: state.employees
+      employees: state.employees,
+      deliveries: state.deliveries,
+      errors: state.errors,
+      alertState: state.alert.alertState,
+      alert_purpose: state.alert.alert_purpose
     });
 
 };
 
 export default connect(mapStateToProps, { 
   get_vehicles,
-  get_employees
+  get_employees,
+  create_delivery,
+  get_deliveries,
+  alertShow,
+  alertHide
 })(Deliveries);
