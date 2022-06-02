@@ -32,7 +32,7 @@ class Deliveries extends Component {
         this.state = {
           cnt: 0,
           date: new Date(),
-          labelId: null
+          labelIds: []
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.addNoteField = this.addNoteField.bind(this);
@@ -50,18 +50,36 @@ class Deliveries extends Component {
 
     handleChange(itemId){
 
+      let arr1 = [...this.state.labelIds];
+      let index = arr1.indexOf(itemId);
+      if(index > -1){
+        arr1.splice(index, 1);
+      }
+      else{
+        arr1.push(itemId);
+      }
+
       this.setState({
-        labelId: this.state.labelId ? null : itemId
+        labelIds: [...arr1]
       });
 
     }
 
     labelCheck(itemId){
 
+      let arr1 = [...this.state.labelIds];
+      let index = arr1.indexOf(itemId);
+      if(index > -1){
+        arr1.splice(index, 1);
+      }
+      else{
+        arr1.push(itemId);
+      }
+
       this.setState({
-        labelId: this.state.labelId ? null : itemId
+        labelIds: [...arr1]
       });
-      
+
     }
 
     setDate(date){
@@ -92,32 +110,19 @@ class Deliveries extends Component {
       event.preventDefault();
       let forma = event.target; 
       let elements = forma.elements;
-      let len1 = elements.length;
-
-      let vehicles = Object.values(elements).filter((item, i) => {
-        return item.className === "form-check-input" && item.checked ? item : null;
-      }).map((item, i) => {
-
-        for(const [key, value] of Object.entries(JSON.parse(item.value))) {
-          return value;
-        }
-
-      });
 
       let delivery_notes = [];
       for(let i=0;i<=this.state.cnt;i++){
 
-        delivery_notes.push({
-          [elements["delivery_note"+i].name]: elements["delivery_note"+i].value
-        });
+        delivery_notes.push(elements["delivery_note"+i].value);
 
       }
-
+      console.log("delivery_notes:: ", delivery_notes);
       let sec_id = this.props && this.props.auth && this.props.auth.user ? this.props.auth.user.id : null;
       
       const data = {
         operator_id: elements["employees"].value ? elements["employees"].value : null,
-        vehicles: vehicles ? vehicles : null,
+        vehicles: this.state.labelIds ? this.state.labelIds : null,
         delivery_note: delivery_notes ? delivery_notes : null,
         sec_id: sec_id ? sec_id : null,
         time_in: elements["time_in"].value ? elements["time_in"].value : null,
@@ -148,8 +153,6 @@ class Deliveries extends Component {
         
       }
 
-      
-
       let tmp = errors ? errors : data;
       console.log("dataxxx: ", data);
       this.props.create_delivery(data);
@@ -157,7 +160,7 @@ class Deliveries extends Component {
     }
 
     render() {
-      console.log("deliveries: ", this.props);
+      console.log("deliveries: ", this.state.labelIds);
 
       let option1 = [<option key={""} value={""}>Choose employee</option>];
       let employees = this.props.employees && this.props.employees.list_employees ? this.props.employees.list_employees.map((item, i) => {
@@ -182,7 +185,7 @@ class Deliveries extends Component {
         });
         return <Dropdown.Item key={item.id} href={"#"+item.id}>
           <div class="form-check">
-            <input className="form-check-input" type="checkbox" key={"x"+item.id} value={obj} checked={this.state.labelId===item.id ? true : false} onChange={() => this.handleChange(item.id)}/>
+            <input className="form-check-input" type="checkbox" key={"x"+item.id} value={obj} checked={this.state.labelIds.indexOf(item.id) > -1 ? true : false} onChange={() => this.handleChange(item.id)}/>
             <label key={"y"+item.id} class="form-check-label" for="flexCheckDefault" onClick={() => this.labelCheck(item.id)}>
               {item.registration}
             </label>
@@ -218,8 +221,8 @@ class Deliveries extends Component {
       
       let errors = this.props && this.props.errors && this.props.errors.errors && this.props.errors.errors.messages ? this.props.errors.errors.messages : null;
 
-      console.log("delivery_note: ", this.state);
-      
+      //console.log("delivery_note: ", this.state);
+      console.log("deliveryState: ", this.state.labelIds);
       return (
         <div>
           
