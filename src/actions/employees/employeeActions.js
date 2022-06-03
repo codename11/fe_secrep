@@ -152,6 +152,11 @@ export const update_employee = (data) => dispatch => {
                 }
             });
 
+            dispatch({
+                type: ERRORS,
+                payload: null
+            });
+
         }
 
     })

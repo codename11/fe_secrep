@@ -13,7 +13,7 @@ import { list_work_organizations } from "./actions/work_organizations/workOrgani
 import WorkOrgs from './components/work_organizations/list_work_organizations';
 import PropTypes from "prop-types";
 import Employees from './components/employees/list_employees';
-import Deliveries from './components/deliveries/list_deliveries';
+import Deliveries from './components/deliveries/deliveries';
 
 class App extends Component {
 

@@ -6,10 +6,8 @@ let auth = null;
 export const create_delivery = (data) => dispatch => {
 
     let url = "http://secrep.test/api/create_delivery";
-    console.log("create_delivery1: ", data);
-    
+
     auth = store.getState().auth.auth;
-    //let list_employees = store.getState().employees.list_employees;
     
     fetch(url, {
         method: 'POST',
@@ -28,7 +26,6 @@ export const create_delivery = (data) => dispatch => {
 
     })
     .then((data) => {
-        console.log("create_delivery2: ", data);
 
         let errors = {
             type: "",
@@ -101,16 +98,27 @@ export const create_delivery = (data) => dispatch => {
 
         }
         else{
+            console.log("ok");
+            let list_deliveries = store.getState() && store.getState().deliveries && store.getState().deliveries.list_deliveries && store.getState().deliveries.list_deliveries.length>0 ? store.getState().deliveries.list_deliveries : [];
+            let delivery = data.delivery;
+            if(list_deliveries){
+                list_deliveries.push(delivery);
+            }
+            else{
+                list_deliveries[0] = delivery;
+            }
+            
+            dispatch({
+                type: ERRORS,
+                payload: null
+            });
 
-            console.log("radi");
+            dispatch({
+                type: LIST_DELIVERIES,
+                payload: [...list_deliveries]
+            });
 
         }
-        /*list_employees.push(data.employee);
-        
-        dispatch({
-            type: LIST_EMPLOYEES,
-            payload: [...list_employees]
-        });*/
 
     })
     .catch((error) => {
@@ -141,12 +149,17 @@ export const get_deliveries = (data) => dispatch => {
 
     })// parses JSON response into native JavaScript objects
     .then((data) => {
-        console.log("deliveries: ", data);
-        dispatch({
-            type: LIST_DELIVERIES,
-            payload: [...data.deliveries]
-        });
 
+        if(data && data.deliveries && data.deliveries.length>0){
+            dispatch({
+                type: LIST_DELIVERIES,
+                payload: [...data.deliveries]
+            });
+        }
+        else{
+            console.log("prazno");
+        }
+        
     })
     .catch((error) => {
         console.error('Error:', error);
