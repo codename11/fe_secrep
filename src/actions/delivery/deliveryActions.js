@@ -166,3 +166,43 @@ export const get_deliveries = (data) => dispatch => {
     });
 
 }
+
+export const deleteDelivery = (data) => dispatch => {
+    
+    auth = store.getState().auth.auth;
+    let list_deliveries = store.getState().deliveries.list_deliveries;
+    
+    const url = "http://secrep.test/api/delete_delivery";
+    fetch(url, {
+        method: 'DELETE', // *GET, POST, PUT, DELETE, etc.
+        crossDomain : true,
+        headers: {
+            "X-Requested-With": "XMLHttpRequest",
+            "Content-Type": 'application/json',
+            "Accept": 'application/json',
+            "Authorization": "Bearer " + auth.access_token
+        },
+        body: JSON.stringify({id: data})
+        
+    })
+    .then((response) => {
+
+        return response.json();
+
+    })// parses JSON response into native JavaScript objects
+    .then((data) => {
+        
+        let deliveries = list_deliveries.filter((item, i) => {
+            return data.delivery.id !== item.id;
+        });
+       
+        dispatch({
+            type: LIST_DELIVERIES,
+            payload: [...deliveries]
+        });
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+
+}

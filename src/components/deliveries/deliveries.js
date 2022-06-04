@@ -2,12 +2,11 @@ import { Component } from 'react'
 import {connect} from "react-redux";
 import { get_vehicles } from "../../actions/vehicles/vehicleActions";
 import { get_employees } from "../../actions/employees/employeeActions";
-import { modalShow } from "../../actions/modalActions";
-import { modalHide } from "../../actions/modalActions";
 import PropTypes from "prop-types";
 import Accordion from 'react-bootstrap/Accordion';
 import { get_deliveries } from "../../actions/delivery/deliveryActions";
 import CreateDelivery from '../deliveries/create_delivery';
+import ListDeliveries from '../deliveries/list_deliveries';
 
 class Deliveries extends Component {
 
@@ -46,7 +45,7 @@ class Deliveries extends Component {
                 <Accordion.Header>List deliveries</Accordion.Header>
                 <Accordion.Body>
 
-                    List Deliveries
+                    <ListDeliveries access_token={this.props.auth.access_token} list_deliveries={this.props.deliveries.list_deliveries}/>
 
                 </Accordion.Body>
             </Accordion.Item>
@@ -72,9 +71,6 @@ const mapStateToProps = (state) =>{
       auth: state.auth.auth,
       tabKey: state.key.tabKey,
       vehicles: state.vehicles,
-      modalState: state.modalState.modalState,
-      itemId: state.modalState.itemId,
-      modal_purpose: state.modalState.modal_purpose,
       employees: state.employees,
       deliveries: state.deliveries,
       errors: state.errors
