@@ -40,12 +40,10 @@ class UpdateWorkOrgs extends Component {
     }
 
     render() {
-        console.log("updworkOrgs: ", this.props);
         
         let selectedWorkOrg = this.props && this.props.work_organizations && this.props.work_organizations.list_work_organizations ? this.props.work_organizations.list_work_organizations.find((item, i) => {
             return this.props.itemId===item.id;
         }) : null;
-        console.log("selectedWorkOrg: ", selectedWorkOrg);
         
         return (
 

@@ -34,7 +34,7 @@ class DeleteEmployee extends Component {
     }
 
     render() {
-      console.log("delete_employee: ", this.props);
+      
       let chosen_employee_id = this.props && this.props.chosen_employee && this.props.chosen_employee.id ? this.props.chosen_employee.id : null;
       let authId = this.props && this.props.authId ? this.props.authId : null;
 

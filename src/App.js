@@ -36,7 +36,7 @@ class App extends Component {
   }
 
   render() {
-    //console.log("app: ", this.props);
+    
     let tabKey = this.props.tabKey;
     let access_token = this.props && this.props.auth && this.props.auth.access_token ? this.props.auth.access_token : null;
 

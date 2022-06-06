@@ -7,11 +7,11 @@ import Button from 'react-bootstrap/Button';
 import { modalShow } from "../../actions/modalActions";
 import { modalHide } from "../../actions/modalActions";
 import DeleteDelivery from '../deliveries/delete_delivery';
+import UpdateDelivery from '../deliveries/update_delivery';
 
 class ListDeliveries extends Component {
   
   render() {
-    console.log("list_deliveries: ", this.props);
 
     let list_deliveries = this.props && this.props.list_deliveries ? this.props.list_deliveries : null;
 
@@ -91,7 +91,7 @@ class ListDeliveries extends Component {
 
       if(this.props.modal_purpose === "update"){
 
-        //form = this.props && this.props.modal_purpose && this.props.modal_purpose==="update" ? <UpdateDelivery vehicle={chosen_delivery}/> : null;
+        form = this.props && this.props.modal_purpose && this.props.modal_purpose==="update" ? <UpdateDelivery sec_id={this.props.sec_id} chosen_delivery={chosen_delivery}/> : null;
 
       }
 
@@ -102,8 +102,8 @@ class ListDeliveries extends Component {
     : null;
 
     return (
-      <div>
-        <Table striped bordered hover size="sm" responsive="md">
+      <div className="accord">
+        <Table striped bordered hover size="sm" responsive="sm">
           {thead}
           {tbody}
         </Table>

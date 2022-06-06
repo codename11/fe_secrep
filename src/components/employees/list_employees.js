@@ -44,7 +44,6 @@ class Employees extends Component {
     }
 
     render() {
-      console.log("list_employees: ", this.props);
 
       let employee_thead = <tr>
         <th>avatar</th>

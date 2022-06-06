@@ -34,18 +34,17 @@ class DeleteWorkOrgs extends Component {
         const data = {
             id: elements["workorgid"].value
         }
-        console.log("data: ", data);
+       
         this.props.delete_work_organization(data);
         this.props.modalHide([false]);
     }
 
     render() {
-        console.log("delworkOrgs: ", this.props);
         
         let selectedWorkOrg = this.props && this.props.work_organizations && this.props.work_organizations.list_work_organizations ? this.props.work_organizations.list_work_organizations.find((item, i) => {
             return this.props.itemId===item.id;
         }) : null;
-        console.log("selectedWorkOrg: ", selectedWorkOrg);
+        
         return (
 
             <div className="frame1 container updateWorkOrgs">

@@ -11,7 +11,6 @@ class CustomModal extends Component {
   }
 
   render() {
-    //console.log("modal: ", this.props);
 
     return (
       <Modal

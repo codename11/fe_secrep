@@ -29,7 +29,6 @@ class CreateWorkOrgs extends Component {
     }
 
     render() {
-        console.log("createworkOrgs: ", this.props);
 
         return (
             <div>

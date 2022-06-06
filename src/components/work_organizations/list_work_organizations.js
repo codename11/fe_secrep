@@ -60,7 +60,6 @@ class WorkOrgs extends Component {
     }
 
     render() {
-        console.log("workOrgs: ", this.props);
 
         let workOrgs = this.props.work_organizations.list_work_organizations;
         let workOrg_thead = <tr>

@@ -26,7 +26,7 @@ class Deliveries extends Component {
     }
 
     render() {
-      console.log("deliveries: ", this.props);
+      
       return (
         <div>
           
@@ -45,7 +45,7 @@ class Deliveries extends Component {
                 <Accordion.Header>List deliveries</Accordion.Header>
                 <Accordion.Body>
 
-                    <ListDeliveries access_token={this.props.auth.access_token} list_deliveries={this.props.deliveries.list_deliveries}/>
+                    <ListDeliveries sec_id={this.props.auth.user.id} access_token={this.props.auth.access_token} list_deliveries={this.props.deliveries.list_deliveries}/>
 
                 </Accordion.Body>
             </Accordion.Item>
@@ -56,6 +56,10 @@ class Deliveries extends Component {
       )
   }
 }
+
+get_employees.propTypes = {
+  get_vehicles: PropTypes.func.isRequired,
+};
 
 get_vehicles.propTypes = {
   get_vehicles: PropTypes.func.isRequired,

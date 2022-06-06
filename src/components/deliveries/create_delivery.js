@@ -19,13 +19,15 @@ class CreateDelivery extends Component {
         super(props);
         this.state = {
           cnt: 0,
-          date: new Date(),
+          time_in: new Date(),
+          time_out: new Date(),
           labelIds: []
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.addNoteField = this.addNoteField.bind(this);
         this.removeNoteField = this.removeNoteField.bind(this);
-        this.setDate = this.setDate.bind(this);
+        this.setTimeIn = this.setTimeIn.bind(this);
+        this.setTimeOut = this.setTimeOut.bind(this);
         this.labelCheck = this.labelCheck.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
@@ -68,10 +70,18 @@ class CreateDelivery extends Component {
 
     }
 
-    setDate(date){
-
+    setTimeIn(date){
+      
       this.setState({
-        date: date
+        time_in: date
+      });
+      
+    }
+
+    setTimeOut(date){
+      
+      this.setState({
+        time_out: date
       });
 
     }
@@ -110,7 +120,7 @@ class CreateDelivery extends Component {
         operator_id: elements["employees"].value ? elements["employees"].value : null,
         vehicles: this.state.labelIds ? this.state.labelIds : null,
         delivery_note: delivery_notes ? delivery_notes : null,
-        sec_id: sec_id ? sec_id : null,
+        id: sec_id ? sec_id : null,
         time_in: elements["time_in"].value ? elements["time_in"].value : null,
         time_out: elements["time_out"].value ? elements["time_out"].value : null,
         comment: elements["comment"].value ? elements["comment"].value : null,
@@ -144,7 +154,7 @@ class CreateDelivery extends Component {
     }
 
     render() {
-
+      
       let option1 = [<option key={""} value={""}>Choose employee</option>];
       let employees = this.props.employees && this.props.employees.list_employees ? this.props.employees.list_employees.map((item, i) => {
         return <option key={item.id} value={item.id}>{item.lastName+" "+item.firstName}</option>
@@ -203,7 +213,6 @@ class CreateDelivery extends Component {
       
       let errors = this.props && this.props.errors && this.props.errors.errors && this.props.errors.errors.messages ? this.props.errors.errors.messages : null;
 
-      console.log("create_delivery: ", this.props);
       return (
         <div>
 
@@ -229,24 +238,26 @@ class CreateDelivery extends Component {
                   </Form.Group>
 
                   <DatePicker
-                    selected={this.state.date}
-                    onChange={(date) => this.setDate(date)}
+                    selected={this.state.time_in}
+                    onChange={(date) => this.setTimeIn(date)}
                     showTimeSelect
-                    dateFormat="dd/MM/yyyy HH:MM"
+                    dateFormat="dd/MM/yyyy HH:mm"
+                    timeIntervals={15}
                     name="time_in"
                     shouldCloseOnSelect={false}
                     className="datepickerCustom"
                   />
 
                   <DatePicker
-                    selected={this.state.date}
-                    onChange={(date) => this.setDate(date)}
+                    selected={this.state.time_out}
+                    onChange={(date) => this.setTimeOut(date)}
                     showTimeSelect
-                    dateFormat="dd/MM/yyyy HH:MM"
+                    dateFormat="dd/MM/yyyy HH:mm"
+                    timeIntervals={15}
                     name="time_out"
                     shouldCloseOnSelect={false}
                     className="datepickerCustom"
-                    />
+                  />
 
                   <Form.Group className="item6" controlId="comment">
                     <Form.Control as="textarea" rows={3} name="comment" placeholder="Comment"/>
@@ -271,6 +282,11 @@ class CreateDelivery extends Component {
       )
   }
 }
+
+
+create_delivery.propTypes = {
+  create_delivery: PropTypes.func.isRequired,
+};
 
 alertShow.propTypes = {
     alertShow: PropTypes.func.isRequired,

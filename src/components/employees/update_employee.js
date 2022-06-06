@@ -53,7 +53,6 @@ class UpdateEmployee extends Component {
     }
 
   render() {
-        console.log("update_employee: ", this.props);
 
         let chosen_employee = this.props && this.props.chosen_employee ? this.props.chosen_employee : "";
         let option1 = [<option key={""} value={""}>None</option>];

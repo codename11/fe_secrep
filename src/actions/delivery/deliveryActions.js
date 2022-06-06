@@ -98,7 +98,7 @@ export const create_delivery = (data) => dispatch => {
 
         }
         else{
-            console.log("ok");
+            
             let list_deliveries = store.getState() && store.getState().deliveries && store.getState().deliveries.list_deliveries && store.getState().deliveries.list_deliveries.length>0 ? store.getState().deliveries.list_deliveries : [];
             let delivery = data.delivery;
             if(list_deliveries){
@@ -200,6 +200,128 @@ export const deleteDelivery = (data) => dispatch => {
             type: LIST_DELIVERIES,
             payload: [...deliveries]
         });
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+
+}
+
+export const update_delivery = (data) => dispatch => {
+
+    let url = "http://secrep.test/api/update_delivery";
+
+    auth = store.getState().auth.auth;
+    
+    fetch(url, {
+        method: 'PATCH',
+        crossDomain : true,
+        headers: {
+            "X-Requested-With": "XMLHttpRequest",
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + auth.access_token
+        },
+        body: JSON.stringify(data),
+        redirect: 'follow'
+    })
+    .then((response) => {
+
+        return response.json();
+
+    })
+    .then((data) => {
+
+        let errors = {
+            type: "",
+            origin: "",
+            messages: []
+        };
+        
+        if("errors" in data){
+            
+            let flattenedObj = (obj) => {
+                const flattened = {}
+              
+                Object.keys(obj).forEach((key) => {
+                  
+                    const value = obj[key];
+              
+                  if(typeof value === 'object' && value !== null && !Array.isArray(value)){
+                    Object.assign(flattened, flattenedObj(value))
+                  } 
+                  else{
+                    flattened[key] = value
+                  }
+
+                })
+              
+                return flattened;
+
+            }
+            
+            errors = {
+                type: "validation",
+                origin: "create_delivery",
+                messages: Object.values(flattenedObj(data))
+            };
+            
+            dispatch({
+                type: ERRORS,
+                payload: errors
+            });
+            
+            dispatch({
+                type: ALERT_SHOW,
+                payload: {
+                    alertState: true,
+                    alert_purpose: "update_delivery"
+                }
+            });
+            
+        }
+        else if("message" in data){
+
+            errors = {
+                type: "validation",
+                origin: "update_delivery",
+                messages: [data.exception+". "+data.message]
+            };
+            
+            dispatch({
+                type: ERRORS,
+                payload: errors
+            });
+            
+            dispatch({
+                type: ALERT_SHOW,
+                payload: {
+                    alertState: true,
+                    alert_purpose: "create_delivery"
+                }
+            });
+
+        }
+        else{
+            
+            let delivery = data.delivery;
+            let list_deliveries = store.getState() && store.getState().deliveries && store.getState().deliveries.list_deliveries && store.getState().deliveries.list_deliveries.length>0 ? store.getState().deliveries.list_deliveries.map((item, i) => {
+
+                return item.id===delivery.id ? delivery : item;
+
+            }) : [];
+            
+            dispatch({
+                type: ERRORS,
+                payload: null
+            });
+
+            dispatch({
+                type: LIST_DELIVERIES,
+                payload: [...list_deliveries]
+            });
+
+        }
+
     })
     .catch((error) => {
         console.error('Error:', error);

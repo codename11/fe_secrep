@@ -27,7 +27,7 @@ class DeleteDelivery extends Component {
   }
 
   render() {
-    console.log("delete_delivery: ", this.props);
+
     let deliveryid = this.props.deliveryid ? this.props.deliveryid : 0;
     
     return (
