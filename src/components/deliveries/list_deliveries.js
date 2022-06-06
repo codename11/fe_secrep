@@ -90,7 +90,8 @@ class ListDeliveries extends Component {
       }
 
       if(this.props.modal_purpose === "update"){
-
+        let modalHeaderTextUpdateDelivery = this.props && this.props.modal_purpose && this.props.modal_purpose === "update" ? "You are trying to update an item with an id of "+chosen_delivery.id : "";
+        modalHeaderText = modalHeaderTextUpdateDelivery;
         form = this.props && this.props.modal_purpose && this.props.modal_purpose==="update" ? <UpdateDelivery sec_id={this.props.sec_id} chosen_delivery={chosen_delivery}/> : null;
 
       }
