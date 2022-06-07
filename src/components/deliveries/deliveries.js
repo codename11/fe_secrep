@@ -7,6 +7,8 @@ import Accordion from 'react-bootstrap/Accordion';
 import { get_deliveries } from "../../actions/delivery/deliveryActions";
 import CreateDelivery from '../deliveries/create_delivery';
 import ListDeliveries from '../deliveries/list_deliveries';
+import { list_permissions } from "../../actions/special_permission/special_permissionActions";
+import Button from 'react-bootstrap/Button';
 
 class Deliveries extends Component {
 
@@ -23,10 +25,11 @@ class Deliveries extends Component {
       this.props.get_employees();
       this.props.get_vehicles();
       this.props.get_deliveries();
+      this.props.list_permissions()
     }
 
     render() {
-      
+      console.log("deliveriesProps: ", this.props);
       return (
         <div>
           
@@ -46,16 +49,20 @@ class Deliveries extends Component {
                 <Accordion.Body>
 
                     <ListDeliveries sec_id={this.props.auth.user.id} access_token={this.props.auth.access_token} list_deliveries={this.props.deliveries.list_deliveries}/>
-
+                    
                 </Accordion.Body>
             </Accordion.Item>
 
           </Accordion>
-
+        
         </div>
       )
   }
 }
+
+list_permissions.propTypes = {
+  list_permissions: PropTypes.func.isRequired,
+};
 
 get_employees.propTypes = {
   get_vehicles: PropTypes.func.isRequired,
@@ -77,7 +84,8 @@ const mapStateToProps = (state) =>{
       vehicles: state.vehicles,
       employees: state.employees,
       deliveries: state.deliveries,
-      errors: state.errors
+      errors: state.errors,
+      special_permissions: state.special_permissions
     });
 
 };
@@ -86,4 +94,5 @@ export default connect(mapStateToProps, {
   get_vehicles,
   get_employees,
   get_deliveries,
+  list_permissions
 })(Deliveries);

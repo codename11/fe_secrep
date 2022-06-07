@@ -14,6 +14,7 @@ import WorkOrgs from './components/work_organizations/list_work_organizations';
 import PropTypes from "prop-types";
 import Employees from './components/employees/list_employees';
 import Deliveries from './components/deliveries/deliveries';
+import SpecialPermissions from './components/special_permissions/special_permissions';
 
 class App extends Component {
 
@@ -76,6 +77,12 @@ class App extends Component {
           {access_token!==null ?
             <Tab eventKey="deliveries_tab" title="Deliveries">
                 {tabKey==="deliveries_tab" ? <Deliveries/> : null}
+            </Tab> 
+          : null}
+
+          {access_token!==null ?
+            <Tab eventKey="special_permissions_tab" title="Special Permissions">
+                {tabKey==="special_permissions_tab" ? <SpecialPermissions/> : null}
             </Tab> 
           : null}
           
