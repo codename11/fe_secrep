@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import Accordion from 'react-bootstrap/Accordion';
 import { list_permissions } from "../../actions/special_permission/special_permissionActions";
 import ListPermissions from '../special_permissions/list_permissions';
+import CreatePermission from '../special_permissions/create_permission';
 
 class SpecialPermissions extends Component {
 
@@ -34,7 +35,7 @@ class SpecialPermissions extends Component {
                 <Accordion.Header>Create new special permission</Accordion.Header>
                 <Accordion.Body className="accordion-custom">
 
-                  Create permission
+                  <CreatePermission sec_id={this.props.auth.user.id} errors={this.props.errors}/>
 
                 </Accordion.Body>
             </Accordion.Item>
@@ -43,7 +44,7 @@ class SpecialPermissions extends Component {
                 <Accordion.Header>List special permissions</Accordion.Header>
                 <Accordion.Body>
 
-                    <ListPermissions list_permissions={list_permissions}/>
+                    <ListPermissions list_permissions={list_permissions} access_token={this.props.auth.access_token}/>
                     
                 </Accordion.Body>
             </Accordion.Item>
