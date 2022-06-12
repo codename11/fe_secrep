@@ -23,7 +23,7 @@ class SpecialPermissions extends Component {
     }
 
     render() {
-      console.log("permissionsProps: ", this.props);
+      
       let list_permissions = this.props && this.props.special_permissions && this.props.special_permissions.list_permissions && this.props.special_permissions.list_permissions.length > 0 ? this.props.special_permissions.list_permissions : null;
       
       return (
@@ -44,7 +44,7 @@ class SpecialPermissions extends Component {
                 <Accordion.Header>List special permissions</Accordion.Header>
                 <Accordion.Body>
 
-                    <ListPermissions list_permissions={list_permissions} access_token={this.props.auth.access_token}/>
+                  <ListPermissions list_permissions={list_permissions} sec_id={this.props.auth.user.id} access_token={this.props.auth.access_token}/>
                     
                 </Accordion.Body>
             </Accordion.Item>

@@ -37,13 +37,13 @@ class CreatePermission extends Component {
         permission_name: elements["permission_name"].value ? elements["permission_name"].value : null,
         permission_description: elements["permission_description"].value ? elements["permission_description"].value : null,
       };
-      console.log("CreatePermissionData: ", data);
+      
       this.props.create_permission(data);
 
     }
 
     render() {
-      console.log("create_permission: ", this.props);
+      
       let errors = this.props && this.props.errors && this.props.errors.errors && this.props.errors.errors.messages ? this.props.errors.errors.messages : null;
 
       return (

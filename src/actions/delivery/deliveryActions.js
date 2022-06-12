@@ -261,7 +261,7 @@ export const update_delivery = (data) => dispatch => {
             
             errors = {
                 type: "validation",
-                origin: "create_delivery",
+                origin: "update_delivery",
                 messages: Object.values(flattenedObj(data))
             };
             
@@ -296,7 +296,7 @@ export const update_delivery = (data) => dispatch => {
                 type: ALERT_SHOW,
                 payload: {
                     alertState: true,
-                    alert_purpose: "create_delivery"
+                    alert_purpose: "update_delivery"
                 }
             });
 

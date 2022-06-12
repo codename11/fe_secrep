@@ -29,7 +29,7 @@ class Deliveries extends Component {
     }
 
     render() {
-      console.log("deliveriesProps: ", this.props);
+      
       return (
         <div>
           

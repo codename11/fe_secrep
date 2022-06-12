@@ -6,6 +6,8 @@ import { modalShow } from "../../actions/modalActions";
 import { modalHide } from "../../actions/modalActions";
 import Table from 'react-bootstrap/Table';
 import CustomModal from '../subcomponents/CustomModal';
+import UpdatePermission from './update_permission';
+import DeletePermission from './delete_permission';
 
 class ListPermissions extends Component {
 
@@ -25,7 +27,7 @@ class ListPermissions extends Component {
     }
 
     render() {
-      console.log("listPermissionsProps: ", this.props);
+      
       let listPermissions = this.props && this.props.list_permissions ? this.props.list_permissions : null;
       
       let chosen_permission = this.props && this.props.list_permissions && this.props.list_permissions.length > 0 && this.props.itemId ? this.props.list_permissions.find((item, i) => {
@@ -33,8 +35,8 @@ class ListPermissions extends Component {
       }) : null;
 
       let permissions_thead = <tr>
-        <th>Description</th>
         <th>Name</th>
+        <th>Description</th>
         <th>SecOficials</th>
         <th>Employees</th>
         <th>Vehicles</th>
@@ -46,8 +48,8 @@ class ListPermissions extends Component {
       let permissions_tbody = listPermissions && listPermissions.length>0 ? listPermissions.map((item, i) => {
 
         return <tr key={item && item.id ? item.id : null}>
-            <td>{item && item.permission_description ? item.permission_description : null}</td>
             <td>{item && item.permission_name}</td>
+            <td>{item && item.permission_description ? item.permission_description : null}</td>
             <td>{item && item.user && item.user.length>0 ? item.user.map((item, i) => {
               return item.name;
             }).toString(): null}</td>
@@ -102,14 +104,14 @@ class ListPermissions extends Component {
             modalHeaderText = modalHeaderTextDeletePermission;
             
             modalBodyText = modalBodyTextDeletePermission;
-            //form = this.props && this.props.modal_purpose && this.props.modal_purpose==="delete" ? <DeleteDelivery deliveryid={this.props.itemId}/> : null;
+            form = this.props && this.props.modal_purpose && this.props.modal_purpose==="delete" ? <DeletePermission/> : null;
     
           }
     
           if(this.props.modal_purpose === "update"){
             let modalHeaderTextUpdatePermission = this.props && this.props.modal_purpose && this.props.modal_purpose === "update" ? "You are trying to update an item with an id of "+chosen_permission.id : "";
             modalHeaderText = modalHeaderTextUpdatePermission;
-            //form = this.props && this.props.modal_purpose && this.props.modal_purpose==="update" ? <UpdateDelivery sec_id={this.props.sec_id} chosen_delivery={chosen_delivery}/> : null;
+            form = this.props && this.props.modal_purpose && this.props.modal_purpose==="update" ? <UpdatePermission sec_id={this.props.sec_id} chosen_permission={chosen_permission}/> : null;
     
           }
     
