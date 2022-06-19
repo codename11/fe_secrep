@@ -52,7 +52,7 @@ class CreatePermission extends Component {
                 <Form onSubmit={this.handleSubmit} className="grid-container">
 
                   <Form.Group className="" controlId="permission_name">
-                    <Form.Control type="text" placeholder="Load placePermission name" name="permission_name" />
+                    <Form.Control type="text" placeholder="Permission name" name="permission_name" />
                   </Form.Group>
 
                   <Form.Group className="" controlId="permission_description">

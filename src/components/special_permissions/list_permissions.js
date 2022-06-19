@@ -86,17 +86,17 @@ class ListPermissions extends Component {
             let modalHeaderTextDeletePermission = this.props && this.props.modal_purpose && this.props.modal_purpose === "delete" ? "You are trying to delete an item: " : "";
             let modalBodyTextDeletePermission = this.props && this.props.modal_purpose && this.props.modal_purpose === "delete" && chosen_permission ? <div><h6>An permission: </h6> 
               <div>
-                <div><strong>Description:</strong> {chosen_permission.permission_description}</div>
-                <div><strong>Name:</strong> {chosen_permission.permission_name}</div>
-                <div><strong>SecOficials:</strong> {chosen_permission.user.map((item, i) => {
+                <div><strong>Description:</strong> {chosen_permission && chosen_permission.permission_description ? chosen_permission.permission_description : null}</div>
+                <div><strong>Name:</strong> {chosen_permission && chosen_permission.permission_name ? chosen_permission.permission_name : null}</div>
+                <div><strong>SecOficials:</strong> {chosen_permission && chosen_permission.user && chosen_permission.user.length>0 ? chosen_permission.user.map((item, i) => {
                   return item.name;
-                }).toString()}</div>
-                <div><strong>Employees:</strong> {chosen_permission.employees.map((item2, i2) => {
+                }).toString() : null}</div>
+                <div><strong>Employees:</strong> {chosen_permission && chosen_permission.employees && chosen_permission.employees.length>0 ? chosen_permission.employees.map((item2, i2) => {
                   return item2.lastName+" "+item2.firstName;
-                }).toString()}</div>
-                <div><strong>Vehicles:</strong> {chosen_permission.vehicles.map((item2, i2) => {
+                }).toString() : null}</div>
+                <div><strong>Vehicles:</strong> {chosen_permission && chosen_permission.vehicles && chosen_permission.vehicles.length>0 ? chosen_permission.vehicles.map((item2, i2) => {
                   return item2.registration;
-                }).toString()}</div>
+                }).toString() : null}</div>
                 
               </div>
             </div>
