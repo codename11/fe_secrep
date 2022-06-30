@@ -26,21 +26,34 @@ export const get_vehicles = (data) => dispatch => {
     })// parses JSON response into native JavaScript objects
     .then((data) => {
         console.log("customVehicles: ", data);
-        let vehicles = null;
-        if(data.vehicles && data.vehicles.length){
 
-            vehicles = [...data.vehicles];
+        if(data && data.vehicles && data.vehicles.length>0){
+
+            dispatch({
+                type: LIST_VEHICLES,
+                payload: [...data.vehicles]
+            });
+
+        }
+        else if(data && data.vehicles && data.vehicles.length===1){
+
+            dispatch({
+                type: LIST_VEHICLES,
+                payload: [data.vehicles]
+            });
+
+        }
+        else if(data && data.vehicles && data.vehicles.length===0){
+
+            dispatch({
+                type: LIST_VEHICLES,
+                payload: []
+            });
 
         }
         else{
-
-            vehicles = [data.vehicles];
-
+            console.log("prazno");
         }
-        dispatch({
-            type: LIST_VEHICLES,
-            payload: vehicles
-        });
 
     })
     .catch((error) => {
@@ -72,11 +85,30 @@ export const get_deliveries = (data) => dispatch => {
     })// parses JSON response into native JavaScript objects
     .then((data) => {
         console.log("customDeliveries: ", data);
+      
         if(data && data.deliveries && data.deliveries.length>0){
+
             dispatch({
                 type: LIST_DELIVERIES,
                 payload: [...data.deliveries]
             });
+
+        }
+        else if(data && data.deliveries && data.deliveries.length===1){
+
+            dispatch({
+                type: LIST_DELIVERIES,
+                payload: [data.deliveries]
+            });
+
+        }
+        else if(data && data.deliveries && data.deliveries.length===0){
+
+            dispatch({
+                type: LIST_DELIVERIES,
+                payload: []
+            });
+
         }
         else{
             console.log("prazno");
@@ -113,10 +145,34 @@ export const get_employees = (data) => dispatch => {
     })// parses JSON response into native JavaScript objects
     .then((data) => {
         console.log("customEmployees: ", data);
-        dispatch({
-            type: LIST_EMPLOYEES,
-            payload: [...data.employees]
-        });
+
+        if(data && data.employees && data.employees.length>0){
+
+            dispatch({
+                type: LIST_EMPLOYEES,
+                payload: [...data.employees]
+            });
+
+        }
+        else if(data && data.employees && data.employees.length===1){
+
+            dispatch({
+                type: LIST_EMPLOYEES,
+                payload: [data.employees]
+            });
+
+        }
+        else if(data && data.employees && data.employees.length===0){
+
+            dispatch({
+                type: LIST_EMPLOYEES,
+                payload: []
+            });
+
+        }
+        else{
+            console.log("prazno");
+        }
 
     })
     .catch((error) => {
@@ -149,10 +205,34 @@ export const get_users = (data) => dispatch => {
     })// parses JSON response into native JavaScript objects
     .then((data) => {
         console.log("customUsers: ", data);
-        dispatch({
-            type: LIST_USERS,
-            payload: [...data.users]
-        });
+
+        if(data && data.users && data.users.length>0){
+
+            dispatch({
+                type: LIST_USERS,
+                payload: [...data.users]
+            });
+
+        }
+        else if(data && data.users && data.users.length===1){
+
+            dispatch({
+                type: LIST_USERS,
+                payload: [data.users]
+            });
+
+        }
+        else if(data && data.users && data.users.length===0){
+
+            dispatch({
+                type: LIST_USERS,
+                payload: []
+            });
+
+        }
+        else{
+            console.log("prazno");
+        }
 
     })
     .catch((error) => {

@@ -6,6 +6,7 @@ import { get_vehicles } from "../../actions/custom_reports/customReportsActions"
 import { get_deliveries } from "../../actions/custom_reports/customReportsActions";
 import { get_employees } from "../../actions/custom_reports/customReportsActions";
 import { get_users } from "../../actions/custom_reports/customReportsActions";
+import GetVehicles from '../custom_reports/get_vehicles';
 
 class CustomReports extends Component {
 
@@ -27,7 +28,8 @@ class CustomReports extends Component {
             "vehicle": [
                 "user",
                 "type",
-                "workOrganization"
+                "workOrganization",
+                "complements"
             ]
         };
         this.props.get_vehicles(data1);
@@ -35,6 +37,7 @@ class CustomReports extends Component {
         let data2 = {
             "start_date": "17/07/2021 00:00",
             "end_date": "30/01/2023 00:00",
+            "delivery_id": 75,
             "delivery": [
                 "operator",
                 "enteredBy",
@@ -47,6 +50,7 @@ class CustomReports extends Component {
         let data3 = {
             "start_date": "17/07/2021 00:00",
             "end_date": "30/01/2023 00:00",
+            "employee_id": 1,
             "employee": [
                 "work_organization",
                 "enteredBy",
@@ -59,6 +63,7 @@ class CustomReports extends Component {
         let data4 = {
             "start_date": "17/07/2021 00:00",
             "end_date": "30/01/2023 00:00",
+            "user_id": 1,
             "user": [
                 "role",
                 "vehicles",
@@ -87,7 +92,7 @@ class CustomReports extends Component {
                 <Accordion.Header>List vehicles</Accordion.Header>
                 <Accordion.Body className="accordion-custom">
 
-                  
+                  <GetVehicles/>
 
                 </Accordion.Body>
             </Accordion.Item>
