@@ -84,7 +84,7 @@ export const get_deliveries = (data) => dispatch => {
 
     })// parses JSON response into native JavaScript objects
     .then((data) => {
-        console.log("customDeliveries: ", data);
+        //console.log("customDeliveries: ", data);
       
         if(data && data.deliveries && data.deliveries.length>0){
 
@@ -144,7 +144,7 @@ export const get_employees = (data) => dispatch => {
 
     })// parses JSON response into native JavaScript objects
     .then((data) => {
-        console.log("customEmployees: ", data);
+        //console.log("customEmployees: ", data);
 
         if(data && data.employees && data.employees.length>0){
 
@@ -204,7 +204,7 @@ export const get_users = (data) => dispatch => {
 
     })// parses JSON response into native JavaScript objects
     .then((data) => {
-        console.log("customUsers: ", data);
+        //console.log("customUsers: ", data);
 
         if(data && data.users && data.users.length>0){
 

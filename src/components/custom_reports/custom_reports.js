@@ -22,7 +22,7 @@ class CustomReports extends Component {
     componentDidMount(){
       
         let data1 = {
-            "start_date": "17/07/2021 00:00",
+            /*"start_date": "17/07/2021 00:00",
             "end_date": "30/07/2023 00:00",
             "vehicle_id": 1,
             "vehicle": [
@@ -30,7 +30,7 @@ class CustomReports extends Component {
                 "type",
                 "workOrganization",
                 "complements"
-            ]
+            ]*/
         };
         this.props.get_vehicles(data1);
 
@@ -80,7 +80,7 @@ class CustomReports extends Component {
     }
 
     render() {
-      
+      console.log("customRepProps: ", this.props);
       //let list_permissions = this.props && this.props.special_permissions && this.props.special_permissions.list_permissions && this.props.special_permissions.list_permissions.length > 0 ? this.props.special_permissions.list_permissions : null;
       
       return (
@@ -92,7 +92,7 @@ class CustomReports extends Component {
                 <Accordion.Header>List vehicles</Accordion.Header>
                 <Accordion.Body className="accordion-custom">
 
-                  <GetVehicles/>
+                  <GetVehicles list_vehicles={this.props.list_vehicles}/>
 
                 </Accordion.Body>
             </Accordion.Item>
@@ -153,7 +153,7 @@ const mapStateToProps = (state) =>{
         auth: state.auth.auth,
         tabKey: state.key.tabKey,
         errors: state.errors,
-        vehicles: state.vehicles,
+        list_vehicles: state.vehicles.list_vehicles,
         employees: state.employees,
         deliveries: state.deliveries,
         users: state.users

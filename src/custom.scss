@@ -105,7 +105,7 @@
     grid-row: 3/3;
 }
 
-.item5{
+.item5, .itemGV3, .itemGV4, .itemGV5{
     grid-column: 1 / span 2;
 }
 
@@ -129,4 +129,8 @@
 .update_delivery{
     margin-left: 2%;
     margin-right: 2%;
+}
+
+.itemGV1, .itemGV2{
+    width: 100%;
 }

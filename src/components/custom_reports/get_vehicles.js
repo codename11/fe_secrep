@@ -5,72 +5,155 @@ import {connect} from "react-redux";
 import Table from 'react-bootstrap/Table';
 import PropTypes from "prop-types";
 import Accordion from 'react-bootstrap/Accordion';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { get_vehicles } from "../../actions/custom_reports/customReportsActions";
 
 class GetVehicles extends Component {
 
     constructor(props) {
 
         super(props);
-
+        this.state = {
+            time_in: new Date(),
+            time_out: new Date(),
+        };
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.setTimeIn = this.setTimeIn.bind(this);
+        this.setTimeOut = this.setTimeOut.bind(this);
+
+    }
+
+    setTimeIn(date){
+      
+        this.setState({
+            time_in: date
+        });
+        
+    }
+  
+    setTimeOut(date){
+    
+        this.setState({
+            time_out: date
+        });
 
     }
     
     async handleSubmit(event) {
-      event.preventDefault();
-      let forma = event.target; 
-      let elements = forma.elements;
-      let len1 = elements.length;
+        event.preventDefault();
+        let forma = event.target; 
+        let elements = forma.elements;
+        let len1 = elements.length;
 
-      const data = {
-        el1: elements[0] && elements[0].checked ? elements[0].value : null,
-        el2: elements[1] && elements[1].checked ? elements[1].value : null,
-        el3: elements[2] && elements[2].checked ? elements[2].value : null,
-        el4: elements[3] && elements[3].checked ? elements[3].value : null,
-        el5: elements[4] && elements[4].checked ? elements[4].value : null,
-      };
-      console.log(data);
+        let data = {};
+        let len2 = 0;
+        for(let key in elements){
+            if(elements[key].type==="checkbox" && elements[key].checked){  
+                data.vehicle = [];
+                len2++;
+            }
+        }
+
+        for(let i=0;i<len1;i++){
+
+            if(elements[i].type==="checkbox" && elements[i].checked && elements[i].value){  
+                data.vehicle.push(elements[i].value);
+            }
+
+            if(elements[i].type!=="checkbox" && elements[i].value){  
+                data[elements[i].name] = elements[i].value;
+            }
+
+        }
+        
+        this.props.get_vehicles(data);
     }
 
     render() {
-
-      return (
+        console.log("customGetVehicles: ", this.props);
+        let list_vehicles = this.props && this.props.list_vehicles && this.props.list_vehicles.length>0 ? this.props.list_vehicles.map((item, i) => {
+            return <option key={item.id} value={item.id}>{item.registration}</option>
+        }) : null;
+        if(list_vehicles){
+            list_vehicles.unshift(<option key="tmp" value="">Choose vehicle</option>);
+        }
+        
+        return (
         <div>
-          <Form onSubmit={this.handleSubmit} name="myForm">
+            <Form onSubmit={this.handleSubmit} name="myForm" className="grid-container f1">
 
-                <Form.Check 
-                    type="switch"
-                    id="custom-switch"
-                    label="Check this switch1"
-                    name="sw1"
-                    value="1"
+                <DatePicker
+                    selected={this.state.time_in}
+                    onChange={(date) => this.setTimeIn(date)}
+                    showTimeSelect
+                    dateFormat="dd/MM/yyyy HH:mm"
+                    timeIntervals={15}
+                    name="time_in"
+                    shouldCloseOnSelect={false}
+                    className="itemGV1"
                 />
 
-                <Form.Check 
-                    type="switch"
-                    id="custom-switch"
-                    label="Check this switch2"
-                    name="sw2"
-                    value="2"
+                <DatePicker
+                    selected={this.state.time_out}
+                    onChange={(date) => this.setTimeOut(date)}
+                    showTimeSelect
+                    dateFormat="dd/MM/yyyy HH:mm"
+                    timeIntervals={15}
+                    name="time_out"
+                    shouldCloseOnSelect={false}
+                    className="itemGV2"
                 />
 
-                <Form.Check 
-                    type="switch"
-                    id="custom-switch"
-                    label="Check this switch3"
-                    name="sw3"
-                    value="3"
-                />
+                <Form.Select className="itemGV3" aria-label="Default select example" name="vehicle_id" id="vehicle_id">
+                    {list_vehicles}
+                </Form.Select>
 
-                <Form.Check 
-                    type="switch"
-                    id="custom-switch"
-                    label="Check this switch4"
-                    name="sw4"
-                    value="4"
-                />
+                <div className="itemGV4 grid-container">
 
-                <Button name="button" variant="outline-success" type="submit">
+                    <Form.Check 
+                        type="switch"
+                        id="custom-switch"
+                        label="User"
+                        name="user"
+                        value="user"
+                    />
+
+                    <Form.Check 
+                        type="switch"
+                        id="custom-switch"
+                        label="Type"
+                        name="type"
+                        value="type"
+                    />
+
+                    <Form.Check 
+                        type="switch"
+                        id="custom-switch"
+                        label="WorkOrg"
+                        name="workOrganization"
+                        value="workOrganization"
+                    />
+
+                    <Form.Check 
+                        type="switch"
+                        id="custom-switch"
+                        label="Complements"
+                        name="complements"
+                        value="complements"
+                    />
+
+                    <Form.Check 
+                        type="switch"
+                        id="custom-switch"
+                        label="Deliveries"
+                        name="deliveries"
+                        value="deliveries"
+                    />
+
+                </div>
+
+                <Button className="itemGV5" name="button" variant="outline-success" type="submit">
                     Klik
                 </Button>
 
@@ -80,14 +163,18 @@ class GetVehicles extends Component {
   }
 }
 
+get_vehicles.propTypes = {
+    get_vehicles: PropTypes.func.isRequired,
+};
+
 const mapStateToProps = (state) =>{ 
     
     return ({
-        vehicles: state.vehicles,
+        list_vehicles: state.vehicles.list_vehicles,
     });
 
 };
 
 export default connect(mapStateToProps, { 
-  
+    get_vehicles,
 })(GetVehicles);
