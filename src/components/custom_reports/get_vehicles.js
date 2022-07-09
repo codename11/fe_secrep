@@ -8,6 +8,7 @@ import Accordion from 'react-bootstrap/Accordion';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { get_vehicles } from "../../actions/custom_reports/customReportsActions";
+import ListGroup from 'react-bootstrap/ListGroup';
 
 class GetVehicles extends Component {
 
@@ -69,14 +70,45 @@ class GetVehicles extends Component {
         
         this.props.get_vehicles(data);
     }
+/*
+if(item==="user" || item==="type" || item==="workOrganization" || item==="complements" || item==="deliveries"){
 
+                return <ListGroup.Item></ListGroup.Item>;
+
+            }
+*/
     render() {
         console.log("customGetVehicles: ", this.props);
-        let list_vehicles = this.props && this.props.list_vehicles && this.props.list_vehicles.length>0 ? this.props.list_vehicles.map((item, i) => {
+        let vehicleList = this.props && this.props.list_vehicles && this.props.list_vehicles.length>0 ? this.props.list_vehicles : null;
+        let list_vehicles = vehicleList && vehicleList.length>0 ? vehicleList.map((item, i) => {
             return <option key={item.id} value={item.id}>{item.registration}</option>
         }) : null;
+
         if(list_vehicles){
             list_vehicles.unshift(<option key="tmp" value="">Choose vehicle</option>);
+        }
+
+        let lista = [];
+        if(vehicleList && vehicleList.length>0){
+
+            for(let i=0;i<vehicleList.length;i++){
+
+                let subObj1 = [];
+                let tmp1 = vehicleList ? Object.keys(vehicleList[i]).map(item1 => {
+                    
+                    if(vehicleList[i].hasOwnProperty("user")){
+
+                        console.log("isObject: ", vehicleList[i] instanceof Object);
+
+                    }
+                    return item1;
+
+                }) : null;
+                
+                lista[i] = <div><div>{i+": "}</div>{tmp1}</div>;
+
+            }
+
         }
         
         return (
@@ -158,6 +190,9 @@ class GetVehicles extends Component {
                 </Button>
 
             </Form>
+
+            {lista}
+
         </div>
       )
   }
