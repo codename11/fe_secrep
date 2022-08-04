@@ -7,7 +7,7 @@ let myState = null;
 let list_permissions = null;
 
 export default function(state = initialState, action){
-
+    
     switch(action.type){
 
         case LIST_PERMISSIONS:

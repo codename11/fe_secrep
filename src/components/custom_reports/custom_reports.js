@@ -32,9 +32,9 @@ class CustomReports extends Component {
                 "complements"
             ]*/
         };
-        this.props.get_vehicles(data1);
+        //this.props.get_vehicles(data1);
 
-        let data2 = {
+        /*let data2 = {
             "start_date": "17/07/2021 00:00",
             "end_date": "30/01/2023 00:00",
             "delivery_id": 75,
@@ -75,7 +75,7 @@ class CustomReports extends Component {
             ]
         };
 
-        this.props.get_users(data4);
+        this.props.get_users(data4);*/
 
     }
 
@@ -92,7 +92,7 @@ class CustomReports extends Component {
                 <Accordion.Header>List vehicles</Accordion.Header>
                 <Accordion.Body className="accordion-custom">
 
-                  <GetVehicles list_vehicles={this.props.list_vehicles}/>
+                  <GetVehicles/>
 
                 </Accordion.Body>
             </Accordion.Item>

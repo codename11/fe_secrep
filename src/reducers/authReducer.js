@@ -1,4 +1,4 @@
-import { REGISTER, LOGIN } from "../actions/types";
+import { REGISTER, LOGIN, LOGOUT } from "../actions/types";
 
 const initialState = {
     auth: {
@@ -41,6 +41,21 @@ export default function(state = initialState, action){
                 }
             };
            
+            return myState;
+
+        case LOGOUT:
+        
+            user = action.payload.user;
+            access_token = action.payload.access_token;
+            let vehicles = action.payload.vehicles;
+            myState = {
+                auth: {
+                    user: user,
+                    access_token: access_token
+                },
+                vehicles: vehicles
+            };
+            
             return myState;
 
         default:

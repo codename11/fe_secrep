@@ -16,6 +16,8 @@ import Employees from './components/employees/list_employees';
 import Deliveries from './components/deliveries/deliveries';
 import SpecialPermissions from './components/special_permissions/special_permissions';
 import CustomReports from './components/custom_reports/custom_reports';
+import { logout } from "./actions/auth/authActions";
+import Button from 'react-bootstrap/Button';
 
 class App extends Component {
 
@@ -44,7 +46,9 @@ class App extends Component {
 
     return (
       <Container className="container">
-        
+
+        {access_token!==null ? <Button className="logout" variant="outline-warning" onClick={this.props.logout}>logout</Button> : null}
+
         <Tabs id="controlled-tab-example" activeKey={tabKey} onSelect={(tabKey)=> {
           this.props.setTab(tabKey); this.handleSelect(tabKey);
           }} className="mb-3">
@@ -112,6 +116,10 @@ list_work_organizations.propTypes = {
   list_work_organizations: PropTypes.func.isRequired,
 };
 
+logout.propTypes = {
+  logout: PropTypes.func.isRequired,
+};
+
 const mapStateToProps = (state) =>{ 
 
   return ({
@@ -131,5 +139,6 @@ export default connect(mapStateToProps, {
   setTab,
   get_vehicles,
   get_vehicle_types,
-  list_work_organizations
+  list_work_organizations,
+  logout
  })(App);

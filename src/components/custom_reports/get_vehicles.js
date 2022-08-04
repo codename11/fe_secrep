@@ -25,6 +25,12 @@ class GetVehicles extends Component {
 
     }
 
+    componentDidMount(){
+      
+        this.props.get_vehicles();
+
+    }
+
     setTimeIn(date){
       
         this.setState({
@@ -70,13 +76,7 @@ class GetVehicles extends Component {
         
         this.props.get_vehicles(data);
     }
-/*
-if(item==="user" || item==="type" || item==="workOrganization" || item==="complements" || item==="deliveries"){
 
-                return <ListGroup.Item></ListGroup.Item>;
-
-            }
-*/
     render() {
         console.log("customGetVehicles: ", this.props);
         let vehicleList = this.props && this.props.list_vehicles && this.props.list_vehicles.length>0 ? this.props.list_vehicles : null;
@@ -105,7 +105,7 @@ if(item==="user" || item==="type" || item==="workOrganization" || item==="comple
 
                 }) : null;
                 
-                lista[i] = <div><div>{i+": "}</div>{tmp1}</div>;
+                lista[i] = <div key={"inner"+i}><div key={"outer"+i}>{i+": "}</div>{tmp1}</div>;
 
             }
 
@@ -191,8 +191,6 @@ if(item==="user" || item==="type" || item==="workOrganization" || item==="comple
 
             </Form>
 
-            {lista}
-
         </div>
       )
   }
@@ -211,5 +209,5 @@ const mapStateToProps = (state) =>{
 };
 
 export default connect(mapStateToProps, { 
-    get_vehicles,
+    get_vehicles
 })(GetVehicles);

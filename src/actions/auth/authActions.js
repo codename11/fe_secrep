@@ -1,4 +1,4 @@
-import { REGISTER, LOGIN} from "../types";
+import { REGISTER, LOGIN, LOGIN_TAB, LOGOUT} from "../types";
 
 export const register = (data) => dispatch => {
     
@@ -60,6 +60,47 @@ export const login = (data) => dispatch => {
             type: LOGIN,
             payload: data
         });
+
+    })
+    .catch((error) => {
+            console.error('Error:', error);
+    });
+
+}
+
+export const logout = (data) => dispatch => {
+
+    let url = "http://secrep.test/api/logout";
+
+    fetch(url, {
+        method: 'POST',
+        crossDomain : true,
+        headers: {
+            'Content-Type': 'application/json',
+            "Accept": 'application/json',
+        },
+    })
+    .then((response) => {
+
+        return response.json();
+
+    })
+    .then((data) => {
+        
+        dispatch({
+            type: LOGIN_TAB,
+            payload: "login_tab"
+        });
+    
+        dispatch({
+            type: LOGOUT,
+            payload: {
+                user: null,
+                access_token: null,
+                vehicles: null
+            }
+        });
+        console.log("Logged Out! ", data);
 
     })
     .catch((error) => {
