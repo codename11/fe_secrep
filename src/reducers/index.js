@@ -12,6 +12,7 @@ import alertReducer from "./alertReducer";
 import deliveryReducer from "./deliveryReducer";
 import special_permissionReducer from "./special_permissionReducer";
 import userReducer from "./userReducer";
+import customReportsReducer from "./customReportsReducer";
 
 export default combineReducers({
     auth: authReducer,
@@ -26,5 +27,6 @@ export default combineReducers({
     alert: alertReducer,
     deliveries: deliveryReducer,
     special_permissions: special_permissionReducer,
-    users: userReducer
+    users: userReducer,
+    href: customReportsReducer
 });

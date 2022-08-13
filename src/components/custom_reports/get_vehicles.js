@@ -9,6 +9,8 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { get_vehicles } from "../../actions/custom_reports/customReportsActions";
 import ListGroup from 'react-bootstrap/ListGroup';
+import { json2csv } from 'json-2-csv';
+import { toCSV } from "../../actions/custom_reports/customReportsActions";
 
 class GetVehicles extends Component {
 
@@ -18,6 +20,7 @@ class GetVehicles extends Component {
         this.state = {
             time_in: new Date(),
             time_out: new Date(),
+            href: null
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.setTimeIn = this.setTimeIn.bind(this);
@@ -31,6 +34,24 @@ class GetVehicles extends Component {
 
     }
 
+    test(){
+        this.props.toCSV();
+        console.log("customGetVehiclesxxx: ", this.props);
+        /*let vehicleList = this.props && this.props.list_vehicles && this.props.list_vehicles.length>0 ? this.props.list_vehicles : null;
+
+        let json2csvCallback = (err, csv) => {
+            if(err){
+                throw err;
+            }
+            this.setState({
+                href: "data:text/csv;charset=utf-8," + encodeURI(csv)
+            });
+            
+        };
+        
+        json2csv(vehicleList, json2csvCallback, {expandArrayObjects:true});*/
+
+    }
     setTimeIn(date){
       
         this.setState({
@@ -78,7 +99,8 @@ class GetVehicles extends Component {
     }
 
     render() {
-        console.log("customGetVehicles: ", this.props);
+        console.log("customGetVehiclesProps: ", this.props);
+
         let vehicleList = this.props && this.props.list_vehicles && this.props.list_vehicles.length>0 ? this.props.list_vehicles : null;
         let list_vehicles = vehicleList && vehicleList.length>0 ? vehicleList.map((item, i) => {
             return <option key={item.id} value={item.id}>{item.registration}</option>
@@ -88,29 +110,23 @@ class GetVehicles extends Component {
             list_vehicles.unshift(<option key="tmp" value="">Choose vehicle</option>);
         }
 
-        let lista = [];
-        if(vehicleList && vehicleList.length>0){
-
-            for(let i=0;i<vehicleList.length;i++){
-
-                let subObj1 = [];
-                let tmp1 = vehicleList ? Object.keys(vehicleList[i]).map(item1 => {
-                    
-                    if(vehicleList[i].hasOwnProperty("user")){
-
-                        console.log("isObject: ", vehicleList[i] instanceof Object);
-
-                    }
-                    return item1;
-
-                }) : null;
-                
-                lista[i] = <div key={"inner"+i}><div key={"outer"+i}>{i+": "}</div>{tmp1}</div>;
-
-            }
-
-        }
+        console.log("vozila: ", vehicleList);
         
+        let tmp1 = vehicleList && vehicleList.length>0 ? vehicleList.map((item, i) => {
+
+            return <Accordion.Item eventKey={item.id} key={"x"+item.id}>
+                <Accordion.Header key={"y"+item.id}>{item.registration}</Accordion.Header>
+                <Accordion.Body key={"z"+item.id} className="accordion-custom">
+
+                    <code key={"q"+item.id}><pre key={"w"+item.id}>{JSON.stringify(item, null, 4)}</pre></code>
+
+                </Accordion.Body>
+            </Accordion.Item>;
+
+        }) : null;
+        let accordionVehicleList = <Accordion defaultActiveKey="0" className="itemGV6">{tmp1}</Accordion>;
+
+        let href = this.props && this.props.href ? this.props.href : null;
         return (
         <div>
             <Form onSubmit={this.handleSubmit} name="myForm" className="grid-container f1">
@@ -185,16 +201,25 @@ class GetVehicles extends Component {
 
                 </div>
 
+                <Button className="itemGV7" name="button2" href={href} download="wholeReport"  variant="outline-success" onClick={this.props.toCSV}>
+                    WholeReportDownload
+                </Button>
+
                 <Button className="itemGV5" name="button" variant="outline-success" type="submit">
                     Klik
                 </Button>
 
             </Form>
+            {accordionVehicleList}
 
         </div>
       )
   }
 }
+
+toCSV.propTypes = {
+    toCSV: PropTypes.func.isRequired,
+};
 
 get_vehicles.propTypes = {
     get_vehicles: PropTypes.func.isRequired,
@@ -204,10 +229,12 @@ const mapStateToProps = (state) =>{
     
     return ({
         list_vehicles: state.vehicles.list_vehicles,
+        href: state.href.href
     });
 
 };
 
 export default connect(mapStateToProps, { 
-    get_vehicles
+    get_vehicles,
+    toCSV
 })(GetVehicles);

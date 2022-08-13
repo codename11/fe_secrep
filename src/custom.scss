@@ -1,10 +1,8 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
-.container{
-    height: auto;
-    width: 50%;
-    margin-top: 10%;
-    //display: flex;
+.container1{
+    margin-top: 1%;
+    padding: 1%;
     justify-content: center;
     align-items: center;
 }
@@ -105,7 +103,7 @@
     grid-row: 3/3;
 }
 
-.item5, .itemGV3, .itemGV4, .itemGV5{
+.item5, .itemGV3, .itemGV4, .itemGV5, .itemGV6, .itemGV7{
     grid-column: 1 / span 2;
 }
 

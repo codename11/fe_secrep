@@ -45,7 +45,7 @@ class App extends Component {
     let access_token = this.props && this.props.auth && this.props.auth.access_token ? this.props.auth.access_token : null;
 
     return (
-      <Container className="container">
+      <Container fluid className="container1">
 
         {access_token!==null ? <Button className="logout" variant="outline-warning" onClick={this.props.logout}>logout</Button> : null}
 

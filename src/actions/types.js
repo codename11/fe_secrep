@@ -44,3 +44,7 @@ export const LIST_PERMISSIONS = "LIST_PERMISSIONS";
 export const UPDATE_PERMISSIONS = "UPDATE_PERMISSIONS";
 
 export const LIST_USERS = "LIST_USERS";
+
+export const TIME_IN = "TIME_IN";
+export const TIME_OUT = "TIME_OUT";
+export const HREF = "HREF";

@@ -1,5 +1,6 @@
-import { LIST_VEHICLES, LIST_EMPLOYEES, LIST_DELIVERIES, LIST_USERS } from "../types";
+import { LIST_VEHICLES, LIST_EMPLOYEES, LIST_DELIVERIES, LIST_USERS, TIME_IN, TIME_OUT, HREF } from "../types";
 import store from "../../store";
+import { json2csv } from 'json-2-csv';
 
 let auth = null;
 
@@ -27,23 +28,23 @@ export const get_vehicles = (data) => dispatch => {
     .then((data) => {
         console.log("customVehicles: ", data);
 
-        if(data && data.vehicles && data.vehicles.length>0){
+        if(data && data.vehicles && data.vehicles.data && data.vehicles.data.length>0){
 
             dispatch({
                 type: LIST_VEHICLES,
-                payload: [...data.vehicles]
+                payload: [...data.vehicles.data]
             });
 
         }
-        else if(data && data.vehicles && data.vehicles.length===1){
+        else if(data && data.vehicles && data.vehicles.data && data.vehicles.data.length===1){
 
             dispatch({
                 type: LIST_VEHICLES,
-                payload: [data.vehicles]
+                payload: [data.vehicles.data]
             });
 
         }
-        else if(data && data.vehicles && data.vehicles.length===0){
+        else if(data && data.vehicles && data.vehicles.data && data.vehicles.data.length===0){
 
             dispatch({
                 type: LIST_VEHICLES,
@@ -238,5 +239,28 @@ export const get_users = (data) => dispatch => {
     .catch((error) => {
         console.error('Error:', error);
     });
+
+}
+
+export const toCSV = (e) => dispatch => {
+    
+    console.log("test: ", e);
+    auth = store.getState().auth.auth;
+    console.log("trt: ", store.getState());
+    let vehicleList = store.getState() && store.getState().vehicles.list_vehicles && store.getState().vehicles.list_vehicles.length>0 ? store.getState().vehicles.list_vehicles : null;
+
+    let json2csvCallback = (err, csv) => {
+        if(err){
+            throw err;
+        }
+        
+        dispatch({
+            type: HREF,
+            payload: "data:text/csv;charset=utf-8," + encodeURI(csv)
+        });
+        
+    };
+    
+    json2csv(vehicleList, json2csvCallback, {expandArrayObjects:true});
 
 }
