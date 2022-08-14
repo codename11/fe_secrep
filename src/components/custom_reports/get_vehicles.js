@@ -2,15 +2,15 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { Component } from 'react'
 import {connect} from "react-redux";
-import Table from 'react-bootstrap/Table';
 import PropTypes from "prop-types";
 import Accordion from 'react-bootstrap/Accordion';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { get_vehicles } from "../../actions/custom_reports/customReportsActions";
-import ListGroup from 'react-bootstrap/ListGroup';
-import { json2csv } from 'json-2-csv';
 import { toCSV } from "../../actions/custom_reports/customReportsActions";
+import {setTimeIn} from "../../actions/custom_reports/customReportsActions";
+import {setTimeOut} from "../../actions/custom_reports/customReportsActions";
+import { Pagination } from "react-bootstrap";
 
 class GetVehicles extends Component {
 
@@ -18,53 +18,15 @@ class GetVehicles extends Component {
 
         super(props);
         this.state = {
-            time_in: new Date(),
-            time_out: new Date(),
-            href: null
+            
         };
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.setTimeIn = this.setTimeIn.bind(this);
-        this.setTimeOut = this.setTimeOut.bind(this);
 
     }
 
     componentDidMount(){
       
         this.props.get_vehicles();
-
-    }
-
-    test(){
-        this.props.toCSV();
-        console.log("customGetVehiclesxxx: ", this.props);
-        /*let vehicleList = this.props && this.props.list_vehicles && this.props.list_vehicles.length>0 ? this.props.list_vehicles : null;
-
-        let json2csvCallback = (err, csv) => {
-            if(err){
-                throw err;
-            }
-            this.setState({
-                href: "data:text/csv;charset=utf-8," + encodeURI(csv)
-            });
-            
-        };
-        
-        json2csv(vehicleList, json2csvCallback, {expandArrayObjects:true});*/
-
-    }
-    setTimeIn(date){
-      
-        this.setState({
-            time_in: date
-        });
-        
-    }
-  
-    setTimeOut(date){
-    
-        this.setState({
-            time_out: date
-        });
 
     }
     
@@ -109,8 +71,6 @@ class GetVehicles extends Component {
         if(list_vehicles){
             list_vehicles.unshift(<option key="tmp" value="">Choose vehicle</option>);
         }
-
-        console.log("vozila: ", vehicleList);
         
         let tmp1 = vehicleList && vehicleList.length>0 ? vehicleList.map((item, i) => {
 
@@ -125,15 +85,16 @@ class GetVehicles extends Component {
 
         }) : null;
         let accordionVehicleList = <Accordion defaultActiveKey="0" className="itemGV6">{tmp1}</Accordion>;
-
+        
         let href = this.props && this.props.href ? this.props.href : null;
+
         return (
         <div>
             <Form onSubmit={this.handleSubmit} name="myForm" className="grid-container f1">
 
                 <DatePicker
-                    selected={this.state.time_in}
-                    onChange={(date) => this.setTimeIn(date)}
+                    selected={this.props.time_in}
+                    onChange={(date) => this.props.setTimeIn(date)}
                     showTimeSelect
                     dateFormat="dd/MM/yyyy HH:mm"
                     timeIntervals={15}
@@ -143,8 +104,8 @@ class GetVehicles extends Component {
                 />
 
                 <DatePicker
-                    selected={this.state.time_out}
-                    onChange={(date) => this.setTimeOut(date)}
+                    selected={this.props.time_out}
+                    onChange={(date) => this.props.setTimeOut(date)}
                     showTimeSelect
                     dateFormat="dd/MM/yyyy HH:mm"
                     timeIntervals={15}
@@ -211,11 +172,19 @@ class GetVehicles extends Component {
 
             </Form>
             {accordionVehicleList}
-
+            
         </div>
       )
   }
 }
+
+setTimeIn.propTypes = {
+    setTimeIn: PropTypes.func.isRequired,
+};
+
+setTimeOut.propTypes = {
+    setTimeOut: PropTypes.func.isRequired,
+};
 
 toCSV.propTypes = {
     toCSV: PropTypes.func.isRequired,
@@ -229,12 +198,17 @@ const mapStateToProps = (state) =>{
     
     return ({
         list_vehicles: state.vehicles.list_vehicles,
-        href: state.href.href
+        href: state.customReports.href,
+        time_in: state.customReports.time_in,
+        time_out: state.customReports.time_out,
+        pagination: state.customReports.pagination
     });
 
 };
 
 export default connect(mapStateToProps, { 
     get_vehicles,
-    toCSV
+    toCSV,
+    setTimeIn,
+    setTimeOut
 })(GetVehicles);

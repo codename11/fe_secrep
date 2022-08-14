@@ -1,4 +1,4 @@
-import { LIST_VEHICLES, LIST_EMPLOYEES, LIST_DELIVERIES, LIST_USERS, TIME_IN, TIME_OUT, HREF } from "../types";
+import { LIST_VEHICLES, LIST_EMPLOYEES, LIST_DELIVERIES, LIST_USERS, TIME_IN, TIME_OUT, HREF, PAGINATION } from "../types";
 import store from "../../store";
 import { json2csv } from 'json-2-csv';
 
@@ -26,7 +26,7 @@ export const get_vehicles = (data) => dispatch => {
 
     })// parses JSON response into native JavaScript objects
     .then((data) => {
-        console.log("customVehicles: ", data);
+        console.log("customVehiclesActions: ", data);
 
         if(data && data.vehicles && data.vehicles.data && data.vehicles.data.length>0){
 
@@ -54,6 +54,17 @@ export const get_vehicles = (data) => dispatch => {
         }
         else{
             console.log("prazno");
+        }
+
+        let pagination = data && data.vehicles ? data.vehicles : null;
+        if(pagination){
+
+            delete pagination.data;
+            dispatch({
+                type: PAGINATION,
+                payload: pagination
+            });
+            
         }
 
     })
@@ -242,11 +253,8 @@ export const get_users = (data) => dispatch => {
 
 }
 
-export const toCSV = (e) => dispatch => {
+export const toCSV = () => dispatch => {
     
-    console.log("test: ", e);
-    auth = store.getState().auth.auth;
-    console.log("trt: ", store.getState());
     let vehicleList = store.getState() && store.getState().vehicles.list_vehicles && store.getState().vehicles.list_vehicles.length>0 ? store.getState().vehicles.list_vehicles : null;
 
     let json2csvCallback = (err, csv) => {
@@ -262,5 +270,23 @@ export const toCSV = (e) => dispatch => {
     };
     
     json2csv(vehicleList, json2csvCallback, {expandArrayObjects:true});
+
+}
+
+export const setTimeIn = (date) => dispatch => {
+    
+    dispatch({
+        type: TIME_IN,
+        payload: date
+    });
+
+}
+
+export const setTimeOut = (date) => dispatch => {
+    
+    dispatch({
+        type: TIME_OUT,
+        payload: date
+    });
 
 }

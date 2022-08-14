@@ -48,3 +48,4 @@ export const LIST_USERS = "LIST_USERS";
 export const TIME_IN = "TIME_IN";
 export const TIME_OUT = "TIME_OUT";
 export const HREF = "HREF";
+export const PAGINATION = "PAGINATION";

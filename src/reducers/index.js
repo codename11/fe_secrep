@@ -28,5 +28,5 @@ export default combineReducers({
     deliveries: deliveryReducer,
     special_permissions: special_permissionReducer,
     users: userReducer,
-    href: customReportsReducer
+    customReports: customReportsReducer
 });
