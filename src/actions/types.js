@@ -49,3 +49,4 @@ export const TIME_IN = "TIME_IN";
 export const TIME_OUT = "TIME_OUT";
 export const HREF = "HREF";
 export const PAGINATION = "PAGINATION";
+export const PAGE = "PAGE";

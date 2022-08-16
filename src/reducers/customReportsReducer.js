@@ -75,18 +75,18 @@ export default function(state = initialState, action){
 
         case PAGINATION:
             
-            pagination.current_page = action.payload.current_page;
-            pagination.first_page_url = action.payload.first_page_url;
-            pagination.from = action.payload.from;
-            pagination.last_page = action.payload.last_page;
-            pagination.last_page_url = action.payload.last_page_url;
-            pagination.next_page_url = action.payload.next_page_url;
-            pagination.path = action.payload.path;
-            pagination.per_page = action.payload.per_page;
-            pagination.prev_page_url = action.payload.prev_page_url;
-            pagination.to = action.payload.to;
-            pagination.total = action.payload.total;
-
+            pagination.current_page = action && action.payload && action.payload.current_page ? action.payload.current_page : null;
+            pagination.first_page_url = action && action.payload && action.payload.first_page_url ? action.payload.first_page_url : null;
+            pagination.from = action && action.payload && action.payload.from ? action.payload.from : null;
+            pagination.last_page = action && action.payload && action.payload.last_page ? action.payload.last_page : null;
+            pagination.last_page_url = action && action.payload && action.payload.last_page_url ? action.payload.last_page_url : null;
+            pagination.next_page_url = action && action.payload && action.payload.next_page_url ? action.payload.next_page_url : null;
+            pagination.path = action && action.payload && action.payload.path ? action.payload.path : null;
+            pagination.per_page = action && action.payload && action.payload.per_page ? action.payload.per_page : null;
+            pagination.prev_page_url = action && action.payload && action.payload.prev_page_url ? action.payload.prev_page_url : null;
+            pagination.to = action && action.payload && action.payload.to ? action.payload.to : null;
+            pagination.total = action && action.payload && action.payload.total ? action.payload.total : null;
+           
             myState = {
                 pagination: pagination,
                 time_in: initialState.time_in,

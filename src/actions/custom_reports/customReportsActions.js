@@ -1,4 +1,4 @@
-import { LIST_VEHICLES, LIST_EMPLOYEES, LIST_DELIVERIES, LIST_USERS, TIME_IN, TIME_OUT, HREF, PAGINATION } from "../types";
+import { LIST_VEHICLES, LIST_EMPLOYEES, LIST_DELIVERIES, LIST_USERS, TIME_IN, TIME_OUT, HREF, PAGINATION, PAGE } from "../types";
 import store from "../../store";
 import { json2csv } from 'json-2-csv';
 
@@ -26,7 +26,7 @@ export const get_vehicles = (data) => dispatch => {
 
     })// parses JSON response into native JavaScript objects
     .then((data) => {
-        console.log("customVehiclesActions: ", data);
+        //console.log("customVehiclesActions: ", data);
 
         if(data && data.vehicles && data.vehicles.data && data.vehicles.data.length>0){
 
@@ -287,6 +287,18 @@ export const setTimeOut = (date) => dispatch => {
     dispatch({
         type: TIME_OUT,
         payload: date
+    });
+
+}
+
+export const setPageNumber = (e) => dispatch => {
+    
+    let page = e.currentTarget.getAttribute("page");
+    console.log("page: ", page);
+    let setCurrentPage = page;
+    dispatch({
+        type: PAGINATION,
+        payload: {current_page: page}
     });
 
 }

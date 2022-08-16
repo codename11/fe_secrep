@@ -10,7 +10,8 @@ import { get_vehicles } from "../../actions/custom_reports/customReportsActions"
 import { toCSV } from "../../actions/custom_reports/customReportsActions";
 import {setTimeIn} from "../../actions/custom_reports/customReportsActions";
 import {setTimeOut} from "../../actions/custom_reports/customReportsActions";
-import { Pagination } from "react-bootstrap";
+import Pagination from 'react-bootstrap/Pagination';
+import {setPageNumber} from "../../actions/custom_reports/customReportsActions";
 
 class GetVehicles extends Component {
 
@@ -87,7 +88,24 @@ class GetVehicles extends Component {
         let accordionVehicleList = <Accordion defaultActiveKey="0" className="itemGV6">{tmp1}</Accordion>;
         
         let href = this.props && this.props.href ? this.props.href : null;
-
+        
+        let pagination = this.props && this.props.pagination ? this.props.pagination : null;
+        let from = pagination && pagination.from ? pagination.from : null;
+        let to = pagination && pagination.to ? pagination.to : null;
+        let current_page = pagination && pagination.current_page ? pagination.current_page : null;
+        let last_page = pagination && pagination.last_page ? pagination.last_page : null;
+        let i = current_page;
+        let active = i===current_page ? true : false;
+        console.log("current_page: ", current_page);
+        let items = [];
+        for (let i = current_page; i<=last_page; i++){
+            
+          items.push(
+            <Pagination.Item key={i} active={active} page={i} onClick={(e)=> this.props.setPageNumber(e)}>
+                {i}
+            </Pagination.Item>,
+          );
+        }
         return (
         <div>
             <Form onSubmit={this.handleSubmit} name="myForm" className="grid-container f1">
@@ -172,11 +190,17 @@ class GetVehicles extends Component {
 
             </Form>
             {accordionVehicleList}
-            
+            <div><Pagination>{items}</Pagination></div>
+            <div>{this.props && this.props.pagination && this.props.pagination.current_page ? this.props.pagination.current_page : null}</div>
+            <div>{current_page}</div>
         </div>
       )
   }
 }
+
+setPageNumber.propTypes = {
+    setPageNumber: PropTypes.func.isRequired,
+};
 
 setTimeIn.propTypes = {
     setTimeIn: PropTypes.func.isRequired,
@@ -210,5 +234,6 @@ export default connect(mapStateToProps, {
     get_vehicles,
     toCSV,
     setTimeIn,
-    setTimeOut
+    setPageNumber,
+    setTimeOut,
 })(GetVehicles);

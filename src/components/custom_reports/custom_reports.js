@@ -80,7 +80,7 @@ class CustomReports extends Component {
     }
 
     render() {
-      console.log("customRepProps: ", this.props);
+      //console.log("customRepProps: ", this.props);
       //let list_permissions = this.props && this.props.special_permissions && this.props.special_permissions.list_permissions && this.props.special_permissions.list_permissions.length > 0 ? this.props.special_permissions.list_permissions : null;
       
       return (
