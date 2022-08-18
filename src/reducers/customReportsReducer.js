@@ -15,7 +15,8 @@ const initialState = {
         per_page: null,
         prev_page_url: null,
         to: null,
-        total: null
+        total: null,
+        index: 0
     }
 };
 
@@ -34,7 +35,8 @@ let pagination = {
     per_page: null,
     prev_page_url: null,
     to: null,
-    total: null
+    total: null,
+    index: 0
 };
 
 export default function(state = initialState, action){
@@ -75,18 +77,19 @@ export default function(state = initialState, action){
 
         case PAGINATION:
             
-            pagination.current_page = action && action.payload && action.payload.current_page ? action.payload.current_page : null;
-            pagination.first_page_url = action && action.payload && action.payload.first_page_url ? action.payload.first_page_url : null;
-            pagination.from = action && action.payload && action.payload.from ? action.payload.from : null;
-            pagination.last_page = action && action.payload && action.payload.last_page ? action.payload.last_page : null;
-            pagination.last_page_url = action && action.payload && action.payload.last_page_url ? action.payload.last_page_url : null;
-            pagination.next_page_url = action && action.payload && action.payload.next_page_url ? action.payload.next_page_url : null;
-            pagination.path = action && action.payload && action.payload.path ? action.payload.path : null;
-            pagination.per_page = action && action.payload && action.payload.per_page ? action.payload.per_page : null;
-            pagination.prev_page_url = action && action.payload && action.payload.prev_page_url ? action.payload.prev_page_url : null;
-            pagination.to = action && action.payload && action.payload.to ? action.payload.to : null;
-            pagination.total = action && action.payload && action.payload.total ? action.payload.total : null;
-           
+            pagination.current_page = action && action.payload && action.payload.current_page ? action.payload.current_page : initialState.current_page;
+            pagination.first_page_url = action && action.payload && action.payload.first_page_url ? action.payload.first_page_url : initialState.first_page_url;
+            pagination.from = action && action.payload && action.payload.from ? action.payload.from : initialState.from;
+            pagination.last_page = action && action.payload && action.payload.last_page ? action.payload.last_page : initialState.last_page;
+            pagination.last_page_url = action && action.payload && action.payload.last_page_url ? action.payload.last_page_url : initialState.last_page_url;
+            pagination.next_page_url = action && action.payload && action.payload.next_page_url ? action.payload.next_page_url : initialState.next_page_url;
+            pagination.path = action && action.payload && action.payload.path ? action.payload.path : initialState.path;
+            pagination.per_page = action && action.payload && action.payload.per_page ? action.payload.per_page : initialState.per_page;
+            pagination.prev_page_url = action && action.payload && action.payload.prev_page_url ? action.payload.prev_page_url : initialState.prev_page_url;
+            pagination.to = action && action.payload && action.payload.to ? action.payload.to : initialState.to;
+            pagination.total = action && action.payload && action.payload.total ? action.payload.total : initialState.total;
+            pagination.index = action.payload.index;
+            console.log("paginacija: ", pagination);
             myState = {
                 pagination: pagination,
                 time_in: initialState.time_in,
@@ -94,6 +97,8 @@ export default function(state = initialState, action){
             };
             
             return myState;
+        
+        return myState;
 
         default:
             return state;

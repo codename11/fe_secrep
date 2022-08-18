@@ -18,10 +18,9 @@ class GetVehicles extends Component {
     constructor(props) {
 
         super(props);
-        this.state = {
-            
-        };
+        
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.test = this.test.bind(this);
 
     }
 
@@ -29,6 +28,13 @@ class GetVehicles extends Component {
       
         this.props.get_vehicles();
 
+    }
+
+    test(e, i){
+        let pagination = this.props && this.props.pagination ? this.props.pagination : null;
+        
+        console.log("pagination: ", pagination);
+        
     }
     
     async handleSubmit(event) {
@@ -62,8 +68,7 @@ class GetVehicles extends Component {
     }
 
     render() {
-        console.log("customGetVehiclesProps: ", this.props);
-
+        console.log("getVehiclesProps: ", this.props);
         let vehicleList = this.props && this.props.list_vehicles && this.props.list_vehicles.length>0 ? this.props.list_vehicles : null;
         let list_vehicles = vehicleList && vehicleList.length>0 ? vehicleList.map((item, i) => {
             return <option key={item.id} value={item.id}>{item.registration}</option>
@@ -94,18 +99,16 @@ class GetVehicles extends Component {
         let to = pagination && pagination.to ? pagination.to : null;
         let current_page = pagination && pagination.current_page ? pagination.current_page : null;
         let last_page = pagination && pagination.last_page ? pagination.last_page : null;
-        let i = current_page;
-        let active = i===current_page ? true : false;
-        console.log("current_page: ", current_page);
-        let items = [];
-        for (let i = current_page; i<=last_page; i++){
+        let index = pagination && pagination.index ? pagination.index : null;
+
+        let pagesArr = [...Array(last_page).keys()].map((item, i)=> {
             
-          items.push(
-            <Pagination.Item key={i} active={active} page={i} onClick={(e)=> this.props.setPageNumber(e)}>
-                {i}
-            </Pagination.Item>,
-          );
-        }
+            return <Pagination.Item key={i} active={index===i} page={i+1} onClick={(e)=>{this.props.setPageNumber(e,  i);this.test(e, i)}}>
+                {i+1}
+            </Pagination.Item>;
+            
+        });//Generated array from number.
+        
         return (
         <div>
             <Form onSubmit={this.handleSubmit} name="myForm" className="grid-container f1">
@@ -190,9 +193,10 @@ class GetVehicles extends Component {
 
             </Form>
             {accordionVehicleList}
-            <div><Pagination>{items}</Pagination></div>
-            <div>{this.props && this.props.pagination && this.props.pagination.current_page ? this.props.pagination.current_page : null}</div>
-            <div>{current_page}</div>
+            <div>
+                <Pagination>{pagesArr}</Pagination>
+            </div>
+
         </div>
       )
   }

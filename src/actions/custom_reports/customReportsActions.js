@@ -1,4 +1,4 @@
-import { LIST_VEHICLES, LIST_EMPLOYEES, LIST_DELIVERIES, LIST_USERS, TIME_IN, TIME_OUT, HREF, PAGINATION, PAGE } from "../types";
+import { LIST_VEHICLES, LIST_EMPLOYEES, LIST_DELIVERIES, LIST_USERS, TIME_IN, TIME_OUT, HREF, PAGINATION } from "../types";
 import store from "../../store";
 import { json2csv } from 'json-2-csv';
 
@@ -60,6 +60,8 @@ export const get_vehicles = (data) => dispatch => {
         if(pagination){
 
             delete pagination.data;
+            pagination.index = 0;
+            
             dispatch({
                 type: PAGINATION,
                 payload: pagination
@@ -291,14 +293,42 @@ export const setTimeOut = (date) => dispatch => {
 
 }
 
-export const setPageNumber = (e) => dispatch => {
+export const setPageNumber = (e, i) => dispatch => {
     
     let page = e.currentTarget.getAttribute("page");
-    console.log("page: ", page);
-    let setCurrentPage = page;
+
+    let pagination = store.getState().customReports.pagination;
+    
+    let first = pagination.from;
+    let last = pagination.last_page;
+
+    let next = (Number(page)+1)<=last ? Number(page)+1 : first;
+    let prev = (Number(page)-1)<first ? last : (Number(page)-1);
+    
+    let index1 = pagination.next_page_url.indexOf("=");
+
+    let next_page_url = pagination.next_page_url.substr(0, index1+1)+next;
+    let prev_page_url = pagination.next_page_url.substr(0, index1+1)+prev;
+
+    let paginacija = {
+        current_page: page ? Number(page) : pagination.current_page,
+        first_page_url: pagination.first_page_url,
+        from: pagination.from,
+        last_page: pagination.last_page,
+        last_page_url: pagination.last_page_url,
+        next_page_url: next_page_url ? next_page_url : pagination.next_page_url,
+        path: pagination.path,
+        per_page: pagination.per_page,
+        prev_page_url: prev_page_url ? prev_page_url : pagination.prev_page_url,
+        to: pagination.to,
+        total: pagination.total,
+        index: i
+    }
+    console.log("paginacijaAction: ", pagination);
+    
     dispatch({
         type: PAGINATION,
-        payload: {current_page: page}
+        payload: paginacija
     });
 
 }
