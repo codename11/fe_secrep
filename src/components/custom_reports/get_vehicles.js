@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import Accordion from 'react-bootstrap/Accordion';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { get_vehicles } from "../../actions/custom_reports/customReportsActions";
+import { get_vehicles_custom } from "../../actions/custom_reports/customReportsActions";
 import { toCSV } from "../../actions/custom_reports/customReportsActions";
 import {setTimeIn} from "../../actions/custom_reports/customReportsActions";
 import {setTimeOut} from "../../actions/custom_reports/customReportsActions";
@@ -18,23 +18,33 @@ class GetVehicles extends Component {
     constructor(props) {
 
         super(props);
-        
+        this.state = {
+            pageIndex: 0
+        };
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.test = this.test.bind(this);
+        this.setActive = this.setActive.bind(this);
 
     }
 
     componentDidMount(){
       
-        this.props.get_vehicles();
+        this.props.get_vehicles_custom();
 
     }
 
-    test(e, i){
+    setActive(e, i){
+
+        this.props.setPageNumber(e, i);
         let pagination = this.props && this.props.pagination ? this.props.pagination : null;
+        if(pagination.last_page>1){
+            this.setState({
+                pageIndex: i
+            }, () => {
+                this.props.get_vehicles_custom({page: i+1});
+            });
+        }
         
-        console.log("pagination: ", pagination);
-        
+        console.log("setActive: ", i);
     }
     
     async handleSubmit(event) {
@@ -63,12 +73,13 @@ class GetVehicles extends Component {
             }
 
         }
-        
-        this.props.get_vehicles(data);
+        console.log("handleSubmit: ", data);
+        this.props.get_vehicles_custom(data);
     }
 
     render() {
         console.log("getVehiclesProps: ", this.props);
+
         let vehicleList = this.props && this.props.list_vehicles && this.props.list_vehicles.length>0 ? this.props.list_vehicles : null;
         let list_vehicles = vehicleList && vehicleList.length>0 ? vehicleList.map((item, i) => {
             return <option key={item.id} value={item.id}>{item.registration}</option>
@@ -80,17 +91,10 @@ class GetVehicles extends Component {
         
         let tmp1 = vehicleList && vehicleList.length>0 ? vehicleList.map((item, i) => {
 
-            return <Accordion.Item eventKey={item.id} key={"x"+item.id}>
-                <Accordion.Header key={"y"+item.id}>{item.registration}</Accordion.Header>
-                <Accordion.Body key={"z"+item.id} className="accordion-custom">
-
-                    <code key={"q"+item.id}><pre key={"w"+item.id}>{JSON.stringify(item, null, 4)}</pre></code>
-
-                </Accordion.Body>
-            </Accordion.Item>;
+            return <code className="vehicleCustom" key={"x"+item.id}><pre key={"y"+item.id}>{JSON.stringify(item, null, 4)}</pre></code>;
 
         }) : null;
-        let accordionVehicleList = <Accordion defaultActiveKey="0" className="itemGV6">{tmp1}</Accordion>;
+        let accordionVehicleList = <div className="itemGV6 grid-container1">{tmp1}</div>;
         
         let href = this.props && this.props.href ? this.props.href : null;
         
@@ -100,14 +104,17 @@ class GetVehicles extends Component {
         let current_page = pagination && pagination.current_page ? pagination.current_page : null;
         let last_page = pagination && pagination.last_page ? pagination.last_page : null;
         let index = pagination && pagination.index ? pagination.index : null;
+        let pageIndex = this.state && this.state.pageIndex ? this.state.pageIndex : 0;
+        
+        let arr1 = [];
+        console.log("last_page: ", last_page);
 
-        let pagesArr = [...Array(last_page).keys()].map((item, i)=> {
-            
-            return <Pagination.Item key={i} active={index===i} page={i+1} onClick={(e)=>{this.props.setPageNumber(e,  i);this.test(e, i)}}>
-                {i+1}
-            </Pagination.Item>;
-            
-        });//Generated array from number.
+        for(let i=0;i<last_page;i++){
+            arr1.push(<Pagination.Item key={i} active={pageIndex===i} page={i+1} onClick={(e)=>{this.setActive(e, i)}}>
+            {i+1}
+        </Pagination.Item>);
+        }
+        let pagesArr = [...arr1];//Generated array from number.
         
         return (
         <div>
@@ -183,9 +190,9 @@ class GetVehicles extends Component {
 
                 </div>
 
-                <Button className="itemGV7" name="button2" href={href} download="wholeReport"  variant="outline-success" onClick={this.props.toCSV}>
+                <a className="itemGV7 btn btn-outline-success" name="button2" href={href} download="wholeReport" onClick={(e)=>this.props.toCSV(e)}>
                     WholeReportDownload
-                </Button>
+                </a>
 
                 <Button className="itemGV5" name="button" variant="outline-success" type="submit">
                     Klik
@@ -214,30 +221,30 @@ setTimeOut.propTypes = {
     setTimeOut: PropTypes.func.isRequired,
 };
 
-toCSV.propTypes = {
-    toCSV: PropTypes.func.isRequired,
+get_vehicles_custom.propTypes = {
+    get_vehicles_custom: PropTypes.func.isRequired,
 };
 
-get_vehicles.propTypes = {
-    get_vehicles: PropTypes.func.isRequired,
+toCSV.propTypes = {
+    toCSV: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) =>{ 
     
     return ({
         list_vehicles: state.vehicles.list_vehicles,
+        pagination: state.customReports.pagination,
         href: state.customReports.href,
         time_in: state.customReports.time_in,
-        time_out: state.customReports.time_out,
-        pagination: state.customReports.pagination
+        time_out: state.customReports.time_out
     });
 
 };
 
 export default connect(mapStateToProps, { 
-    get_vehicles,
     toCSV,
+    get_vehicles_custom,
     setTimeIn,
     setPageNumber,
-    setTimeOut,
+    setTimeOut
 })(GetVehicles);

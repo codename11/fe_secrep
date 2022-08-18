@@ -4,10 +4,10 @@ import { json2csv } from 'json-2-csv';
 
 let auth = null;
 
-export const get_vehicles = (data) => dispatch => {
+export const get_vehicles_custom = (data) => dispatch => {
     
     auth = store.getState().auth.auth;
-    
+    console.log("get_vehicles_custom: ", data);
     const url = "http://secrep.test/api/vehicles";
     fetch(url, {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -26,10 +26,10 @@ export const get_vehicles = (data) => dispatch => {
 
     })// parses JSON response into native JavaScript objects
     .then((data) => {
-        //console.log("customVehiclesActions: ", data);
+        console.log("customVehiclesActions: ", data);
 
         if(data && data.vehicles && data.vehicles.data && data.vehicles.data.length>0){
-
+            console.log("test1");
             dispatch({
                 type: LIST_VEHICLES,
                 payload: [...data.vehicles.data]
@@ -37,18 +37,47 @@ export const get_vehicles = (data) => dispatch => {
 
         }
         else if(data && data.vehicles && data.vehicles.data && data.vehicles.data.length===1){
-
+            console.log("test2");
             dispatch({
                 type: LIST_VEHICLES,
-                payload: [data.vehicles.data]
+                payload: [...data.vehicles.data]
             });
 
         }
         else if(data && data.vehicles && data.vehicles.data && data.vehicles.data.length===0){
-
+            console.log("test3");
             dispatch({
                 type: LIST_VEHICLES,
                 payload: []
+            });
+
+        }
+        else if(data && data.vehicles && data.vehicles.created_at){
+
+            console.log("test4");
+            dispatch({
+                type: LIST_VEHICLES,
+                payload: [data.vehicles]
+            });
+
+            let pagination = {
+                current_page: 1,
+                first_page_url: "http://secrep.test/api/vehicles?page=1",
+                from: 1,
+                last_page: 1,
+                last_page_url: "http://secrep.test/api/vehicles?page=1",
+                next_page_url: "http://secrep.test/api/vehicles?page=1",
+                path: "http://secrep.test/api/vehicles",
+                per_page: 1,
+                prev_page_url: "http://secrep.test/api/vehicles?page=1",
+                to: 1,
+                total: 1,
+                index: 0
+            };
+            
+            dispatch({
+                type: PAGINATION,
+                payload: pagination
             });
 
         }
@@ -57,10 +86,9 @@ export const get_vehicles = (data) => dispatch => {
         }
 
         let pagination = data && data.vehicles ? data.vehicles : null;
-        if(pagination){
+        if(pagination && pagination.path){
 
             delete pagination.data;
-            pagination.index = 0;
             
             dispatch({
                 type: PAGINATION,
@@ -68,7 +96,7 @@ export const get_vehicles = (data) => dispatch => {
             });
             
         }
-
+        
     })
     .catch((error) => {
         console.error('Error:', error);
@@ -255,10 +283,9 @@ export const get_users = (data) => dispatch => {
 
 }
 
-export const toCSV = () => dispatch => {
-    
+export const toCSV = (e) => dispatch => {
     let vehicleList = store.getState() && store.getState().vehicles.list_vehicles && store.getState().vehicles.list_vehicles.length>0 ? store.getState().vehicles.list_vehicles : null;
-
+    
     let json2csvCallback = (err, csv) => {
         if(err){
             throw err;
@@ -270,7 +297,7 @@ export const toCSV = () => dispatch => {
         });
         
     };
-    
+
     json2csv(vehicleList, json2csvCallback, {expandArrayObjects:true});
 
 }
@@ -296,7 +323,7 @@ export const setTimeOut = (date) => dispatch => {
 export const setPageNumber = (e, i) => dispatch => {
     
     let page = e.currentTarget.getAttribute("page");
-
+    
     let pagination = store.getState().customReports.pagination;
     
     let first = pagination.from;
@@ -305,10 +332,10 @@ export const setPageNumber = (e, i) => dispatch => {
     let next = (Number(page)+1)<=last ? Number(page)+1 : first;
     let prev = (Number(page)-1)<first ? last : (Number(page)-1);
     
-    let index1 = pagination.next_page_url.indexOf("=");
+    let url = pagination.path;
 
-    let next_page_url = pagination.next_page_url.substr(0, index1+1)+next;
-    let prev_page_url = pagination.next_page_url.substr(0, index1+1)+prev;
+    let next_page_url = url+"?page="+next;
+    let prev_page_url =  url+"?page="+prev;
 
     let paginacija = {
         current_page: page ? Number(page) : pagination.current_page,
@@ -324,11 +351,10 @@ export const setPageNumber = (e, i) => dispatch => {
         total: pagination.total,
         index: i
     }
-    console.log("paginacijaAction: ", pagination);
     
     dispatch({
         type: PAGINATION,
-        payload: paginacija
+        payload: {...paginacija, index: i}
     });
 
 }

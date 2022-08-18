@@ -2,7 +2,7 @@ import { Component } from 'react'
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import Accordion from 'react-bootstrap/Accordion';
-import { get_vehicles } from "../../actions/custom_reports/customReportsActions";
+import { get_vehicles_custom } from "../../actions/custom_reports/customReportsActions";
 import { get_deliveries } from "../../actions/custom_reports/customReportsActions";
 import { get_employees } from "../../actions/custom_reports/customReportsActions";
 import { get_users } from "../../actions/custom_reports/customReportsActions";
@@ -131,20 +131,20 @@ class CustomReports extends Component {
   }
 }
 
-get_vehicles.propTypes = {
-    get_vehicles: PropTypes.func.isRequired,
+get_vehicles_custom.propTypes = {
+    get_vehicles_custom: PropTypes.func.isRequired,
 };
 
 get_deliveries.propTypes = {
-    get_vehicles: PropTypes.func.isRequired,
+    get_deliveries: PropTypes.func.isRequired,
 };
 
 get_employees.propTypes = {
-    get_vehicles: PropTypes.func.isRequired,
+    get_employees: PropTypes.func.isRequired,
 };
 
 get_users.propTypes = {
-    get_vehicles: PropTypes.func.isRequired,
+    get_users: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) =>{ 
@@ -162,7 +162,7 @@ const mapStateToProps = (state) =>{
 };
 
 export default connect(mapStateToProps, { 
-    get_vehicles,
+    get_vehicles_custom,
     get_deliveries,
     get_employees,
     get_users

@@ -1,4 +1,4 @@
-import { TIME_IN, TIME_OUT, HREF, PAGINATION } from "../actions/types";
+import { TIME_IN, TIME_OUT, HREF, PAGINATION} from "../actions/types";
 
 const initialState = {
     time_in: new Date(),
@@ -48,7 +48,10 @@ export default function(state = initialState, action){
             time_in = action.payload;
 
             myState = {
-                time_in: time_in
+                href: state.href,
+                time_in: time_in,
+                time_out: time_out,
+                pagination: state.pagination
             };
             
             return myState;
@@ -58,7 +61,10 @@ export default function(state = initialState, action){
             time_out = action.payload;
 
             myState = {
-                time_out: time_out
+                href: state.href,
+                time_out: time_out,
+                time_in: state.time_in,
+                pagination: state.pagination
             };
             
             return myState;
@@ -66,11 +72,12 @@ export default function(state = initialState, action){
         case HREF:
             
             href = action.payload;
-
+            
             myState = {
                 href: href,
-                time_in: initialState.time_in,
-                time_out: initialState.time_out
+                time_in: state.time_in,
+                time_out: state.time_out,
+                pagination: state.pagination
             };
             
             return myState;
@@ -89,14 +96,13 @@ export default function(state = initialState, action){
             pagination.to = action && action.payload && action.payload.to ? action.payload.to : initialState.to;
             pagination.total = action && action.payload && action.payload.total ? action.payload.total : initialState.total;
             pagination.index = action.payload.index;
-            console.log("paginacija: ", pagination);
-            myState = {
-                pagination: pagination,
-                time_in: initialState.time_in,
-                time_out: initialState.time_out
-            };
             
-            return myState;
+            myState = {
+                href: state.href,
+                pagination: pagination,
+                time_in: state.time_in,
+                time_out: state.time_out
+            };
         
         return myState;
 

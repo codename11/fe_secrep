@@ -136,3 +136,17 @@
 .logout{
     float: right;
 }
+
+.grid-container1{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+    padding: 5px;
+    justify-content: space-evenly;
+}
+
+.vehicleCustom{
+    border: 1px solid whitesmoke;
+    border-radius: 5px;
+    padding: 10px;
+}
