@@ -79,24 +79,31 @@ class GetVehicles extends Component {
 
     render() {
         console.log("getVehiclesProps: ", this.props);
-
+        
         let vehicleList = this.props && this.props.list_vehicles && this.props.list_vehicles.length>0 ? this.props.list_vehicles : null;
         let list_vehicles = vehicleList && vehicleList.length>0 ? vehicleList.map((item, i) => {
             return <option key={item.id} value={item.id}>{item.registration}</option>
         }) : null;
 
         if(list_vehicles){
-            list_vehicles.unshift(<option key="tmp" value="">Choose vehicle</option>);
+            list_vehicles.unshift(<option key="tmp" value="">All vehicles</option>);
         }
         
         let tmp1 = vehicleList && vehicleList.length>0 ? vehicleList.map((item, i) => {
 
-            return <code className="vehicleCustom" key={"x"+item.id}><pre key={"y"+item.id}>{JSON.stringify(item, null, 4)}</pre></code>;
+            return <div key={"q"+item.id}>
+                <code className="vehicleCustom" key={"x"+item.id}><pre key={"y"+item.id}>{JSON.stringify(item, null, 4)}</pre></code>
+            </div>;
 
         }) : null;
-        let accordionVehicleList = <div className="itemGV6 grid-container1">{tmp1}</div>;
-        
+
         let href = this.props && this.props.href ? this.props.href : null;
+
+        let accordionVehicleList = <div className="itemGV6 grid-container1">{tmp1}
+            <a className="btn btn-outline-success" href={href} download="wholeReport" onClick={(e)=>this.props.toCSV(e, vehicleList)}>
+                ReportPageDownload
+            </a>
+        </div>;
         
         let pagination = this.props && this.props.pagination ? this.props.pagination : null;
         let from = pagination && pagination.from ? pagination.from : null;
@@ -107,7 +114,6 @@ class GetVehicles extends Component {
         let pageIndex = this.state && this.state.pageIndex ? this.state.pageIndex : 0;
         
         let arr1 = [];
-        console.log("last_page: ", last_page);
 
         for(let i=0;i<last_page;i++){
             arr1.push(<Pagination.Item key={i} active={pageIndex===i} page={i+1} onClick={(e)=>{this.setActive(e, i)}}>
@@ -119,16 +125,21 @@ class GetVehicles extends Component {
         return (
         <div>
             <Form onSubmit={this.handleSubmit} name="myForm" className="grid-container f1">
-
+                
+                <Form.Group className="mb-3 per_page" controlId="per_page">
+                    <Form.Control name="per_page" type="number" min={0} max={20} placeholder="Per page" />
+                </Form.Group>
+                
                 <DatePicker
                     selected={this.props.time_in}
                     onChange={(date) => this.props.setTimeIn(date)}
                     showTimeSelect
                     dateFormat="dd/MM/yyyy HH:mm"
                     timeIntervals={15}
-                    name="time_in"
+                    name="start_date"
                     shouldCloseOnSelect={false}
                     className="itemGV1"
+                    placeholderText={"Please select a date"}
                 />
 
                 <DatePicker
@@ -137,13 +148,14 @@ class GetVehicles extends Component {
                     showTimeSelect
                     dateFormat="dd/MM/yyyy HH:mm"
                     timeIntervals={15}
-                    name="time_out"
+                    name="end_date"
                     shouldCloseOnSelect={false}
                     className="itemGV2"
+                    placeholderText={"Please select a date"}
                 />
 
                 <Form.Select className="itemGV3" aria-label="Default select example" name="vehicle_id" id="vehicle_id">
-                    {list_vehicles}
+                    {list_vehicles ? list_vehicles : <option value="">No available vehicles for this date range</option>}
                 </Form.Select>
 
                 <div className="itemGV4 grid-container">
@@ -195,7 +207,7 @@ class GetVehicles extends Component {
                 </a>
 
                 <Button className="itemGV5" name="button" variant="outline-success" type="submit">
-                    Klik
+                    Submit
                 </Button>
 
             </Form>
@@ -236,7 +248,8 @@ const mapStateToProps = (state) =>{
         pagination: state.customReports.pagination,
         href: state.customReports.href,
         time_in: state.customReports.time_in,
-        time_out: state.customReports.time_out
+        time_out: state.customReports.time_out,
+        test: state
     });
 
 };

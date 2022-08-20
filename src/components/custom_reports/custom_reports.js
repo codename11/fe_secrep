@@ -2,7 +2,6 @@ import { Component } from 'react'
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import Accordion from 'react-bootstrap/Accordion';
-import { get_vehicles_custom } from "../../actions/custom_reports/customReportsActions";
 import { get_deliveries } from "../../actions/custom_reports/customReportsActions";
 import { get_employees } from "../../actions/custom_reports/customReportsActions";
 import { get_users } from "../../actions/custom_reports/customReportsActions";
@@ -16,66 +15,6 @@ class CustomReports extends Component {
         this.state = {
           
         };
-
-    }
-
-    componentDidMount(){
-      
-        let data1 = {
-            /*"start_date": "17/07/2021 00:00",
-            "end_date": "30/07/2023 00:00",
-            "vehicle_id": 1,
-            "vehicle": [
-                "user",
-                "type",
-                "workOrganization",
-                "complements"
-            ]*/
-        };
-        //this.props.get_vehicles(data1);
-
-        /*let data2 = {
-            "start_date": "17/07/2021 00:00",
-            "end_date": "30/01/2023 00:00",
-            "delivery_id": 75,
-            "delivery": [
-                "operator",
-                "enteredBy",
-                "complement"
-            ]
-        };
-
-        this.props.get_deliveries(data2);
-
-        let data3 = {
-            "start_date": "17/07/2021 00:00",
-            "end_date": "30/01/2023 00:00",
-            "employee_id": 1,
-            "employee": [
-                "work_organization",
-                "enteredBy",
-                "deliveries"
-            ]
-        };
-
-        this.props.get_employees(data3);
-
-        let data4 = {
-            "start_date": "17/07/2021 00:00",
-            "end_date": "30/01/2023 00:00",
-            "user_id": 1,
-            "user": [
-                "role",
-                "vehicles",
-                "deliveries",
-                "complement",
-                "delivery_details",
-                "special_permissions",
-                "employees"
-            ]
-        };
-
-        this.props.get_users(data4);*/
 
     }
 
@@ -131,10 +70,6 @@ class CustomReports extends Component {
   }
 }
 
-get_vehicles_custom.propTypes = {
-    get_vehicles_custom: PropTypes.func.isRequired,
-};
-
 get_deliveries.propTypes = {
     get_deliveries: PropTypes.func.isRequired,
 };
@@ -153,7 +88,6 @@ const mapStateToProps = (state) =>{
         auth: state.auth.auth,
         tabKey: state.key.tabKey,
         errors: state.errors,
-        list_vehicles: state.vehicles.list_vehicles,
         employees: state.employees,
         deliveries: state.deliveries,
         users: state.users
@@ -162,7 +96,6 @@ const mapStateToProps = (state) =>{
 };
 
 export default connect(mapStateToProps, { 
-    get_vehicles_custom,
     get_deliveries,
     get_employees,
     get_users

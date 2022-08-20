@@ -1,8 +1,8 @@
 import { TIME_IN, TIME_OUT, HREF, PAGINATION} from "../actions/types";
 
 const initialState = {
-    time_in: new Date(),
-    time_out: new Date(),
+    time_in: null,
+    time_out: null,
     href: null,
     pagination: {
         current_page: null,
@@ -40,7 +40,7 @@ let pagination = {
 };
 
 export default function(state = initialState, action){
-
+    //console.log("paginationReducer: ", action);
     switch(action.type){
 
         case TIME_IN:

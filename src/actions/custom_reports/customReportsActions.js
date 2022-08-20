@@ -7,7 +7,7 @@ let auth = null;
 export const get_vehicles_custom = (data) => dispatch => {
     
     auth = store.getState().auth.auth;
-    console.log("get_vehicles_custom: ", data);
+    //console.log("get_vehicles_custom: ", data);
     const url = "http://secrep.test/api/vehicles";
     fetch(url, {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -25,41 +25,38 @@ export const get_vehicles_custom = (data) => dispatch => {
         return response.json();
 
     })// parses JSON response into native JavaScript objects
-    .then((data) => {
-        console.log("customVehiclesActions: ", data);
+    .then((response) => {
+        //console.log("customVehiclesActions: ", response);
 
-        if(data && data.vehicles && data.vehicles.data && data.vehicles.data.length>0){
-            console.log("test1");
+        /* 17/07/2022 00:00 */
+        /* 30/07/2022 00:00 */
+        if(response && response.hasOwnProperty("vehicles") && response.vehicles.hasOwnProperty("data")){
+
+            //console.log("test1");
+            let list_vehicles = response && response.vehicles && response.vehicles.data ? response.vehicles.data : null;
+            //console.log("test1List_vehicles: ", list_vehicles);
             dispatch({
                 type: LIST_VEHICLES,
-                payload: [...data.vehicles.data]
+                payload: [...list_vehicles]
+            });
+
+            let pagination = response && response.vehicles ? response.vehicles : null;
+            delete pagination.data;
+
+            dispatch({
+                type: PAGINATION,
+                payload: pagination
             });
 
         }
-        else if(data && data.vehicles && data.vehicles.data && data.vehicles.data.length===1){
-            console.log("test2");
+        else if(response && response.hasOwnProperty("vehicles") && response.vehicles.hasOwnProperty("created_at")){
+
+            //console.log("test2");
             dispatch({
                 type: LIST_VEHICLES,
-                payload: [...data.vehicles.data]
+                payload: [response.vehicles]
             });
-
-        }
-        else if(data && data.vehicles && data.vehicles.data && data.vehicles.data.length===0){
-            console.log("test3");
-            dispatch({
-                type: LIST_VEHICLES,
-                payload: []
-            });
-
-        }
-        else if(data && data.vehicles && data.vehicles.created_at){
-
-            console.log("test4");
-            dispatch({
-                type: LIST_VEHICLES,
-                payload: [data.vehicles]
-            });
-
+            
             let pagination = {
                 current_page: 1,
                 first_page_url: "http://secrep.test/api/vehicles?page=1",
@@ -80,21 +77,6 @@ export const get_vehicles_custom = (data) => dispatch => {
                 payload: pagination
             });
 
-        }
-        else{
-            console.log("prazno");
-        }
-
-        let pagination = data && data.vehicles ? data.vehicles : null;
-        if(pagination && pagination.path){
-
-            delete pagination.data;
-            
-            dispatch({
-                type: PAGINATION,
-                payload: pagination
-            });
-            
         }
         
     })
@@ -283,9 +265,10 @@ export const get_users = (data) => dispatch => {
 
 }
 
-export const toCSV = (e) => dispatch => {
+export const toCSV = (e, data) => dispatch => {
     let vehicleList = store.getState() && store.getState().vehicles.list_vehicles && store.getState().vehicles.list_vehicles.length>0 ? store.getState().vehicles.list_vehicles : null;
-    
+    let data1 = data ? data : vehicleList;
+
     let json2csvCallback = (err, csv) => {
         if(err){
             throw err;

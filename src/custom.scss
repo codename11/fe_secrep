@@ -150,3 +150,12 @@
     border-radius: 5px;
     padding: 10px;
 }
+
+.test{
+    float: right;
+}
+
+.per_page{
+    grid-row: 1;
+    grid-column: 1 / span 2;
+}
