@@ -9,10 +9,6 @@ export const get_vehicles_custom = (data) => dispatch => {
     //console.log("get_vehicles_custom: ", data);
 
     auth = store.getState().auth.auth;
-    let prevPagination = store.getState().customReports.pagination;
-    let per_page = data && data.per_page ? data.per_page : prevPagination.per_page;
-    let page = data && data.page ? data.page : prevPagination.current_page;
-    prevPagination.per_page = per_page;
     
     const url = "http://secrep.test/api/vehicles";
     fetch(url, {
@@ -31,8 +27,8 @@ export const get_vehicles_custom = (data) => dispatch => {
         return response.json();
 
     })// parses JSON response into native JavaScript objects
-    .then((response) => {
-        //console.log("customVehiclesActions: ", response);
+    .then((data) => {
+        //console.log("customVehiclesActions: ", data.pagination);
 
         /* 17/07/2022 00:00 */
         /* 30/07/2022 00:00 */
@@ -48,40 +44,40 @@ export const get_vehicles_custom = (data) => dispatch => {
 
         }*/
 
-        if(response && response.hasOwnProperty("vehicles") && response.vehicles.hasOwnProperty("data")){
+        if(data && data.hasOwnProperty("vehicles") && data.vehicles.hasOwnProperty("data")){
 
             //console.log("test1");
-            let list_vehicles = response && response.vehicles && response.vehicles.data ? response.vehicles.data : null;
-            console.log("test1List_vehicles: ", response);
+            let list_vehicles = data && data.vehicles && data.vehicles.data ? data.vehicles.data : null;
+            console.log("test1List_vehicles: ", data);
             dispatch({
                 type: LIST_VEHICLES,
                 payload: [...list_vehicles]
             });
 
-            let pagination = response && response.vehicles ? response.vehicles : null;
+            let pagination = data && data.vehicles ? data.vehicles : null;
             delete pagination.data;
-            pagination.per_page = per_page;
+            
             dispatch({
                 type: PAGINATION,
                 payload: pagination
             });
             
         }
-        else if(response && response.hasOwnProperty("vehicles") && !response.vehicles.hasOwnProperty("data")){
+        else if(data && data.hasOwnProperty("vehicles") && !data.vehicles.hasOwnProperty("data")){
 
-            let pagination = response && response.vehicles ? response.vehicles : null;
+            let pagination = data && data.vehicles ? data.vehicles : null;
             dispatch({
                 type: PAGINATION,
                 payload: pagination
             });
 
         }
-        else if(response && response.hasOwnProperty("vehicles") && response.vehicles.hasOwnProperty("created_at")){
+        else if(data && data.hasOwnProperty("vehicles") && data.vehicles.hasOwnProperty("created_at")){
 
             //console.log("test2");
             dispatch({
                 type: LIST_VEHICLES,
-                payload: [response.vehicles]
+                payload: [data.vehicles]
             });
 
         }
