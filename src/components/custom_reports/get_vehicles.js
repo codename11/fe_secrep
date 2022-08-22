@@ -3,7 +3,6 @@ import Button from 'react-bootstrap/Button';
 import { Component } from 'react'
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
-import Accordion from 'react-bootstrap/Accordion';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { get_vehicles_custom } from "../../actions/custom_reports/customReportsActions";
@@ -66,7 +65,7 @@ class GetVehicles extends Component {
             });
         }
         
-        console.log("setActive: ", i);
+        //console.log("setActive: ", i);
     }
     
     async handleSubmit(event) {
@@ -95,14 +94,19 @@ class GetVehicles extends Component {
             }
 
         }
-        //console.log("handleSubmit: ", data);
+        
+        console.log("handleSubmit: ", data);
 
-        this.props.get_vehicles_custom(data);
+        this.setState({
+            pageIndex: 0
+        }, () => {
+            this.props.get_vehicles_custom(data);
+        });
 
     }
 
     render() {
-        console.log("getVehiclesProps: ", this.props);
+        //console.log("getVehiclesProps: ", this.props);
         
         let vehicleList = this.props && this.props.list_vehicles && this.props.list_vehicles.length>0 ? this.props.list_vehicles : null;
         let list_vehicles = vehicleList && vehicleList.length>0 ? vehicleList.map((item, i) => {
@@ -130,43 +134,45 @@ class GetVehicles extends Component {
         </div>;
         
         let pagination = this.props && this.props.pagination ? this.props.pagination : null;
-        let from = pagination && pagination.from ? pagination.from : null;
-        let to = pagination && pagination.to ? pagination.to : null;
-        let current_page = pagination && pagination.current_page ? pagination.current_page : null;
         let last_page = pagination && pagination.last_page ? pagination.last_page : null;
-        let index = pagination && pagination.index ? pagination.index : null;
         let pageIndex = this.state && this.state.pageIndex ? this.state.pageIndex : 0;
         
         let arr1 = [];
 
         for(let i=0;i<last_page;i++){
             arr1.push(<Pagination.Item key={i} active={pageIndex===i} page={i+1} onClick={(e)=>{this.setActive(e, i)}}>
-            {i+1}
-        </Pagination.Item>);
+                {i+1}
+            </Pagination.Item>);
         }
         let pagesArr = [...arr1];//Generated array from number.
         let per_page = pagination && pagination.per_page ? pagination.per_page : null;
-
+        let checkIfUtility = this.props && this.props.auth && this.props.auth.user && this.props.auth.user.utility && this.props.auth.user.utility.id && Number.isInteger(this.props.auth.user.utility.id) ? true : false;
+        
         return (
         <div>
-            <Form onSubmit={this.handleSubmitPerPage} name="myPerPageForm" className="grid-container f1">
-                <Form.Group className="mb-3 per_page" controlId="per_page">
-                    <Form.Control name="per_page" type="number" min={0} max={20} defaultValue={per_page} placeholder="Per page" />
-                </Form.Group>
+            <div>
+                <h5 className="labelSetPerPage">Set or update per page</h5>
+                <Form onSubmit={this.handleSubmitPerPage} name="myPerPageForm" className="grid-container f1">
+                    
+                    <Form.Group className="mb-3 per_page" controlId="per_page">
+                        <Form.Control name="per_page" type="number" min={0} max={20} defaultValue={per_page} placeholder="Per page" />
+                    </Form.Group>
 
-                <Form.Group className="mb-3" controlId="post">
-                    <Form.Check name="metoda" type="radio" value="post" label="Method"/>
-                </Form.Group>
+                    <Form.Group className="mb-3" controlId="post">
+                        <Form.Check name="metoda" type="radio" value="post" label="Create" disabled={checkIfUtility ? true : false} defaultChecked={checkIfUtility ? false : true}/>
+                    </Form.Group>
 
-                <Form.Group className="mb-3" controlId="patch">
-                    <Form.Check name="metoda" type="radio" value="patch" label="Method"/>
-                </Form.Group>
+                    <Form.Group className="mb-3" controlId="patch">
+                        <Form.Check name="metoda" type="radio" value="patch" label="Update" disabled={checkIfUtility ? false : true} defaultChecked={checkIfUtility ? true : false}/>
+                    </Form.Group>
 
-                <Button className="itemGV5" name="per_page_button" variant="outline-success" type="submit">
-                    Set per page
-                </Button>
+                    <Button className="itemGV5" name="per_page_button" variant="outline-success" type="submit">
+                        Set per page
+                    </Button>
 
-            </Form>
+                </Form>
+
+            </div>
 
             <Form onSubmit={this.handleSubmit} name="myForm" className="grid-container f1">
                 
@@ -288,7 +294,8 @@ const mapStateToProps = (state) =>{
         pagination: state.customReports.pagination,
         href: state.customReports.href,
         time_in: state.customReports.time_in,
-        time_out: state.customReports.time_out
+        time_out: state.customReports.time_out,
+        auth: state.auth.auth
     });
 
 };

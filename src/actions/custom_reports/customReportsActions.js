@@ -6,8 +6,11 @@ let auth = null;
 
 export const get_vehicles_custom = (data) => dispatch => {
     
-    //console.log("get_vehicles_custom: ", data);
-
+    console.log("get_vehicles_custom: ", data);
+    let index =  null;
+    if(data && data.index){
+        index =  data.index;
+    }
     auth = store.getState().auth.auth;
     
     const url = "http://secrep.test/api/vehicles";
@@ -28,27 +31,17 @@ export const get_vehicles_custom = (data) => dispatch => {
 
     })// parses JSON response into native JavaScript objects
     .then((data) => {
-        //console.log("customVehiclesActions: ", data.pagination);
+        console.log("customVehiclesActions: ", data);
 
         /* 17/07/2022 00:00 */
         /* 30/07/2022 00:00 */
-        /*if(response && response.hasOwnProperty("vehicles") && response.vehicles.hasOwnProperty("current_page") && !response.vehicles.hasOwnProperty("data")){
-
-
-
-        }
-
-        if(response && response.hasOwnProperty("vehicles") && response.vehicles.hasOwnProperty("current_page") && response.vehicles.hasOwnProperty("data")){
-
-
-
-        }*/
 
         if(data && data.hasOwnProperty("vehicles") && data.vehicles.hasOwnProperty("data")){
 
-            //console.log("test1");
+            console.log("test1");
             let list_vehicles = data && data.vehicles && data.vehicles.data ? data.vehicles.data : null;
             console.log("test1List_vehicles: ", data);
+
             dispatch({
                 type: LIST_VEHICLES,
                 payload: [...list_vehicles]
@@ -56,7 +49,11 @@ export const get_vehicles_custom = (data) => dispatch => {
 
             let pagination = data && data.vehicles ? data.vehicles : null;
             delete pagination.data;
-            
+
+            if(index){
+                pagination.index = index;
+            }
+
             dispatch({
                 type: PAGINATION,
                 payload: pagination
@@ -66,15 +63,31 @@ export const get_vehicles_custom = (data) => dispatch => {
         else if(data && data.hasOwnProperty("vehicles") && !data.vehicles.hasOwnProperty("data")){
 
             let pagination = data && data.vehicles ? data.vehicles : null;
+
+            if(index){
+                pagination.index = index;
+            }
+
             dispatch({
                 type: PAGINATION,
                 payload: pagination
             });
 
         }
-        else if(data && data.hasOwnProperty("vehicles") && data.vehicles.hasOwnProperty("created_at")){
+        
+        if(data && data.hasOwnProperty("vehicles") && data.vehicles.hasOwnProperty("registration")){
 
-            //console.log("test2");
+            console.log("test2");
+
+            if(index){
+                let pagination = store.getState() && store.getState().customReports && store.getState().customReports.pagination ? store.getState().customReports.pagination  : null;
+                pagination.index = index;
+                dispatch({
+                    type: PAGINATION,
+                    payload: pagination
+                });
+            }
+
             dispatch({
                 type: LIST_VEHICLES,
                 payload: [data.vehicles]
@@ -338,9 +351,7 @@ export const setPageNumber = (e, i) => dispatch => {
         index: i
     }
     //console.log("setPageNumber: ", paginacija);
-    console.clear();
-    console.log("from: ", paginacija.from, "to: ", paginacija.to);
-    console.log("per_page: ", pagination.per_page);
+  
     dispatch({
         type: PAGINATION,
         payload: paginacija
@@ -349,7 +360,7 @@ export const setPageNumber = (e, i) => dispatch => {
 }
 
 export const set_per_page = (data) => dispatch => {
-    console.log("trt: ", data);
+    console.log("set_per_page1: ", data);
     auth = store.getState().auth.auth;
     
     const create_url = "http://secrep.test/api/create_per_page";//post
@@ -384,7 +395,7 @@ export const set_per_page = (data) => dispatch => {
     })// parses JSON response into native JavaScript objects
     .then((data) => {
 
-        console.log("set_per_page: ", data);
+        console.log("set_per_page2: ", data);
 
     })
     .catch((error) => {
