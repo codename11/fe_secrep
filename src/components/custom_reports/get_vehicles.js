@@ -24,12 +24,61 @@ class GetVehicles extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
         this.setActive = this.setActive.bind(this);
         this.handleSubmitPerPage = this.handleSubmitPerPage.bind(this);
+        this.prevPage = this.prevPage.bind(this);
+        this.nextPage = this.nextPage.bind(this);
+        this.firstPage = this.firstPage.bind(this);
+        this.lastPage = this.lastPage.bind(this);
+
     }
 
     componentDidMount(){
       
         this.props.get_vehicles_custom();
 
+    }
+
+    firstPage(){
+        this.setState({
+            pageIndex: 0
+        }, ()=>{
+            this.props.get_vehicles_custom({page: this.state.pageIndex+1});
+        });
+    }
+
+    lastPage(){
+        this.setState({
+            pageIndex: this.props.pagination.last_page-1
+        }, ()=>{
+            this.props.get_vehicles_custom({page: this.state.pageIndex+1});
+        });
+    }
+
+    prevPage(){
+
+        let pagination = this.props && this.props.pagination ? this.props.pagination : null;
+        let first = 0;
+        let last = pagination.last_page;
+
+        this.setState({
+            pageIndex: this.state.pageIndex-1 >= first ? this.state.pageIndex-1 : last-1
+        }, ()=>{
+            this.props.get_vehicles_custom({page: this.state.pageIndex+1});
+        });
+
+    }
+
+    nextPage(){
+
+        let pagination = this.props && this.props.pagination ? this.props.pagination : null;
+        let first = 0;
+        let last = pagination.last_page;
+
+        this.setState({
+            pageIndex: this.state.pageIndex+1 <= last-1 ? this.state.pageIndex+1 : first
+        }, ()=>{
+            this.props.get_vehicles_custom({page: this.state.pageIndex+1});
+        });
+        
     }
 
     handleSubmitPerPage(event){
@@ -65,7 +114,7 @@ class GetVehicles extends Component {
             });
         }
         
-        //console.log("setActive: ", i);
+        console.log("setActive: ", i);
     }
     
     async handleSubmit(event) {
@@ -138,11 +187,27 @@ class GetVehicles extends Component {
         let pageIndex = this.state && this.state.pageIndex ? this.state.pageIndex : 0;
         
         let arr1 = [];
+        const createPaginationItem = (pageIndex, i) => {
+
+            /*if(i===1 || i===last_page-2){
+                return <Pagination.Ellipsis key={i} />;
+            }
+            else{
+                return <Pagination.Item key={i} active={pageIndex===i} page={i+1} onClick={(e)=>{this.setActive(e, i)}}>
+                    {i+1}
+                </Pagination.Item>;
+            }*/
+
+            return <Pagination.Item key={i} active={pageIndex===i} page={i+1} onClick={(e)=>{this.setActive(e, i)}}>
+                    {i+1}
+                </Pagination.Item>;
+            
+        };
 
         for(let i=0;i<last_page;i++){
-            arr1.push(<Pagination.Item key={i} active={pageIndex===i} page={i+1} onClick={(e)=>{this.setActive(e, i)}}>
-                {i+1}
-            </Pagination.Item>);
+            
+            arr1.push(createPaginationItem(pageIndex, i));
+            
         }
         let pagesArr = [...arr1];//Generated array from number.
         let per_page = pagination && pagination.per_page ? pagination.per_page : null;
@@ -255,7 +320,13 @@ class GetVehicles extends Component {
             </Form>
             {accordionVehicleList}
             <div>
-                <Pagination>{pagesArr}</Pagination>
+                <Pagination>
+                    <Pagination.First onClick={this.firstPage}/>
+                    <Pagination.Prev onClick={this.prevPage}/>
+                        {pagesArr}
+                    <Pagination.Next  onClick={this.nextPage}/>
+                    <Pagination.Last  onClick={this.lastPage}/>
+                </Pagination>
             </div>
 
         </div>
