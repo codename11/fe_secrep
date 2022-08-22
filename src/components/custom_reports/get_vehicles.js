@@ -12,6 +12,7 @@ import {setTimeIn} from "../../actions/custom_reports/customReportsActions";
 import {setTimeOut} from "../../actions/custom_reports/customReportsActions";
 import Pagination from 'react-bootstrap/Pagination';
 import {setPageNumber} from "../../actions/custom_reports/customReportsActions";
+import {set_per_page} from "../../actions/custom_reports/customReportsActions";
 
 class GetVehicles extends Component {
 
@@ -23,12 +24,33 @@ class GetVehicles extends Component {
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.setActive = this.setActive.bind(this);
-
+        this.handleSubmitPerPage = this.handleSubmitPerPage.bind(this);
     }
 
     componentDidMount(){
       
         this.props.get_vehicles_custom();
+
+    }
+
+    handleSubmitPerPage(event){
+
+        event.preventDefault();
+        let forma = event.target; 
+        let elements = forma.elements;
+        let per_page = elements[0].value;
+        let metoda = elements[1].checked ? elements[1].value : (elements[2].checked ? elements[2].value : null);
+        let per_page_id = 1;
+        if(per_page && metoda && per_page_id){
+            let data = {
+                per_page: per_page,
+                metoda: metoda,
+                "per_page_id": per_page_id
+            }
+            this.props.set_per_page(data);
+            this.props.get_vehicles_custom();
+        }
+        
 
     }
 
@@ -73,8 +95,10 @@ class GetVehicles extends Component {
             }
 
         }
-        console.log("handleSubmit: ", data);
+        //console.log("handleSubmit: ", data);
+
         this.props.get_vehicles_custom(data);
+
     }
 
     render() {
@@ -99,8 +123,8 @@ class GetVehicles extends Component {
 
         let href = this.props && this.props.href ? this.props.href : null;
 
-        let accordionVehicleList = <div className="itemGV6 grid-container1">{tmp1}
-            <a className="btn btn-outline-success" href={href} download="wholeReport" onClick={(e)=>this.props.toCSV(e, vehicleList)}>
+        let accordionVehicleList = <div><div className="itemGV6 grid-container1">{tmp1}</div>
+            <a className="btn btn-outline-info ReportPageDownload" href={href} download="wholeReport" onClick={(e)=>this.props.toCSV(e, vehicleList)}>
                 ReportPageDownload
             </a>
         </div>;
@@ -121,14 +145,30 @@ class GetVehicles extends Component {
         </Pagination.Item>);
         }
         let pagesArr = [...arr1];//Generated array from number.
-        
+        let per_page = pagination && pagination.per_page ? pagination.per_page : null;
+
         return (
         <div>
-            <Form onSubmit={this.handleSubmit} name="myForm" className="grid-container f1">
-                
+            <Form onSubmit={this.handleSubmitPerPage} name="myPerPageForm" className="grid-container f1">
                 <Form.Group className="mb-3 per_page" controlId="per_page">
-                    <Form.Control name="per_page" type="number" min={0} max={20} placeholder="Per page" />
+                    <Form.Control name="per_page" type="number" min={0} max={20} defaultValue={per_page} placeholder="Per page" />
                 </Form.Group>
+
+                <Form.Group className="mb-3" controlId="post">
+                    <Form.Check name="metoda" type="radio" value="post" label="Method"/>
+                </Form.Group>
+
+                <Form.Group className="mb-3" controlId="patch">
+                    <Form.Check name="metoda" type="radio" value="patch" label="Method"/>
+                </Form.Group>
+
+                <Button className="itemGV5" name="per_page_button" variant="outline-success" type="submit">
+                    Set per page
+                </Button>
+
+            </Form>
+
+            <Form onSubmit={this.handleSubmit} name="myForm" className="grid-container f1">
                 
                 <DatePicker
                     selected={this.props.time_in}
@@ -202,10 +242,6 @@ class GetVehicles extends Component {
 
                 </div>
 
-                <a className="itemGV7 btn btn-outline-success" name="button2" href={href} download="wholeReport" onClick={(e)=>this.props.toCSV(e)}>
-                    WholeReportDownload
-                </a>
-
                 <Button className="itemGV5" name="button" variant="outline-success" type="submit">
                     Submit
                 </Button>
@@ -241,6 +277,10 @@ toCSV.propTypes = {
     toCSV: PropTypes.func.isRequired,
 };
 
+set_per_page.propTypes = {
+    set_per_page: PropTypes.func.isRequired,
+};
+
 const mapStateToProps = (state) =>{ 
     
     return ({
@@ -248,8 +288,7 @@ const mapStateToProps = (state) =>{
         pagination: state.customReports.pagination,
         href: state.customReports.href,
         time_in: state.customReports.time_in,
-        time_out: state.customReports.time_out,
-        test: state
+        time_out: state.customReports.time_out
     });
 
 };
@@ -259,5 +298,6 @@ export default connect(mapStateToProps, {
     get_vehicles_custom,
     setTimeIn,
     setPageNumber,
-    setTimeOut
+    setTimeOut,
+    set_per_page
 })(GetVehicles);

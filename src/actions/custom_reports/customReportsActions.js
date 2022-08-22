@@ -6,8 +6,14 @@ let auth = null;
 
 export const get_vehicles_custom = (data) => dispatch => {
     
-    auth = store.getState().auth.auth;
     //console.log("get_vehicles_custom: ", data);
+
+    auth = store.getState().auth.auth;
+    let prevPagination = store.getState().customReports.pagination;
+    let per_page = data && data.per_page ? data.per_page : prevPagination.per_page;
+    let page = data && data.page ? data.page : prevPagination.current_page;
+    prevPagination.per_page = per_page;
+    
     const url = "http://secrep.test/api/vehicles";
     fetch(url, {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -30,11 +36,23 @@ export const get_vehicles_custom = (data) => dispatch => {
 
         /* 17/07/2022 00:00 */
         /* 30/07/2022 00:00 */
+        /*if(response && response.hasOwnProperty("vehicles") && response.vehicles.hasOwnProperty("current_page") && !response.vehicles.hasOwnProperty("data")){
+
+
+
+        }
+
+        if(response && response.hasOwnProperty("vehicles") && response.vehicles.hasOwnProperty("current_page") && response.vehicles.hasOwnProperty("data")){
+
+
+
+        }*/
+
         if(response && response.hasOwnProperty("vehicles") && response.vehicles.hasOwnProperty("data")){
 
             //console.log("test1");
             let list_vehicles = response && response.vehicles && response.vehicles.data ? response.vehicles.data : null;
-            //console.log("test1List_vehicles: ", list_vehicles);
+            console.log("test1List_vehicles: ", response);
             dispatch({
                 type: LIST_VEHICLES,
                 payload: [...list_vehicles]
@@ -42,7 +60,16 @@ export const get_vehicles_custom = (data) => dispatch => {
 
             let pagination = response && response.vehicles ? response.vehicles : null;
             delete pagination.data;
+            pagination.per_page = per_page;
+            dispatch({
+                type: PAGINATION,
+                payload: pagination
+            });
+            
+        }
+        else if(response && response.hasOwnProperty("vehicles") && !response.vehicles.hasOwnProperty("data")){
 
+            let pagination = response && response.vehicles ? response.vehicles : null;
             dispatch({
                 type: PAGINATION,
                 payload: pagination
@@ -55,26 +82,6 @@ export const get_vehicles_custom = (data) => dispatch => {
             dispatch({
                 type: LIST_VEHICLES,
                 payload: [response.vehicles]
-            });
-            
-            let pagination = {
-                current_page: 1,
-                first_page_url: "http://secrep.test/api/vehicles?page=1",
-                from: 1,
-                last_page: 1,
-                last_page_url: "http://secrep.test/api/vehicles?page=1",
-                next_page_url: "http://secrep.test/api/vehicles?page=1",
-                path: "http://secrep.test/api/vehicles",
-                per_page: 1,
-                prev_page_url: "http://secrep.test/api/vehicles?page=1",
-                to: 1,
-                total: 1,
-                index: 0
-            };
-            
-            dispatch({
-                type: PAGINATION,
-                payload: pagination
             });
 
         }
@@ -319,7 +326,7 @@ export const setPageNumber = (e, i) => dispatch => {
 
     let next_page_url = url+"?page="+next;
     let prev_page_url =  url+"?page="+prev;
-
+    
     let paginacija = {
         current_page: page ? Number(page) : pagination.current_page,
         first_page_url: pagination.first_page_url,
@@ -334,10 +341,58 @@ export const setPageNumber = (e, i) => dispatch => {
         total: pagination.total,
         index: i
     }
-    
+    //console.log("setPageNumber: ", paginacija);
+    console.clear();
+    console.log("from: ", paginacija.from, "to: ", paginacija.to);
+    console.log("per_page: ", pagination.per_page);
     dispatch({
         type: PAGINATION,
-        payload: {...paginacija, index: i}
+        payload: paginacija
+    });
+
+}
+
+export const set_per_page = (data) => dispatch => {
+    console.log("trt: ", data);
+    auth = store.getState().auth.auth;
+    
+    const create_url = "http://secrep.test/api/create_per_page";//post
+    const update_url = "http://secrep.test/api/update_per_page";//patch
+
+    let metoda = data && data.metoda ? data.metoda : null;
+    let url = null;
+    if(metoda==="post"){
+        url = create_url;
+    }
+
+    if(metoda==="patch"){
+        url = update_url;
+    }
+
+    fetch(url, {
+        method: metoda, // *GET, POST, PUT, DELETE, etc.
+        crossDomain : true,
+        headers: {
+            "X-Requested-With": "XMLHttpRequest",
+            "Content-Type": 'application/json',
+            "Accept": 'application/json',
+            "Authorization": "Bearer " + auth.access_token
+        },
+        body: JSON.stringify({per_page_id: data.per_page_id, per_page: data.per_page})
+        
+    })
+    .then((response) => {
+
+        return response.json();
+
+    })// parses JSON response into native JavaScript objects
+    .then((data) => {
+
+        console.log("set_per_page: ", data);
+
+    })
+    .catch((error) => {
+        console.error('Error:', error);
     });
 
 }
