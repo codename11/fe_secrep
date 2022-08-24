@@ -160,14 +160,27 @@
     grid-column: 1 / span 2;
 }
 
-.ReportPageDownload{
-    position: absolute;
-    right: 30px;  
-}
-
 .labelSetPerPage{
     margin: 0 auto;
     text-align: center;
     padding-top: 5px;
     padding-bottom: 5px;
+}
+
+.grid-container2{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 5px;
+    padding: 5px;
+    justify-content: space-evenly;
+}
+
+.gc2-item1{
+    grid-column: 1 / span 4;
+    justify-content: center;
+}
+
+.ReportPageDownload{
+    width: 100%;
+    grid-column: 4;
 }

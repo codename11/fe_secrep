@@ -6,7 +6,7 @@ let auth = null;
 
 export const get_vehicles_custom = (data) => dispatch => {
     
-    console.log("get_vehicles_custom: ", data);
+    //console.log("get_vehicles_custom: ", data);
     let index =  null;
     if(data && data.index){
         index =  data.index;
@@ -31,16 +31,16 @@ export const get_vehicles_custom = (data) => dispatch => {
 
     })// parses JSON response into native JavaScript objects
     .then((data) => {
-        console.log("customVehiclesActions: ", data);
+        //console.log("customVehiclesActions: ", data);
 
         /* 17/07/2022 00:00 */
         /* 30/07/2022 00:00 */
 
         if(data && data.hasOwnProperty("vehicles") && data.vehicles.hasOwnProperty("data")){
 
-            console.log("test1");
+            //console.log("test1");
             let list_vehicles = data && data.vehicles && data.vehicles.data ? data.vehicles.data : null;
-            console.log("test1List_vehicles: ", data);
+            //console.log("test1List_vehicles: ", data);
 
             dispatch({
                 type: LIST_VEHICLES,

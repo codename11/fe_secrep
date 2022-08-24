@@ -176,7 +176,7 @@ class GetVehicles extends Component {
 
         let href = this.props && this.props.href ? this.props.href : null;
 
-        let accordionVehicleList = <div><div className="itemGV6 grid-container1">{tmp1}</div>
+        let accordionVehicleList = <div className="grid-container2"><div className="itemGV6 grid-container1 gc2-item1">{tmp1}</div>
             <a className="btn btn-outline-info ReportPageDownload" href={href} download="wholeReport" onClick={(e)=>this.props.toCSV(e, vehicleList)}>
                 ReportPageDownload
             </a>
@@ -185,22 +185,19 @@ class GetVehicles extends Component {
         let pagination = this.props && this.props.pagination ? this.props.pagination : null;
         let last_page = pagination && pagination.last_page ? pagination.last_page : null;
         let pageIndex = this.state && this.state.pageIndex ? this.state.pageIndex : 0;
-        
+        let current_page = pagination && pagination.current_page ? pagination.current_page : null;
         let arr1 = [];
+
+        let ttt = [];//i+2<=last_page
         const createPaginationItem = (pageIndex, i) => {
-
-            /*if(i===1 || i===last_page-2){
-                return <Pagination.Ellipsis key={i} />;
+            
+            if(pageIndex===i && i-4>=0 && i+4<=last_page-1){
+                ttt.push([<Pagination.Ellipsis />, i-2, i-1, i, i+1, i+2, <Pagination.Ellipsis />]);
             }
-            else{
-                return <Pagination.Item key={i} active={pageIndex===i} page={i+1} onClick={(e)=>{this.setActive(e, i)}}>
-                    {i+1}
-                </Pagination.Item>;
-            }*/
-
+            
             return <Pagination.Item key={i} active={pageIndex===i} page={i+1} onClick={(e)=>{this.setActive(e, i)}}>
-                    {i+1}
-                </Pagination.Item>;
+                {i+1}
+            </Pagination.Item>;
             
         };
 
@@ -209,10 +206,22 @@ class GetVehicles extends Component {
             arr1.push(createPaginationItem(pageIndex, i));
             
         }
+        //console.clear();
+        console.log("ttt: ", ttt);
+        //<Pagination.Ellipsis />
+        //arr1.push(createPaginationItem(pageIndex, i));
+        //let midpoint = Math.ceil(last_page/2);
+        //let arr2 = [...Array(10).keys()];
+        //if((current_page && current_page-side>=0) || (current_page && current_page+side<=last_page))
+        let arr2 = [];
+        let side = 2;
+        let left = null;
+        let right = null;
+
         let pagesArr = [...arr1];//Generated array from number.
         let per_page = pagination && pagination.per_page ? pagination.per_page : null;
         let checkIfUtility = this.props && this.props.auth && this.props.auth.user && this.props.auth.user.utility && this.props.auth.user.utility.id && Number.isInteger(this.props.auth.user.utility.id) ? true : false;
-        
+
         return (
         <div>
             <div>
@@ -328,7 +337,7 @@ class GetVehicles extends Component {
                     <Pagination.Last  onClick={this.lastPage}/>
                 </Pagination>
             </div>
-
+            
         </div>
       )
   }
