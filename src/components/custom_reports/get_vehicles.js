@@ -44,7 +44,7 @@ class GetVehicles extends Component {
         let current_page = obj.current_page-1;
         let last_page = obj.last_page-1;
         let siblings = 1;
-
+        
         if(current_page===0 && current_page<=last_page && current_page+siblings<=last_page && current_page+(siblings*2)<=last_page){
             
             console.log("mojTest1", [current_page, current_page+siblings, current_page+(siblings*2)], current_page);
@@ -120,6 +120,87 @@ class GetVehicles extends Component {
         }
 
     }
+    /*
+    setVisiblePages(obj){
+
+        let current_page = obj.current_page-1;
+        let last_page = obj.last_page-1;
+        let siblings = 1;
+        let arr1 = [];
+        if(current_page===0 && current_page<=last_page && current_page+siblings<=last_page && current_page+(siblings*2)<=last_page){
+            
+            console.log("mojTest1", [current_page, current_page+siblings, current_page+(siblings*2)], current_page);
+
+            arr1.push(
+                <Pagination.Item key={current_page} active={true} page={current_page+1} onClick={(e)=>{this.setActive(e, current_page)}}>
+                {current_page+1}
+                </Pagination.Item>,
+
+                <Pagination.Item key={current_page+siblings} page={current_page+1+siblings} onClick={(e)=>{this.setActive(e, current_page+siblings)}}>
+                    {current_page+1+siblings}
+                </Pagination.Item>,
+
+                <Pagination.Item key={current_page+(2*siblings)} page={current_page+1+(2*siblings)} onClick={(e)=>{this.setActive(e, current_page+(siblings*2))}}>
+                    {current_page+1+(2*siblings)}
+                </Pagination.Item>,
+
+                <Pagination.Ellipsis key={"elip"+(current_page+3)}/>
+            );
+
+        }
+        
+        if(current_page>=0 && current_page<=last_page && current_page-siblings>=0 && current_page+siblings<=last_page){
+            
+            console.log("mojTest2", [current_page-siblings, current_page, current_page+siblings], current_page);
+            let ellipsis1 = current_page-siblings> 0 ? <Pagination.Ellipsis key={"elip"+(current_page+3)}/> : null;
+            let ellipsis2 = (current_page+siblings)<last_page ? <Pagination.Ellipsis key={"elip"+(current_page+4)}/> : null;
+
+            arr1.push(
+                ellipsis1,
+
+                <Pagination.Item key={current_page-siblings} page={current_page+1-siblings} onClick={(e)=>{this.setActive(e, current_page-siblings)}}>
+                    {current_page+1-siblings}
+                </Pagination.Item>,
+    
+                <Pagination.Item key={current_page} active={true} page={current_page+1} onClick={(e)=>{this.setActive(e, current_page)}}>
+                    {current_page+1}
+                </Pagination.Item>,
+    
+                <Pagination.Item key={current_page+siblings} page={current_page+1+siblings} onClick={(e)=>{this.setActive(e, current_page+siblings)}}>
+                    {current_page+1+siblings}
+                </Pagination.Item>,
+
+                ellipsis2
+            );       
+
+        }
+        
+        if(current_page>=0 && current_page<=last_page && current_page-(siblings*2)>=0 && current_page-siblings>=0 && current_page===last_page){
+
+            console.log("mojTest3", [current_page-(siblings*2), current_page-siblings, current_page], current_page);
+
+            arr1.push(
+                <Pagination.Ellipsis key={"elip"+(current_page+3)}/>,
+
+                <Pagination.Item key={current_page-(2*siblings)} page={current_page+1-(2*siblings)} onClick={(e)=>{this.setActive(e, current_page-(siblings*2))}}>
+                    {current_page+1-(2*siblings)}
+                </Pagination.Item>,
+    
+                <Pagination.Item key={current_page-siblings} page={current_page+1-siblings} onClick={(e)=>{this.setActive(e, current_page)}}>
+                    {current_page+1-siblings}
+                </Pagination.Item>,
+    
+                <Pagination.Item key={current_page} active={true} page={current_page+1} onClick={(e)=>{this.setActive(e, current_page-siblings)}}>
+                    {current_page+1}
+                </Pagination.Item>
+            );
+            
+        }
+
+        return arr1;
+
+    }
+    */
 
     firstPage(){
         this.setState({
