@@ -19,7 +19,8 @@ class GetVehicles extends Component {
 
         super(props);
         this.state = {
-            pageIndex: 0
+            pageIndex: 0,
+            setVisiblePages: []
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.setActive = this.setActive.bind(this);
@@ -28,6 +29,7 @@ class GetVehicles extends Component {
         this.nextPage = this.nextPage.bind(this);
         this.firstPage = this.firstPage.bind(this);
         this.lastPage = this.lastPage.bind(this);
+        this.setVisiblePages = this.setVisiblePages.bind(this);
 
     }
 
@@ -37,11 +39,99 @@ class GetVehicles extends Component {
 
     }
 
+    setVisiblePages(obj){
+
+        let current_page = obj.current_page-1;
+        let last_page = obj.last_page-1;
+        let siblings = 1;
+
+        if(current_page===0 && current_page<=last_page && current_page+siblings<=last_page && current_page+(siblings*2)<=last_page){
+            
+            console.log("mojTest1", [current_page, current_page+siblings, current_page+(siblings*2)], current_page);
+            this.setState({
+                setVisiblePages: [...[
+                <Pagination.Item key={current_page} active={true} page={current_page+1} onClick={(e)=>{this.setActive(e, current_page)}}>
+                    {current_page+1}
+                </Pagination.Item>,
+    
+                <Pagination.Item key={current_page+siblings} page={current_page+1+siblings} onClick={(e)=>{this.setActive(e, current_page+siblings)}}>
+                    {current_page+1+siblings}
+                </Pagination.Item>,
+    
+                <Pagination.Item key={current_page+(2*siblings)} page={current_page+1+(2*siblings)} onClick={(e)=>{this.setActive(e, current_page+(siblings*2))}}>
+                    {current_page+1+(2*siblings)}
+                </Pagination.Item>,
+
+                <Pagination.Ellipsis key={"elip"+(current_page+3)}/>
+            ]]});
+
+        }
+        
+        if(current_page>=0 && current_page<=last_page && current_page-siblings>=0 && current_page+siblings<=last_page){
+            
+            console.log("mojTest2", [current_page-siblings, current_page, current_page+siblings], current_page);
+            let ellipsis1 = current_page-siblings> 0 ? <Pagination.Ellipsis key={"elip"+(current_page+3)}/> : null;
+            let ellipsis2 = (current_page+siblings)<last_page ? <Pagination.Ellipsis key={"elip"+(current_page+4)}/> : null;
+            this.setState({
+                setVisiblePages: [...[
+
+                ellipsis1,
+
+                <Pagination.Item key={current_page-siblings} page={current_page+1-siblings} onClick={(e)=>{this.setActive(e, current_page-siblings)}}>
+                    {current_page+1-siblings}
+                </Pagination.Item>,
+    
+                <Pagination.Item key={current_page} active={true} page={current_page+1} onClick={(e)=>{this.setActive(e, current_page)}}>
+                    {current_page+1}
+                </Pagination.Item>,
+    
+                <Pagination.Item key={current_page+siblings} page={current_page+1+siblings} onClick={(e)=>{this.setActive(e, current_page+siblings)}}>
+                    {current_page+1+siblings}
+                </Pagination.Item>,
+
+                ellipsis2
+
+            ]]});
+
+            
+
+        }
+        
+        if(current_page>=0 && current_page<=last_page && current_page-(siblings*2)>=0 && current_page-siblings>=0 && current_page===last_page){
+
+            console.log("mojTest3", [current_page-(siblings*2), current_page-siblings, current_page], current_page);
+            this.setState({
+                setVisiblePages: [...[
+                <Pagination.Ellipsis key={"elip"+(current_page+3)}/>,
+
+                <Pagination.Item key={current_page-(2*siblings)} page={current_page+1-(2*siblings)} onClick={(e)=>{this.setActive(e, current_page-(siblings*2))}}>
+                    {current_page+1-(2*siblings)}
+                </Pagination.Item>,
+    
+                <Pagination.Item key={current_page-siblings} page={current_page+1-siblings} onClick={(e)=>{this.setActive(e, current_page)}}>
+                    {current_page+1-siblings}
+                </Pagination.Item>,
+    
+                <Pagination.Item key={current_page} active={true} page={current_page+1} onClick={(e)=>{this.setActive(e, current_page-siblings)}}>
+                    {current_page+1}
+                </Pagination.Item>]]
+            });
+
+        }
+
+    }
+
     firstPage(){
         this.setState({
             pageIndex: 0
         }, ()=>{
             this.props.get_vehicles_custom({page: this.state.pageIndex+1});
+
+            this.setVisiblePages({
+                current_page: this.state.pageIndex+1,
+                last_page: this.props && this.props.pagination && this.props.pagination.last_page ? this.props.pagination.last_page : null,
+            });
+
         });
     }
 
@@ -50,6 +140,12 @@ class GetVehicles extends Component {
             pageIndex: this.props.pagination.last_page-1
         }, ()=>{
             this.props.get_vehicles_custom({page: this.state.pageIndex+1});
+
+            this.setVisiblePages({
+                current_page: this.state.pageIndex+1,
+                last_page: this.props && this.props.pagination && this.props.pagination.last_page ? this.props.pagination.last_page : null,
+            });
+
         });
     }
 
@@ -63,6 +159,12 @@ class GetVehicles extends Component {
             pageIndex: this.state.pageIndex-1 >= first ? this.state.pageIndex-1 : last-1
         }, ()=>{
             this.props.get_vehicles_custom({page: this.state.pageIndex+1});
+
+            this.setVisiblePages({
+                current_page: this.state.pageIndex+1,
+                last_page: this.props && this.props.pagination && this.props.pagination.last_page ? this.props.pagination.last_page : null,
+            });
+
         });
 
     }
@@ -77,6 +179,12 @@ class GetVehicles extends Component {
             pageIndex: this.state.pageIndex+1 <= last-1 ? this.state.pageIndex+1 : first
         }, ()=>{
             this.props.get_vehicles_custom({page: this.state.pageIndex+1});
+
+            this.setVisiblePages({
+                current_page: this.state.pageIndex+1,
+                last_page: this.props && this.props.pagination && this.props.pagination.last_page ? this.props.pagination.last_page : null,
+            });
+
         });
         
     }
@@ -98,7 +206,7 @@ class GetVehicles extends Component {
             this.props.set_per_page(data);
             this.props.get_vehicles_custom();
         }
-        
+        this.firstPage();
 
     }
 
@@ -111,10 +219,17 @@ class GetVehicles extends Component {
                 pageIndex: i
             }, () => {
                 this.props.get_vehicles_custom({page: i+1});
+
+                this.setVisiblePages({
+                    current_page: i+1,
+                    last_page: this.props && this.props.pagination && this.props.pagination.last_page ? this.props.pagination.last_page : null,
+                });
+
             });
         }
         
         console.log("setActive: ", i);
+
     }
     
     async handleSubmit(event) {
@@ -124,11 +239,10 @@ class GetVehicles extends Component {
         let len1 = elements.length;
 
         let data = {};
-        let len2 = 0;
+
         for(let key in elements){
             if(elements[key].type==="checkbox" && elements[key].checked){  
                 data.vehicle = [];
-                len2++;
             }
         }
 
@@ -155,8 +269,8 @@ class GetVehicles extends Component {
     }
 
     render() {
-        //console.log("getVehiclesProps: ", this.props);
-        
+        console.log("getVehiclesProps: ", this.props);
+        console.log("getVehiclesState: ", this.state);
         let vehicleList = this.props && this.props.list_vehicles && this.props.list_vehicles.length>0 ? this.props.list_vehicles : null;
         let list_vehicles = vehicleList && vehicleList.length>0 ? vehicleList.map((item, i) => {
             return <option key={item.id} value={item.id}>{item.registration}</option>
@@ -183,42 +297,53 @@ class GetVehicles extends Component {
         </div>;
         
         let pagination = this.props && this.props.pagination ? this.props.pagination : null;
-        let last_page = pagination && pagination.last_page ? pagination.last_page : null;
-        let pageIndex = this.state && this.state.pageIndex ? this.state.pageIndex : 0;
-        let current_page = pagination && pagination.current_page ? pagination.current_page : null;
-        let arr1 = [];
+        
+        let pagesArr = this.props && this.props.pagination && this.props.pagination.last_page && this.props.pagination.last_page>0 && this.props.pagination.last_page<3 ? ()=> {
 
-        let ttt = [];//i+2<=last_page
-        const createPaginationItem = (pageIndex, i) => {
+            let currentPage = pagination && pagination.current_page  && pagination.current_page ? pagination.current_page : 1;
+            let lastPage = pagination && pagination.last_page  && pagination.last_page ? pagination.last_page : null;
+
+            let currentIndex = pagination && pagination.current_page  && pagination.current_page-1 ? pagination.current_page-1 : 0;
+            let lastIndex = pagination && pagination.last_page  && pagination.last_page-1 ? pagination.last_page-1 : null;
             
-            if(pageIndex===i && i-4>=0 && i+4<=last_page-1){
-                ttt.push([<Pagination.Ellipsis />, i-2, i-1, i, i+1, i+2, <Pagination.Ellipsis />]);
+            let range = lastPage;
+            
+            let arr1 = [];
+            let i = 0;
+            while(i<=range){
+                
+                arr1.push(<Pagination.Item key={i} active={currentIndex===i} page={i+1} onClick={(e)=>{this.setActive(e, i)}}>
+                        {i+1}
+                    </Pagination.Item>);
+                i++;
             }
             
-            return <Pagination.Item key={i} active={pageIndex===i} page={i+1} onClick={(e)=>{this.setActive(e, i)}}>
-                {i+1}
-            </Pagination.Item>;
+            return [...arr1];
+
+        } : ()=>{
             
+            let currentPage = pagination && pagination.current_page  && pagination.current_page ? pagination.current_page : 1;
+            let lastPage = pagination && pagination.last_page  && pagination.last_page ? pagination.last_page : null;
+
+            let currentIndex = pagination && pagination.current_page  && pagination.current_page-1 ? pagination.current_page-1 : 0;
+            let lastIndex = pagination && pagination.last_page  && pagination.last_page-1 ? pagination.last_page-1 : null;
+            
+            let range = 3;
+            
+            let arr1 = [];
+            let i = 0;
+            while(i<range){
+                
+                arr1.push(<Pagination.Item key={i} active={currentIndex===i} page={i+1} onClick={(e)=>{this.setActive(e, i)}}>
+                        {i+1}
+                    </Pagination.Item>);
+                i++;
+            }
+            
+            return [...arr1];
+
         };
-
-        for(let i=0;i<last_page;i++){
-            
-            arr1.push(createPaginationItem(pageIndex, i));
-            
-        }
-        //console.clear();
-        console.log("ttt: ", ttt);
-        //<Pagination.Ellipsis />
-        //arr1.push(createPaginationItem(pageIndex, i));
-        //let midpoint = Math.ceil(last_page/2);
-        //let arr2 = [...Array(10).keys()];
-        //if((current_page && current_page-side>=0) || (current_page && current_page+side<=last_page))
-        let arr2 = [];
-        let side = 2;
-        let left = null;
-        let right = null;
-
-        let pagesArr = [...arr1];//Generated array from number.
+        
         let per_page = pagination && pagination.per_page ? pagination.per_page : null;
         let checkIfUtility = this.props && this.props.auth && this.props.auth.user && this.props.auth.user.utility && this.props.auth.user.utility.id && Number.isInteger(this.props.auth.user.utility.id) ? true : false;
 
@@ -328,16 +453,15 @@ class GetVehicles extends Component {
 
             </Form>
             {accordionVehicleList}
-            <div>
-                <Pagination>
-                    <Pagination.First onClick={this.firstPage}/>
-                    <Pagination.Prev onClick={this.prevPage}/>
-                        {pagesArr}
-                    <Pagination.Next  onClick={this.nextPage}/>
-                    <Pagination.Last  onClick={this.lastPage}/>
-                </Pagination>
-            </div>
             
+            <Pagination className="pagination">
+                <Pagination.First onClick={this.firstPage}/>
+                <Pagination.Prev onClick={this.prevPage}/>
+                    {pagesArr()}
+                <Pagination.Next  onClick={this.nextPage}/>
+                <Pagination.Last  onClick={this.lastPage}/>
+            </Pagination>
+           
         </div>
       )
   }
