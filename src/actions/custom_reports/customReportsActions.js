@@ -37,9 +37,7 @@ export const get_vehicles_custom = (data) => dispatch => {
 
         if(data && data.hasOwnProperty("vehicles") && data.vehicles.hasOwnProperty("data")){
 
-            console.log("test1");
             let list_vehicles = data && data.vehicles && data.vehicles.data ? data.vehicles.data : null;
-            //console.log("test1List_vehicles: ", data);
 
             dispatch({
                 type: LIST_VEHICLES,
@@ -56,7 +54,7 @@ export const get_vehicles_custom = (data) => dispatch => {
             
         }
         else if(data && data.hasOwnProperty("vehicles") && !data.vehicles.hasOwnProperty("data")){
-            console.log("test2");
+            
             let pagination = data && data.vehicles ? data.vehicles : null;
             pagination.index = index;
             dispatch({
@@ -67,8 +65,6 @@ export const get_vehicles_custom = (data) => dispatch => {
         }
         
         if(data && data.hasOwnProperty("vehicles") && data.vehicles.hasOwnProperty("registration")){
-
-            console.log("test3");
 
             let pagination = store.getState() && store.getState().customReports && store.getState().customReports.pagination ? store.getState().customReports.pagination  : null;
             pagination.index = index;
