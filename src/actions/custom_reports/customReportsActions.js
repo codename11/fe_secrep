@@ -7,12 +7,11 @@ let auth = null;
 export const get_vehicles_custom = (data) => dispatch => {
     
     //console.log("get_vehicles_custom: ", data);
-    let index =  null;
-    if(data && data.index){
-        index =  data.index;
-    }
+
     auth = store.getState().auth.auth;
-    
+    let page = data && data.page ? data.page : null;
+    let index = page && page>0 ? page-1 : null;
+
     const url = "http://secrep.test/api/vehicles";
     fetch(url, {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -38,7 +37,7 @@ export const get_vehicles_custom = (data) => dispatch => {
 
         if(data && data.hasOwnProperty("vehicles") && data.vehicles.hasOwnProperty("data")){
 
-            //console.log("test1");
+            console.log("test1");
             let list_vehicles = data && data.vehicles && data.vehicles.data ? data.vehicles.data : null;
             //console.log("test1List_vehicles: ", data);
 
@@ -49,11 +48,7 @@ export const get_vehicles_custom = (data) => dispatch => {
 
             let pagination = data && data.vehicles ? data.vehicles : null;
             delete pagination.data;
-
-            if(index){
-                pagination.index = index;
-            }
-
+            pagination.index = index;
             dispatch({
                 type: PAGINATION,
                 payload: pagination
@@ -61,13 +56,9 @@ export const get_vehicles_custom = (data) => dispatch => {
             
         }
         else if(data && data.hasOwnProperty("vehicles") && !data.vehicles.hasOwnProperty("data")){
-
+            console.log("test2");
             let pagination = data && data.vehicles ? data.vehicles : null;
-
-            if(index){
-                pagination.index = index;
-            }
-
+            pagination.index = index;
             dispatch({
                 type: PAGINATION,
                 payload: pagination
@@ -77,16 +68,14 @@ export const get_vehicles_custom = (data) => dispatch => {
         
         if(data && data.hasOwnProperty("vehicles") && data.vehicles.hasOwnProperty("registration")){
 
-            console.log("test2");
+            console.log("test3");
 
-            if(index){
-                let pagination = store.getState() && store.getState().customReports && store.getState().customReports.pagination ? store.getState().customReports.pagination  : null;
-                pagination.index = index;
-                dispatch({
-                    type: PAGINATION,
-                    payload: pagination
-                });
-            }
+            let pagination = store.getState() && store.getState().customReports && store.getState().customReports.pagination ? store.getState().customReports.pagination  : null;
+            pagination.index = index;
+            dispatch({
+                type: PAGINATION,
+                payload: pagination
+            });
 
             dispatch({
                 type: LIST_VEHICLES,
