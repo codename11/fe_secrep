@@ -345,7 +345,7 @@ export const setPageNumber = (e, i) => dispatch => {
 }
 
 export const set_per_page = (data) => dispatch => {
-    console.log("set_per_page1: ", data);
+    //console.log("set_per_page1: ", data);
     auth = store.getState().auth.auth;
     
     const create_url = "http://secrep.test/api/create_per_page";//post
@@ -380,7 +380,7 @@ export const set_per_page = (data) => dispatch => {
     })// parses JSON response into native JavaScript objects
     .then((data) => {
 
-        console.log("set_per_page2: ", data);
+        //console.log("set_per_page2: ", data);
 
     })
     .catch((error) => {

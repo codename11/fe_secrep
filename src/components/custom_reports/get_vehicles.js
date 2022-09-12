@@ -19,8 +19,7 @@ class GetVehicles extends Component {
 
         super(props);
         this.state = {
-            pageIndex: 0,
-            setVisiblePages: []
+            pageIndex: 0
         };
         this.handleSubmit = this.handleSubmit.bind(this);
         this.setActive = this.setActive.bind(this);
@@ -29,93 +28,12 @@ class GetVehicles extends Component {
         this.nextPage = this.nextPage.bind(this);
         this.firstPage = this.firstPage.bind(this);
         this.lastPage = this.lastPage.bind(this);
-        this.setVisiblePages = this.setVisiblePages.bind(this);
 
     }
 
     componentDidMount(){
       
         this.props.get_vehicles_custom({page: 1});
-
-    }
-
-    setVisiblePages(obj){
-
-        let current_page = obj.current_page-1;
-        let last_page = obj.last_page-1;
-        let siblings = 1;
-        // Uvrstiti u uslove sta da se radi ako ima manje od 3. Kako to ubaciti u sva tri if-a?
-        if(current_page===0 && current_page<=last_page && current_page+siblings<=last_page && current_page+(siblings*2)<=last_page){
-            
-            //console.log("mojTest1", [current_page, current_page+siblings, current_page+(siblings*2)], current_page);
-            this.setState({
-                setVisiblePages: [...[
-                <Pagination.Item key={current_page} active={current_page===this.state.pageIndex} page={current_page+1} onClick={(e)=>{this.setActive(e, current_page)}}>
-                    {current_page+1}
-                </Pagination.Item>,
-    
-                <Pagination.Item key={current_page+siblings} page={current_page+1+siblings} onClick={(e)=>{this.setActive(e, current_page+siblings)}}>
-                    {current_page+1+siblings}
-                </Pagination.Item>,
-    
-                <Pagination.Item key={current_page+(2*siblings)} page={current_page+1+(2*siblings)} onClick={(e)=>{this.setActive(e, current_page+(siblings*2))}}>
-                    {current_page+1+(2*siblings)}
-                </Pagination.Item>,
-
-                <Pagination.Ellipsis key={"elip"+(current_page+3)}/>]].filter(Boolean) 
-            });
-
-        }
-        
-        if(current_page>=0 && current_page<=last_page && current_page-siblings>=0 && current_page+siblings<=last_page){
-            
-            //console.log("mojTest2", [current_page-siblings, current_page, current_page+siblings], current_page);
-            let ellipsis1 = current_page-siblings> 0 ? <Pagination.Ellipsis key={"elip"+(current_page+3)}/> : null;
-            let ellipsis2 = (current_page+siblings)<last_page ? <Pagination.Ellipsis key={"elip"+(current_page+4)}/> : null;
-            this.setState({
-                setVisiblePages: [...[
-
-                ellipsis1,
-
-                <Pagination.Item key={current_page-siblings} page={current_page+1-siblings} onClick={(e)=>{this.setActive(e, current_page-siblings)}}>
-                    {current_page+1-siblings}
-                </Pagination.Item>,
-    
-                <Pagination.Item key={current_page} active={current_page===this.state.pageIndex} page={current_page+1} onClick={(e)=>{this.setActive(e, current_page)}}>
-                    {current_page+1}
-                </Pagination.Item>,
-    
-                <Pagination.Item key={current_page+siblings} page={current_page+1+siblings} onClick={(e)=>{this.setActive(e, current_page+siblings)}}>
-                    {current_page+1+siblings}
-                </Pagination.Item>,
-
-                ellipsis2]].filter(Boolean) 
-            });
-
-        }
-        
-        if(current_page>=0 && current_page<=last_page && current_page-(siblings*2)>=0 && current_page-siblings>=0 && current_page===last_page){
-
-            //console.log("mojTest3", [current_page-(siblings*2), current_page-siblings, current_page], current_page);
-            this.setState({
-                setVisiblePages: [...[
-                <Pagination.Ellipsis key={"elip"+(current_page+3)}/>,
-
-                <Pagination.Item key={current_page-(2*siblings)} page={current_page+1-(2*siblings)} onClick={(e)=>{this.setActive(e, current_page-(siblings*2))}}>
-                    {current_page+1-(2*siblings)}
-                </Pagination.Item>,
-    
-                <Pagination.Item key={current_page-siblings} page={current_page+1-siblings} onClick={(e)=>{this.setActive(e, current_page)}}>
-                    {current_page+1-siblings}
-                </Pagination.Item>,
-    
-                <Pagination.Item key={current_page} active={current_page===this.state.pageIndex} page={current_page+1} onClick={(e)=>{this.setActive(e, current_page-siblings)}}>
-                    {current_page+1}
-                </Pagination.Item>]].filter(Boolean) 
-            });
-
-        }
-
     }
 
     firstPage(){
@@ -123,11 +41,6 @@ class GetVehicles extends Component {
             pageIndex: 0
         }, ()=>{
             this.props.get_vehicles_custom({page: this.state.pageIndex+1});
-
-            this.setVisiblePages({
-                current_page: this.state.pageIndex+1,
-                last_page: this.props && this.props.pagination && this.props.pagination.last_page ? this.props.pagination.last_page : null,
-            });
 
         });
     }
@@ -137,11 +50,6 @@ class GetVehicles extends Component {
             pageIndex: this.props.pagination.last_page-1
         }, ()=>{
             this.props.get_vehicles_custom({page: this.state.pageIndex+1});
-
-            this.setVisiblePages({
-                current_page: this.state.pageIndex+1,
-                last_page: this.props && this.props.pagination && this.props.pagination.last_page ? this.props.pagination.last_page : null,
-            });
 
         });
     }
@@ -157,11 +65,6 @@ class GetVehicles extends Component {
         }, ()=>{
             this.props.get_vehicles_custom({page: this.state.pageIndex+1});
 
-            this.setVisiblePages({
-                current_page: this.state.pageIndex+1,
-                last_page: this.props && this.props.pagination && this.props.pagination.last_page ? this.props.pagination.last_page : null,
-            });
-
         });
 
     }
@@ -175,11 +78,6 @@ class GetVehicles extends Component {
             pageIndex: this.state.pageIndex+1 < last ? this.state.pageIndex+1 : first
         }, ()=>{
             this.props.get_vehicles_custom({page: this.state.pageIndex+1});
-
-            this.setVisiblePages({
-                current_page: this.state.pageIndex+1,
-                last_page: pagination.last_page ? pagination.last_page : null,
-            });
 
         });
         
@@ -202,6 +100,8 @@ class GetVehicles extends Component {
             }
             this.props.set_per_page(data);
             this.props.get_vehicles_custom({page: 1});
+            //console.log("getVehiclesProps: ", this.props);
+
         }
         this.firstPage();
 
@@ -217,15 +117,10 @@ class GetVehicles extends Component {
             }, () => {
                 this.props.get_vehicles_custom({page: i+1});
 
-                this.setVisiblePages({
-                    current_page: i+1,
-                    last_page: this.props && this.props.pagination && this.props.pagination.last_page ? this.props.pagination.last_page : null,
-                });
-
             });
         }
         
-        console.log("setActive: ", i);
+        //console.log("setActive: ", i);
 
     }
     
@@ -261,13 +156,15 @@ class GetVehicles extends Component {
             pageIndex: 0
         }, () => {
             this.props.get_vehicles_custom(data);
+            //console.log("getVehiclesProps: ", this.props);
+
         });
 
     }
 
     render() {
-        //console.log("getVehiclesProps: ", this.props);
-        console.log("getVehiclesState: ", this.state);
+        
+        //console.log("getVehiclesState: ", this.state);
         let vehicleList = this.props && this.props.list_vehicles && this.props.list_vehicles.length>0 ? this.props.list_vehicles : null;
         let list_vehicles = vehicleList && vehicleList.length>0 ? vehicleList.map((item, i) => {
             return <option key={item.id} value={item.id}>{item.registration}</option>
@@ -297,21 +194,113 @@ class GetVehicles extends Component {
         
         let per_page = pagination && pagination.per_page ? pagination.per_page : null;
         let checkIfUtility = this.props && this.props.auth && this.props.auth.user && this.props.auth.user.utility && this.props.auth.user.utility.id && Number.isInteger(this.props.auth.user.utility.id) ? true : false;
-        
-        let startPages = [];
-        let endPage = pagination.last_page<3 ? pagination.last_page : 3;
-        console.log("last_page: ", pagination.last_page);
-        for(let i=0;i<endPage;i++){
 
-            startPages.push(
-                <Pagination.Item key={"xyz"+i} active={this.state.pageIndex===i} page={i+1} onClick={(e)=>{this.setActive(e, i)}}>
-                    {i+1}
-                </Pagination.Item>
-            );
+        const setVisiblePages = (paginacija) =>{
+            
+            let pageIndex = null;
+            let last_page = null;
+            let siblings = 1;
+            
+            pageIndex = this.state.pageIndex;
+            last_page = paginacija && paginacija.last_page && paginacija.last_page ? paginacija.last_page : null;
+            console.log("pageIndex1: ", this.state.pageIndex, "pageIndex2: ", pageIndex);
+            //console.log("Props: ", this.props.pagination);
+            //console.log("State: ", this.state.setVisiblePages);
+            
+            let myPages = [];
+            // Uvrstiti u uslove sta da se radi ako ima manje od 3. Kako to ubaciti u sva tri if-a?
+            if(pageIndex===0 && pageIndex<=last_page && pageIndex+siblings<=last_page && pageIndex+(siblings*2)<=last_page){
+                
+                console.log("mojTest1", [pageIndex, pageIndex+siblings, pageIndex+(siblings*2)], pageIndex);
 
-        }
-        startPages.push(<Pagination.Ellipsis key={"elipStart"}/>);
+                myPages = [
+                    <Pagination.Item key={pageIndex} active={pageIndex===this.state.pageIndex} page={pageIndex+1} onClick={(e)=>{this.setActive(e, pageIndex)}}>
+                        {pageIndex+1}
+                    </Pagination.Item>,
         
+                    <Pagination.Item key={pageIndex+siblings} page={pageIndex+1+siblings} onClick={(e)=>{this.setActive(e, pageIndex+siblings)}}>
+                        {pageIndex+1+siblings}
+                    </Pagination.Item>,
+        
+                    <Pagination.Item key={pageIndex+(2*siblings)} page={pageIndex+1+(2*siblings)} onClick={(e)=>{this.setActive(e, pageIndex+(siblings*2))}}>
+                        {pageIndex+1+(2*siblings)}
+                    </Pagination.Item>,
+    
+                    <Pagination.Ellipsis key={"elip"+(pageIndex+3)}/>].filter(Boolean);
+    
+            }
+            
+            if(pageIndex>=0 && pageIndex<=last_page && pageIndex-siblings>=0 && pageIndex+siblings<=last_page){
+                
+                console.log("mojTest2", [pageIndex-siblings, pageIndex, pageIndex+siblings], pageIndex);
+                let ellipsis1 = pageIndex-siblings> 0 ? <Pagination.Ellipsis key={"elip"+(pageIndex+3)}/> : null;
+                let ellipsis2 = (pageIndex+siblings)<last_page ? <Pagination.Ellipsis key={"elip"+(pageIndex+4)}/> : null;
+                myPages = [
+    
+                    ellipsis1,
+    
+                    <Pagination.Item key={pageIndex-siblings} page={pageIndex+1-siblings} onClick={(e)=>{this.setActive(e, pageIndex-siblings)}}>
+                        {pageIndex+1-siblings}
+                    </Pagination.Item>,
+        
+                    <Pagination.Item key={pageIndex} active={pageIndex===this.state.pageIndex} page={pageIndex+1} onClick={(e)=>{this.setActive(e, pageIndex)}}>
+                        {pageIndex+1}
+                    </Pagination.Item>,
+        
+                    <Pagination.Item key={pageIndex+siblings} page={pageIndex+1+siblings} onClick={(e)=>{this.setActive(e, pageIndex+siblings)}}>
+                        {pageIndex+1+siblings}
+                    </Pagination.Item>,
+    
+                    ellipsis2].filter(Boolean);
+    
+            }
+            
+            if(pageIndex+1==last_page && pageIndex-(2*siblings)>=0){
+    
+                console.log("mojTest3", [pageIndex-(siblings*2), pageIndex-siblings, pageIndex], pageIndex);
+                myPages = [
+                    <Pagination.Ellipsis key={"elip"+(pageIndex+3)}/>,
+    
+                    <Pagination.Item key={pageIndex-(2*siblings)} page={pageIndex+1-(2*siblings)} onClick={(e)=>{this.setActive(e, pageIndex-(siblings*2))}}>
+                        {pageIndex+1-(2*siblings)}
+                    </Pagination.Item>,
+        
+                    <Pagination.Item key={pageIndex-siblings} page={pageIndex+1-siblings} onClick={(e)=>{this.setActive(e, pageIndex)}}>
+                        {pageIndex+1-siblings}
+                    </Pagination.Item>,
+        
+                    <Pagination.Item key={pageIndex} active={pageIndex===this.state.pageIndex} page={pageIndex+1} onClick={(e)=>{this.setActive(e, pageIndex-siblings)}}>
+                        {pageIndex+1}
+                    </Pagination.Item>].filter(Boolean);
+    
+            }
+    
+            if(pageIndex>=0 && pageIndex<=last_page && last_page<=3){
+                console.log("mojTest4");
+                let pages = [];
+                for(let i=0;i<last_page;i++){
+
+                    pages.push(
+                        <Pagination.Item key={i} active={i===pageIndex} page={i+1} onClick={(e)=>{this.setActive(e, i)}}>
+                            {i+1}
+                        </Pagination.Item>
+                    );
+                    console.log("mojTest4: ", pages.length);
+                }
+                myPages = [...pages].filter(Boolean)
+    
+            }
+    
+            if(this.state.setVisiblePages>3){
+    
+                myPages = [...this.state.setVisiblePages, <Pagination.Ellipsis key={"elipsa"}/>].filter(Boolean);
+    
+            }
+            
+            return myPages;
+
+        };
+
         return (
         <div>
             <div>
@@ -372,7 +361,7 @@ class GetVehicles extends Component {
 
                     <Form.Check 
                         type="switch"
-                        id="custom-switch"
+                        id="User"
                         label="User"
                         name="user"
                         value="user"
@@ -380,7 +369,7 @@ class GetVehicles extends Component {
 
                     <Form.Check 
                         type="switch"
-                        id="custom-switch"
+                        id="Type"
                         label="Type"
                         name="type"
                         value="type"
@@ -388,7 +377,7 @@ class GetVehicles extends Component {
 
                     <Form.Check 
                         type="switch"
-                        id="custom-switch"
+                        id="WorkOrg"
                         label="WorkOrg"
                         name="workOrganization"
                         value="workOrganization"
@@ -396,7 +385,7 @@ class GetVehicles extends Component {
 
                     <Form.Check 
                         type="switch"
-                        id="custom-switch"
+                        id="Complements"
                         label="Complements"
                         name="complements"
                         value="complements"
@@ -404,7 +393,7 @@ class GetVehicles extends Component {
 
                     <Form.Check 
                         type="switch"
-                        id="custom-switch"
+                        id="Deliveries"
                         label="Deliveries"
                         name="deliveries"
                         value="deliveries"
@@ -422,7 +411,7 @@ class GetVehicles extends Component {
             <Pagination className="pagination">
                 <Pagination.First onClick={this.firstPage}/>
                 <Pagination.Prev onClick={this.prevPage}/>
-                    {this.state && this.state.setVisiblePages && this.state.setVisiblePages.length>0 ? this.state.setVisiblePages : startPages}
+                    {setVisiblePages(pagination)}
                 <Pagination.Next  onClick={()=>this.nextPage(pagination)}/>
                 <Pagination.Last  onClick={this.lastPage}/>
             </Pagination>
