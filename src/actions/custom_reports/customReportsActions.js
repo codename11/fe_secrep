@@ -1,4 +1,4 @@
-import { LIST_VEHICLES, LIST_EMPLOYEES, LIST_DELIVERIES, LIST_USERS, TIME_IN, TIME_OUT, HREF, PAGINATION } from "../types";
+import { LIST_VEHICLES, LIST_EMPLOYEES, LIST_DELIVERIES, LIST_USERS, TIME_IN, TIME_OUT, HREF, PAGINATION, LINKOVI } from "../types";
 import store from "../../store";
 import { json2csv } from 'json-2-csv';
 
@@ -30,7 +30,12 @@ export const get_vehicles_custom = (data) => dispatch => {
 
     })// parses JSON response into native JavaScript objects
     .then((data) => {
-        //console.log("customVehiclesActions: ", data);
+        console.log("customVehiclesActions: ", data);
+
+        dispatch({
+            type: LINKOVI,
+            payload: data.linkovi
+        });
 
         /* 17/07/2022 00:00 */
         /* 30/07/2022 00:00 */

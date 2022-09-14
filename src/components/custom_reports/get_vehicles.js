@@ -73,15 +73,15 @@ class GetVehicles extends Component {
 
         let first = 0;
         let last = pagination.last_page;
-        //console.log("nextPage1: ", pagination);
+
         this.setState({
             pageIndex: this.state.pageIndex+1 < last ? this.state.pageIndex+1 : first
         }, ()=>{
             this.props.get_vehicles_custom({page: this.state.pageIndex+1});
 
         });
-        
-//
+        console.log("nextPage1: ", pagination.current_page);
+
     }
 
     handleSubmitPerPage(event){
@@ -115,12 +115,12 @@ class GetVehicles extends Component {
             this.setState({
                 pageIndex: i
             }, () => {
-                this.props.get_vehicles_custom({page: i+1});
+                this.props.get_vehicles_custom({page: this.state.pageIndex});
 
             });
         }
-        
-        //console.log("setActive: ", i);
+        console.log("pageIndex: ", this.state.pageIndex);
+        console.log("setActive: ", i);
 
     }
     
@@ -203,7 +203,7 @@ class GetVehicles extends Component {
             
             pageIndex = this.state.pageIndex;
             last_page = paginacija && paginacija.last_page && paginacija.last_page ? paginacija.last_page : null;
-            console.log("pageIndex1: ", this.state.pageIndex, "pageIndex2: ", pageIndex);
+            //console.log("pageIndex1: ", this.state.pageIndex, "pageIndex2: ", pageIndex);
             //console.log("Props: ", this.props.pagination);
             //console.log("State: ", this.state.setVisiblePages);
             
@@ -211,7 +211,7 @@ class GetVehicles extends Component {
             // Uvrstiti u uslove sta da se radi ako ima manje od 3. Kako to ubaciti u sva tri if-a?
             if(pageIndex===0 && pageIndex<=last_page && pageIndex+siblings<=last_page && pageIndex+(siblings*2)<=last_page){
                 
-                console.log("mojTest1", [pageIndex, pageIndex+siblings, pageIndex+(siblings*2)], pageIndex);
+                //console.log("mojTest1", [pageIndex, pageIndex+siblings, pageIndex+(siblings*2)], pageIndex);
 
                 myPages = [
                     <Pagination.Item key={pageIndex} active={pageIndex===this.state.pageIndex} page={pageIndex+1} onClick={(e)=>{this.setActive(e, pageIndex)}}>
@@ -232,7 +232,7 @@ class GetVehicles extends Component {
             
             if(pageIndex>=0 && pageIndex<=last_page && pageIndex-siblings>=0 && pageIndex+siblings<=last_page){
                 
-                console.log("mojTest2", [pageIndex-siblings, pageIndex, pageIndex+siblings], pageIndex);
+                //console.log("mojTest2", [pageIndex-siblings, pageIndex, pageIndex+siblings], pageIndex);
                 let ellipsis1 = pageIndex-siblings> 0 ? <Pagination.Ellipsis key={"elip"+(pageIndex+3)}/> : null;
                 let ellipsis2 = (pageIndex+siblings)<last_page ? <Pagination.Ellipsis key={"elip"+(pageIndex+4)}/> : null;
                 myPages = [
@@ -257,7 +257,7 @@ class GetVehicles extends Component {
             
             if(pageIndex+1==last_page && pageIndex-(2*siblings)>=0){
     
-                console.log("mojTest3", [pageIndex-(siblings*2), pageIndex-siblings, pageIndex], pageIndex);
+                //console.log("mojTest3", [pageIndex-(siblings*2), pageIndex-siblings, pageIndex], pageIndex);
                 myPages = [
                     <Pagination.Ellipsis key={"elip"+(pageIndex+3)}/>,
     
@@ -276,7 +276,7 @@ class GetVehicles extends Component {
             }
     
             if(pageIndex>=0 && pageIndex<=last_page && last_page<=3){
-                console.log("mojTest4");
+                //console.log("mojTest4");
                 let pages = [];
                 for(let i=0;i<last_page;i++){
 
@@ -285,7 +285,7 @@ class GetVehicles extends Component {
                             {i+1}
                         </Pagination.Item>
                     );
-                    console.log("mojTest4: ", pages.length);
+                    //console.log("mojTest4: ", pages.length);
                 }
                 myPages = [...pages].filter(Boolean)
     

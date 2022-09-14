@@ -1,4 +1,4 @@
-import { TIME_IN, TIME_OUT, HREF, PAGINATION} from "../actions/types";
+import { TIME_IN, TIME_OUT, HREF, PAGINATION, LINKOVI } from "../actions/types";
 
 const initialState = {
     time_in: null,
@@ -17,7 +17,8 @@ const initialState = {
         to: null,
         total: null,
         index: 0
-    }
+    },
+    linkovi: null
 };
 
 let myState = null;
@@ -39,6 +40,8 @@ let pagination = {
     index: 0
 };
 
+let linkovi = null;
+
 export default function(state = initialState, action){
     //console.log("paginationReducer: ", action);
     switch(action.type){
@@ -51,7 +54,8 @@ export default function(state = initialState, action){
                 href: state.href,
                 time_in: time_in,
                 time_out: time_out,
-                pagination: state.pagination
+                pagination: state.pagination,
+                linkovi: state.linkovi
             };
             
             return myState;
@@ -64,11 +68,12 @@ export default function(state = initialState, action){
                 href: state.href,
                 time_out: time_out,
                 time_in: state.time_in,
-                pagination: state.pagination
+                pagination: state.pagination,
+                linkovi: state.linkovi
             };
             
             return myState;
-
+            
         case HREF:
             
             href = action.payload;
@@ -77,7 +82,8 @@ export default function(state = initialState, action){
                 href: href,
                 time_in: state.time_in,
                 time_out: state.time_out,
-                pagination: state.pagination
+                pagination: state.pagination,
+                linkovi: state.linkovi
             };
             
             return myState;
@@ -101,10 +107,22 @@ export default function(state = initialState, action){
                 href: state.href,
                 pagination: pagination,
                 time_in: state.time_in,
-                time_out: state.time_out
+                time_out: state.time_out,
+                linkovi: state.linkovi
             };
         
         return myState;
+
+        
+        case LINKOVI:
+            
+            linkovi = action.payload;
+            
+            myState = {
+                linkovi: linkovi
+            };
+            
+            return myState;
 
         default:
             return state;
