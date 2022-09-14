@@ -28,12 +28,33 @@ class GetVehicles extends Component {
         this.nextPage = this.nextPage.bind(this);
         this.firstPage = this.firstPage.bind(this);
         this.lastPage = this.lastPage.bind(this);
+        this.test = this.test.bind(this);
 
     }
 
     componentDidMount(){
       
         this.props.get_vehicles_custom({page: 1});
+        document.body.addEventListener("click", (e) => {
+            
+            if (e.target.classList.contains("page-link") && e.target.href) {
+                
+                e.preventDefault();
+                let target = e.target;
+                this.test(target);
+            }
+        })
+    }
+
+    test(target){
+
+        let targetHref = target.href;
+
+        let index1 = targetHref.indexOf("=");
+        let index2 = targetHref.length;
+        let str1 = targetHref.substring((index1+1), index2);
+        this.props.get_vehicles_custom({page: str1});
+        
     }
 
     firstPage(){
@@ -80,7 +101,7 @@ class GetVehicles extends Component {
             this.props.get_vehicles_custom({page: this.state.pageIndex+1});
 
         });
-        console.log("nextPage1: ", pagination.current_page);
+        //console.log("nextPage1: ", pagination.current_page);
 
     }
 
@@ -111,9 +132,10 @@ class GetVehicles extends Component {
 
         this.props.setPageNumber(e, i);
         let pagination = this.props && this.props.pagination ? this.props.pagination : null;
+        let page = e.currentTarget.getAttribute("page");
         if(pagination.last_page>1){
             this.setState({
-                pageIndex: i
+                pageIndex: page-1
             }, () => {
                 this.props.get_vehicles_custom({page: this.state.pageIndex});
 
@@ -121,6 +143,7 @@ class GetVehicles extends Component {
         }
         console.log("pageIndex: ", this.state.pageIndex);
         console.log("setActive: ", i);
+        console.log("target: ", e.currentTarget.getAttribute("page"));
 
     }
     
@@ -211,7 +234,7 @@ class GetVehicles extends Component {
             // Uvrstiti u uslove sta da se radi ako ima manje od 3. Kako to ubaciti u sva tri if-a?
             if(pageIndex===0 && pageIndex<=last_page && pageIndex+siblings<=last_page && pageIndex+(siblings*2)<=last_page){
                 
-                //console.log("mojTest1", [pageIndex, pageIndex+siblings, pageIndex+(siblings*2)], pageIndex);
+                console.log("mojTest1", [pageIndex, pageIndex+siblings, pageIndex+(siblings*2)], pageIndex);
 
                 myPages = [
                     <Pagination.Item key={pageIndex} active={pageIndex===this.state.pageIndex} page={pageIndex+1} onClick={(e)=>{this.setActive(e, pageIndex)}}>
@@ -232,9 +255,9 @@ class GetVehicles extends Component {
             
             if(pageIndex>=0 && pageIndex<=last_page && pageIndex-siblings>=0 && pageIndex+siblings<=last_page){
                 
-                //console.log("mojTest2", [pageIndex-siblings, pageIndex, pageIndex+siblings], pageIndex);
+                console.log("mojTest2", [pageIndex-siblings, pageIndex, pageIndex+siblings], pageIndex);
                 let ellipsis1 = pageIndex-siblings> 0 ? <Pagination.Ellipsis key={"elip"+(pageIndex+3)}/> : null;
-                let ellipsis2 = (pageIndex+siblings)<last_page ? <Pagination.Ellipsis key={"elip"+(pageIndex+4)}/> : null;
+                let ellipsis2 = (pageIndex+siblings)<last_page-1 ? <Pagination.Ellipsis key={"elip"+(pageIndex+4)}/> : null;
                 myPages = [
     
                     ellipsis1,
@@ -257,7 +280,7 @@ class GetVehicles extends Component {
             
             if(pageIndex+1==last_page && pageIndex-(2*siblings)>=0){
     
-                //console.log("mojTest3", [pageIndex-(siblings*2), pageIndex-siblings, pageIndex], pageIndex);
+                console.log("mojTest3", [pageIndex-(siblings*2), pageIndex-siblings, pageIndex], pageIndex);
                 myPages = [
                     <Pagination.Ellipsis key={"elip"+(pageIndex+3)}/>,
     
@@ -276,7 +299,7 @@ class GetVehicles extends Component {
             }
     
             if(pageIndex>=0 && pageIndex<=last_page && last_page<=3){
-                //console.log("mojTest4");
+                console.log("mojTest4");
                 let pages = [];
                 for(let i=0;i<last_page;i++){
 
@@ -300,6 +323,12 @@ class GetVehicles extends Component {
             return myPages;
 
         };
+
+        let linkovi = this.props && this.props.linkovi ? this.props.linkovi : null;
+        let tmpX = null;
+
+        let altPagination = null;//Default Laravel pagination implementation in React. Slower then mine take on it.
+        //altPagination = <div dangerouslySetInnerHTML={{ __html: linkovi }} />;
 
         return (
         <div>
@@ -415,7 +444,9 @@ class GetVehicles extends Component {
                 <Pagination.Next  onClick={()=>this.nextPage(pagination)}/>
                 <Pagination.Last  onClick={this.lastPage}/>
             </Pagination>
-           
+            
+            {altPagination}
+
         </div>
       )
   }
@@ -453,7 +484,8 @@ const mapStateToProps = (state) =>{
         href: state.customReports.href,
         time_in: state.customReports.time_in,
         time_out: state.customReports.time_out,
-        auth: state.auth.auth
+        auth: state.auth.auth,
+        linkovi: state.customReports.linkovi
     });
 
 };

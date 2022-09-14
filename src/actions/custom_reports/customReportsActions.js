@@ -30,7 +30,7 @@ export const get_vehicles_custom = (data) => dispatch => {
 
     })// parses JSON response into native JavaScript objects
     .then((data) => {
-        console.log("customVehiclesActions: ", data);
+        //console.log("customVehiclesActions: ", data);
 
         dispatch({
             type: LINKOVI,
