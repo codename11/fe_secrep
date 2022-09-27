@@ -12,6 +12,7 @@ import {setTimeOut} from "../../actions/custom_reports/customReportsActions";
 import Pagination from 'react-bootstrap/Pagination';
 import {setPageNumber} from "../../actions/custom_reports/customReportsActions";
 import {set_per_page} from "../../actions/custom_reports/customReportsActions";
+import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 
 class GetVehicles extends Component {
 
@@ -187,8 +188,16 @@ class GetVehicles extends Component {
 
     render() {
         
-        //console.log("getVehiclesState: ", this.state);
         let vehicleList = this.props && this.props.list_vehicles && this.props.list_vehicles.length>0 ? this.props.list_vehicles : null;
+        
+        let vehicleListCopy = vehicleList && vehicleList.length && vehicleList.length>0 ? vehicleList.map((item, i) => {
+
+            item.createdAt = new Date(item.created_at).getTime();
+            return item;
+
+        }) : null;
+        console.log("vehicleList: ", vehicleList);
+        
         let list_vehicles = vehicleList && vehicleList.length>0 ? vehicleList.map((item, i) => {
             return <option key={item.id} value={item.id}>{item.registration}</option>
         }) : null;
@@ -324,11 +333,7 @@ class GetVehicles extends Component {
 
         };
 
-        let linkovi = this.props && this.props.linkovi ? this.props.linkovi : null;
-        let tmpX = null;
-
         let altPagination = null;//Default Laravel pagination implementation in React. Slower then mine take on it.
-        //altPagination = <div dangerouslySetInnerHTML={{ __html: linkovi }} />;
 
         return (
         <div>
@@ -446,7 +451,18 @@ class GetVehicles extends Component {
             </Pagination>
             
             {altPagination}
-
+            
+            <div className="chart1">
+            
+                <RadarChart cx={300} cy={250} outerRadius={150} width={600} height={600} data={vehicleListCopy}>
+                    <PolarGrid />
+                    <PolarAngleAxis dataKey="registration" />
+                    <PolarRadiusAxis />
+                    <Radar name="Vehicles" dataKey="createdAt" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6}/>
+                </RadarChart>
+      
+            </div>
+            
         </div>
       )
   }
