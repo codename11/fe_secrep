@@ -6,6 +6,9 @@ import { get_deliveries } from "../../actions/custom_reports/customReportsAction
 import { get_employees } from "../../actions/custom_reports/customReportsActions";
 import { get_users } from "../../actions/custom_reports/customReportsActions";
 import GetVehicles from '../custom_reports/get_vehicles';
+import GetDeliveries from '../custom_reports/get_deliveries';
+import GetEmployees from '../custom_reports/get_employees';
+import GetUsers from '../custom_reports/get_users';
 
 class CustomReports extends Component {
 
@@ -31,7 +34,7 @@ class CustomReports extends Component {
                 <Accordion.Header>List vehicles</Accordion.Header>
                 <Accordion.Body className="accordion-custom">
 
-                  <GetVehicles/>
+                    <GetVehicles/>
 
                 </Accordion.Body>
             </Accordion.Item>
@@ -40,7 +43,7 @@ class CustomReports extends Component {
                 <Accordion.Header>List deliveries</Accordion.Header>
                 <Accordion.Body>
 
-                  
+                    <GetDeliveries get_deliveries={this.props.get_deliveries}/>
                     
                 </Accordion.Body>
             </Accordion.Item>
@@ -48,9 +51,9 @@ class CustomReports extends Component {
             <Accordion.Item eventKey="2">
                 <Accordion.Header>List employees</Accordion.Header>
                 <Accordion.Body>
-
-                  
                     
+                    <GetEmployees get_employees={this.props.get_employees}/>
+
                 </Accordion.Body>
             </Accordion.Item>
 
@@ -58,7 +61,7 @@ class CustomReports extends Component {
                 <Accordion.Header>List users</Accordion.Header>
                 <Accordion.Body>
 
-                  
+                <GetUsers get_users={this.props.get_users}/>
                     
                 </Accordion.Body>
             </Accordion.Item>

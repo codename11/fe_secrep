@@ -393,3 +393,7 @@ export const set_per_page = (data) => dispatch => {
     });
 
 }
+
+export const test = (data) => dispatch => {
+    console.log("myData: ", data);
+}

@@ -12,7 +12,6 @@ import {setTimeOut} from "../../actions/custom_reports/customReportsActions";
 import Pagination from 'react-bootstrap/Pagination';
 import {setPageNumber} from "../../actions/custom_reports/customReportsActions";
 import {set_per_page} from "../../actions/custom_reports/customReportsActions";
-import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts';
 
 class GetVehicles extends Component {
 
@@ -29,14 +28,14 @@ class GetVehicles extends Component {
         this.nextPage = this.nextPage.bind(this);
         this.firstPage = this.firstPage.bind(this);
         this.lastPage = this.lastPage.bind(this);
-        this.test = this.test.bind(this);
+        //this.test = this.test.bind(this);
 
     }
 
     componentDidMount(){
       
         this.props.get_vehicles_custom({page: 1});
-        document.body.addEventListener("click", (e) => {
+        /*document.body.addEventListener("click", (e) => {
             
             if (e.target.classList.contains("page-link") && e.target.href) {
                 
@@ -44,10 +43,10 @@ class GetVehicles extends Component {
                 let target = e.target;
                 this.test(target);
             }
-        })
+        })*/
     }
 
-    test(target){
+    /*test(target){
 
         let targetHref = target.href;
 
@@ -56,7 +55,7 @@ class GetVehicles extends Component {
         let str1 = targetHref.substring((index1+1), index2);
         this.props.get_vehicles_custom({page: str1});
         
-    }
+    }*/
 
     firstPage(){
         this.setState({
@@ -190,12 +189,6 @@ class GetVehicles extends Component {
         
         let vehicleList = this.props && this.props.list_vehicles && this.props.list_vehicles.length>0 ? this.props.list_vehicles : null;
         
-        let vehicleListCopy = vehicleList && vehicleList.length && vehicleList.length>0 ? vehicleList.map((item, i) => {
-
-            item.createdAt = new Date(item.created_at).getTime();
-            return item;
-
-        }) : null;
         console.log("vehicleList: ", vehicleList);
         
         let list_vehicles = vehicleList && vehicleList.length>0 ? vehicleList.map((item, i) => {
@@ -287,7 +280,7 @@ class GetVehicles extends Component {
     
             }
             
-            if(pageIndex+1==last_page && pageIndex-(2*siblings)>=0){
+            if(pageIndex+1===last_page && pageIndex-(2*siblings)>=0){
     
                 console.log("mojTest3", [pageIndex-(siblings*2), pageIndex-siblings, pageIndex], pageIndex);
                 myPages = [
@@ -451,18 +444,7 @@ class GetVehicles extends Component {
             </Pagination>
             
             {altPagination}
-            
-            <div className="chart1">
-            
-                <RadarChart cx={300} cy={250} outerRadius={150} width={600} height={600} data={vehicleListCopy}>
-                    <PolarGrid />
-                    <PolarAngleAxis dataKey="registration" />
-                    <PolarRadiusAxis />
-                    <Radar name="Vehicles" dataKey="createdAt" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6}/>
-                </RadarChart>
-      
-            </div>
-            
+
         </div>
       )
   }
