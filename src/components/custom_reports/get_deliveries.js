@@ -3,7 +3,7 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'r
 import { useEffect } from 'react';
 
 function GetDeliveries(props){
-    console.log("props: ", props);
+    //console.log("props: ", props);
     
     useEffect(() => {
         

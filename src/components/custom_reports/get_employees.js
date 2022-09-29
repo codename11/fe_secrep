@@ -3,7 +3,7 @@ import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'r
 import { useEffect } from 'react';
 
 function GetEmployees(props){
-    console.log("GetEmployees: ", props);
+    //console.log("GetEmployees: ", props);
     
     useEffect(() => {
         

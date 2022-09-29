@@ -6,7 +6,7 @@ let auth = null;
 
 export const get_vehicles_custom = (data) => dispatch => {
     
-    //console.log("get_vehicles_custom: ", data);
+    console.log("get_vehicles_custom: ", data);
 
     auth = store.getState().auth.auth;
     let page = data && data.page ? data.page : null;
@@ -311,7 +311,7 @@ export const setTimeOut = (date) => dispatch => {
 
 export const setPageNumber = (e, i) => dispatch => {
     
-    let page = e.currentTarget.getAttribute("page");
+    let page = e && e.currentTarget && e.currentTarget.getAttribute("page") ? e.currentTarget.getAttribute("page") : e;
     
     let pagination = store.getState().customReports.pagination;
     
@@ -340,7 +340,6 @@ export const setPageNumber = (e, i) => dispatch => {
         total: pagination.total,
         index: i
     }
-    //console.log("setPageNumber: ", paginacija);
   
     dispatch({
         type: PAGINATION,

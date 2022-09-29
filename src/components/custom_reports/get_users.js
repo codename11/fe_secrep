@@ -3,7 +3,7 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts'
 import { useEffect } from 'react';
 
 function GetUsers(props){
-    console.log("GetUsers: ", props);
+    //console.log("GetUsers: ", props);
     
     useEffect(() => {
         
