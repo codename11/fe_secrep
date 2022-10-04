@@ -44,10 +44,10 @@ function GetDeliveries(props){
                     <Line type="monotone" dataKey="timeIn" stroke="#8884d8" activeDot={{ r: 8 }} />
                     <Line type="monotone" dataKey="timeOut" stroke="#82ca9d" />
                 </LineChart>
-            </div>
-        </div>;
+                </div>
+            </div>;
 
-    };
+        };
 
     return chart();
 

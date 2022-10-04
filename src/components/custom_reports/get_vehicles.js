@@ -1,6 +1,6 @@
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { Component } from 'react'
+import { useEffect } from 'react'
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import DatePicker from "react-datepicker";
@@ -13,90 +13,63 @@ import Pagination from 'react-bootstrap/Pagination';
 import {setPageNumber} from "../../actions/custom_reports/customReportsActions";
 import {set_per_page} from "../../actions/custom_reports/customReportsActions";
 
-class GetVehicles extends Component {
+function GetVehicles(props){
 
-    constructor(props) {
+    useEffect(() => {
+        
+        props.get_vehicles_custom({page: 1});
+        //Mora array kao dodatni argument da se ne bi ponavljalo.
+    }, []);
 
-        super(props);
-        this.state = {
-            pageIndex: 0
-        };
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.setActive = this.setActive.bind(this);
-        this.handleSubmitPerPage = this.handleSubmitPerPage.bind(this);
-        this.prevPage = this.prevPage.bind(this);
-        this.nextPage = this.nextPage.bind(this);
-        this.firstPage = this.firstPage.bind(this);
-        this.lastPage = this.lastPage.bind(this);
+    const firstPage = (pagination) => {
+        props.setPageNumber(1, 0);
+        props.get_vehicles_custom({page: 1});      
+    }
+
+
+    const lastPage = (pagination) => {
+
+        let last = pagination.last_page;
+        props.get_vehicles_custom({page: last});
+        props.setPageNumber(last, last-1);
 
     }
 
-    componentDidMount(){
-      
-        this.props.get_vehicles_custom({page: 1});
+    const prevPage = (pagination) => {
 
-    }
+        let last = pagination.last_page;
+        let index = pagination.index;
 
-    firstPage(pagination){
-        this.props.setPageNumber(1, 0);
-        this.setState({
-            pageIndex: 0
-        }, ()=>{
-            this.props.get_vehicles_custom({page: this.state.pageIndex+1});
-
-        });
+        if(index>0){
+            index = index-1;
+        }
+        else if(index<=0){
+            index = last-1;
+        }
+        props.get_vehicles_custom({page: index+1});
+        props.setPageNumber(index+1, index);
         
     }
 
-    lastPage(pagination){
-
-        let last = pagination.last_page;
-        this.setState({
-            pageIndex: this.props.pagination.last_page-1
-        }, ()=>{
-            this.props.get_vehicles_custom({page: this.state.pageIndex+1});
-
-        });
-        this.props.setPageNumber(last, last-1);
-
-    }
-
-    prevPage(pagination){
+    const nextPage = (pagination) => {
 
         let first = 0;
         let last = pagination.last_page;
         let index = pagination.index;
-        this.setState({
-            pageIndex: this.state.pageIndex-1 >= first ? this.state.pageIndex-1 : last-1
-        }, ()=>{
-            this.props.get_vehicles_custom({page: this.state.pageIndex+1});
 
-        });
-        this.props.setPageNumber(index+1, index);
-        
-    }
-
-    nextPage(pagination){
-
-        let first = 0;
-        let last = pagination.last_page;
-        let index = null;
-
-        if(pagination.index+1<last){
-
-            index = pagination.index+1;
-
+        if(index+1<last){
+            index = index+1;
         }
         else{
             index = first;
         }
         
-        this.props.get_vehicles_custom({page: index+1});
-        this.props.setPageNumber(index+1, index);
+        props.get_vehicles_custom({page: index+1});
+        props.setPageNumber(index+1, index);
 
     }
 
-    handleSubmitPerPage(event){
+    const handleSubmitPerPage = (event) => {
 
         event.preventDefault();
         let forma = event.target; 
@@ -110,9 +83,9 @@ class GetVehicles extends Component {
                 metoda: metoda,
                 "per_page_id": per_page_id
             }
-            this.props.set_per_page(data);
-            this.props.get_vehicles_custom({page: 1});
-            this.props.setPageNumber(1, 0);
+            props.set_per_page(data);
+            props.get_vehicles_custom({page: 1});
+            props.setPageNumber(1, 0);
 
         }
         let pagination = this.props && this.props.pagination ? this.props.pagination :null;
@@ -120,23 +93,14 @@ class GetVehicles extends Component {
 
     }
 
-    setActive(e, i){
+    const setActive = (e, i) => {
 
-        this.props.setPageNumber(e, i);
-        let pagination = this.props && this.props.pagination ? this.props.pagination : null;
-        
-        if(pagination.last_page>1){
-            this.setState({
-                pageIndex: i
-            }, () => {
-                this.props.get_vehicles_custom({page: i+1});
-
-            });
-        }
+        props.setPageNumber(e, i);
+        props.get_vehicles_custom({page: i+1});
 
     }
     
-    async handleSubmit(event) {
+    const handleSubmit = (event) => {
         event.preventDefault();
         let forma = event.target; 
         let elements = forma.elements;
@@ -162,161 +126,141 @@ class GetVehicles extends Component {
 
         }
         
-        console.log("handleSubmit: ", data);
-
-        this.setState({
-            pageIndex: 0
-        }, () => {
-            this.props.get_vehicles_custom(data);
-
-        });
+        props.get_vehicles_custom(data);
 
     }
 
-    render() {
-        
-        console.log("get_vehiclesProps: ", this.props);
-        let pagination = this.props && this.props.pagination ? this.props.pagination : null;
+    let pagination = props && props.pagination ? props.pagination : null;
 
-        let vehicleList = this.props && this.props.list_vehicles && this.props.list_vehicles.length>0 ? this.props.list_vehicles : null;
+    let vehicleList = props && props.list_vehicles && props.list_vehicles.length>0 ? props.list_vehicles : null;
         
-        let list_vehicles = vehicleList && vehicleList.length>0 ? vehicleList.map((item, i) => {
-            return <option key={item.id} value={item.id}>{item.registration}</option>
-        }) : null;
+    let list_vehicles = vehicleList && vehicleList.length>0 ? vehicleList.map((item, i) => {
+        return <option key={item.id} value={item.id}>{item.registration}</option>
+    }) : null;
 
-        if(list_vehicles){
-            list_vehicles.unshift(<option key="tmp" value="">All vehicles</option>);
+    if(list_vehicles){
+        list_vehicles.unshift(<option key="tmp" value="">All vehicles</option>);
+    }
+        
+    let tmp1 = vehicleList && vehicleList.length>0 ? vehicleList.map((item, i) => {
+
+        return <div key={"q"+item.id}>
+            <code className="vehicleCustom" key={"x"+item.id}><pre key={"y"+item.id}>{JSON.stringify(item, null, 4)}</pre></code>
+        </div>;
+
+    }) : null;
+
+    let href = props && props.href ? props.href : null;
+
+    let accordionVehicleList = <div className="grid-container2"><div className="itemGV6 grid-container1 gc2-item1">{tmp1}</div>
+        <a className="btn btn-outline-info ReportPageDownload" href={href} download="wholeReport" onClick={(e)=> props.toCSV(e, vehicleList)}>
+            ReportPageDownload
+        </a>
+    </div>;
+        
+    let per_page = pagination && pagination.per_page ? pagination.per_page : null;
+    let checkIfUtility = props && props.auth && props.auth.user && props.auth.user.utility && props.auth.user.utility.id && Number.isInteger(props.auth.user.utility.id) ? true : false;
+
+    const setVisiblePages = (paginacija) =>{
+        
+        let pageIndex = null;
+        let last_page = null;
+        let siblings = 1;
+        
+        pageIndex = pagination && pagination.index ? pagination.index : 0;
+        last_page = paginacija && paginacija.last_page && paginacija.last_page ? paginacija.last_page : null;
+        
+        let myPages = [];
+
+        if(pageIndex===0 && pageIndex<=last_page && pageIndex+siblings<=last_page && pageIndex+(siblings*2)<=last_page){
+            
+            myPages = [
+                <Pagination.Item key={pageIndex} active={true} page={pageIndex+1} onClick={(e)=>{setActive(e, pageIndex)}}>
+                    {pageIndex+1}
+                </Pagination.Item>,
+    
+                <Pagination.Item key={pageIndex+siblings} page={pageIndex+1+siblings} onClick={(e)=>{setActive(e, pageIndex+siblings)}}>
+                    {pageIndex+1+siblings}
+                </Pagination.Item>,
+    
+                <Pagination.Item key={pageIndex+(2*siblings)} page={pageIndex+1+(2*siblings)} onClick={(e)=>{setActive(e, pageIndex+(siblings*2))}}>
+                    {pageIndex+1+(2*siblings)}
+                </Pagination.Item>,
+
+                <Pagination.Ellipsis key={"elip"+(pageIndex+3)}/>].filter(Boolean);
+
         }
         
-        let tmp1 = vehicleList && vehicleList.length>0 ? vehicleList.map((item, i) => {
+        if(pageIndex>=0 && pageIndex<=last_page && pageIndex-siblings>=0 && pageIndex+siblings<=last_page){
+            
+            let ellipsis1 = pageIndex-siblings> 0 ? <Pagination.Ellipsis key={"elip"+(pageIndex+3)}/> : null;
+            let ellipsis2 = (pageIndex+siblings)<last_page-1 ? <Pagination.Ellipsis key={"elip"+(pageIndex+4)}/> : null;
+            myPages = [
 
-            return <div key={"q"+item.id}>
-                <code className="vehicleCustom" key={"x"+item.id}><pre key={"y"+item.id}>{JSON.stringify(item, null, 4)}</pre></code>
-            </div>;
+                ellipsis1,
 
-        }) : null;
+                <Pagination.Item key={pageIndex-siblings} page={pageIndex+1-siblings} onClick={(e)=>{setActive(e, pageIndex-siblings)}}>
+                    {pageIndex+1-siblings}
+                </Pagination.Item>,
+    
+                <Pagination.Item key={pageIndex} active={true} page={pageIndex+1} onClick={(e)=>{setActive(e, pageIndex)}}>
+                    {pageIndex+1}
+                </Pagination.Item>,
+    
+                <Pagination.Item key={pageIndex+siblings} page={pageIndex+1+siblings} onClick={(e)=>{setActive(e, pageIndex+siblings)}}>
+                    {pageIndex+1+siblings}
+                </Pagination.Item>,
 
-        let href = this.props && this.props.href ? this.props.href : null;
+                ellipsis2].filter(Boolean);
 
-        let accordionVehicleList = <div className="grid-container2"><div className="itemGV6 grid-container1 gc2-item1">{tmp1}</div>
-            <a className="btn btn-outline-info ReportPageDownload" href={href} download="wholeReport" onClick={(e)=>this.props.toCSV(e, vehicleList)}>
-                ReportPageDownload
-            </a>
-        </div>;
+        }
         
-        let per_page = pagination && pagination.per_page ? pagination.per_page : null;
-        let checkIfUtility = this.props && this.props.auth && this.props.auth.user && this.props.auth.user.utility && this.props.auth.user.utility.id && Number.isInteger(this.props.auth.user.utility.id) ? true : false;
+        if(pageIndex+1===last_page && pageIndex-(2*siblings)>=0){
 
-        const setVisiblePages = (paginacija) =>{
-            console.log("paginacija: ", paginacija);
-            let pageIndex = null;
-            let last_page = null;
-            let siblings = 1;
+            myPages = [
+                <Pagination.Ellipsis key={"elip"+(pageIndex+3)}/>,
+
+                <Pagination.Item key={pageIndex-(2*siblings)} page={pageIndex+1-(2*siblings)} onClick={(e)=>{setActive(e, pageIndex-(siblings*2))}}>
+                    {pageIndex+1-(2*siblings)}
+                </Pagination.Item>,
+    
+                <Pagination.Item key={pageIndex-siblings} page={pageIndex+1-siblings} onClick={(e)=>{setActive(e, pageIndex)}}>
+                    {pageIndex+1-siblings}
+                </Pagination.Item>,
+    
+                <Pagination.Item key={pageIndex} active={true} page={pageIndex+1} onClick={(e)=>{setActive(e, pageIndex-siblings)}}>
+                    {pageIndex+1}
+                </Pagination.Item>].filter(Boolean);
+
+        }
+
+        if(pageIndex>=0 && pageIndex<=last_page && last_page<=3){
             
-            pageIndex = pagination && pagination.index ? pagination.index : 0;
-            last_page = paginacija && paginacija.last_page && paginacija.last_page ? paginacija.last_page : null;
-            
-            let myPages = [];
- 
-            if(pageIndex===0 && pageIndex<=last_page && pageIndex+siblings<=last_page && pageIndex+(siblings*2)<=last_page){
+            let pages = [];
+            for(let i=0;i<last_page;i++){
+
+                pages.push(
+                    <Pagination.Item key={i} active={i===pageIndex} page={i+1} onClick={(e)=>{setActive(e, i)}}>
+                        {i+1}
+                    </Pagination.Item>
+                );
                 
-                //console.log("mojTest1", [pageIndex, pageIndex+siblings, pageIndex+(siblings*2)], pageIndex);
-
-                myPages = [
-                    <Pagination.Item key={pageIndex} active={true} page={pageIndex+1} onClick={(e)=>{this.setActive(e, pageIndex)}}>
-                        {pageIndex+1}
-                    </Pagination.Item>,
-        
-                    <Pagination.Item key={pageIndex+siblings} page={pageIndex+1+siblings} onClick={(e)=>{this.setActive(e, pageIndex+siblings)}}>
-                        {pageIndex+1+siblings}
-                    </Pagination.Item>,
-        
-                    <Pagination.Item key={pageIndex+(2*siblings)} page={pageIndex+1+(2*siblings)} onClick={(e)=>{this.setActive(e, pageIndex+(siblings*2))}}>
-                        {pageIndex+1+(2*siblings)}
-                    </Pagination.Item>,
-    
-                    <Pagination.Ellipsis key={"elip"+(pageIndex+3)}/>].filter(Boolean);
-    
             }
-            
-            if(pageIndex>=0 && pageIndex<=last_page && pageIndex-siblings>=0 && pageIndex+siblings<=last_page){
-                
-                //console.log("mojTest2", [pageIndex-siblings, pageIndex, pageIndex+siblings], pageIndex);
-                let ellipsis1 = pageIndex-siblings> 0 ? <Pagination.Ellipsis key={"elip"+(pageIndex+3)}/> : null;
-                let ellipsis2 = (pageIndex+siblings)<last_page-1 ? <Pagination.Ellipsis key={"elip"+(pageIndex+4)}/> : null;
-                myPages = [
-    
-                    ellipsis1,
-    
-                    <Pagination.Item key={pageIndex-siblings} page={pageIndex+1-siblings} onClick={(e)=>{this.setActive(e, pageIndex-siblings)}}>
-                        {pageIndex+1-siblings}
-                    </Pagination.Item>,
-        
-                    <Pagination.Item key={pageIndex} active={true} page={pageIndex+1} onClick={(e)=>{this.setActive(e, pageIndex)}}>
-                        {pageIndex+1}
-                    </Pagination.Item>,
-        
-                    <Pagination.Item key={pageIndex+siblings} page={pageIndex+1+siblings} onClick={(e)=>{this.setActive(e, pageIndex+siblings)}}>
-                        {pageIndex+1+siblings}
-                    </Pagination.Item>,
-    
-                    ellipsis2].filter(Boolean);
-    
-            }
-            
-            if(pageIndex+1===last_page && pageIndex-(2*siblings)>=0){
-    
-                //console.log("mojTest3", [pageIndex-(siblings*2), pageIndex-siblings, pageIndex], pageIndex);
-                myPages = [
-                    <Pagination.Ellipsis key={"elip"+(pageIndex+3)}/>,
-    
-                    <Pagination.Item key={pageIndex-(2*siblings)} page={pageIndex+1-(2*siblings)} onClick={(e)=>{this.setActive(e, pageIndex-(siblings*2))}}>
-                        {pageIndex+1-(2*siblings)}
-                    </Pagination.Item>,
-        
-                    <Pagination.Item key={pageIndex-siblings} page={pageIndex+1-siblings} onClick={(e)=>{this.setActive(e, pageIndex)}}>
-                        {pageIndex+1-siblings}
-                    </Pagination.Item>,
-        
-                    <Pagination.Item key={pageIndex} active={true} page={pageIndex+1} onClick={(e)=>{this.setActive(e, pageIndex-siblings)}}>
-                        {pageIndex+1}
-                    </Pagination.Item>].filter(Boolean);
-    
-            }
-    
-            if(pageIndex>=0 && pageIndex<=last_page && last_page<=3){
-                //console.log("mojTest4");
-                let pages = [];
-                for(let i=0;i<last_page;i++){
+            myPages = [...pages].filter(Boolean)
 
-                    pages.push(
-                        <Pagination.Item key={i} active={i===pageIndex} page={i+1} onClick={(e)=>{this.setActive(e, i)}}>
-                            {i+1}
-                        </Pagination.Item>
-                    );
-                    
-                }
-                myPages = [...pages].filter(Boolean)
-    
-            }
-    
-            if(this.state.setVisiblePages>3){
-    
-                myPages = [...this.state.setVisiblePages, <Pagination.Ellipsis key={"elipsa"}/>].filter(Boolean);
-    
-            }
-            
-            return myPages;
+        }
+        
+        return myPages;
 
-        };
+    };
 
-        let altPagination = null;//Default Laravel pagination implementation in React. Slower then mine take on it.
+    let altPagination = null;//Default Laravel pagination implementation in React. Slower then mine take on it.
 
-        return (
+    return (
         <div>
             <div>
                 <h5 className="labelSetPerPage">Set or update per page</h5>
-                <Form onSubmit={this.handleSubmitPerPage} name="myPerPageForm" className="grid-container f1">
+                <Form onSubmit={(e)=>handleSubmitPerPage(e)} name="myPerPageForm" className="grid-container f1">
                     
                     <Form.Group className="mb-3 per_page" controlId="per_page">
                         <Form.Control name="per_page" type="number" min={0} max={20} defaultValue={per_page} placeholder="Per page" />
@@ -335,14 +279,13 @@ class GetVehicles extends Component {
                     </Button>
 
                 </Form>
-
             </div>
 
-            <Form onSubmit={this.handleSubmit} name="myForm" className="grid-container f1">
+            <Form onSubmit={(e)=>handleSubmit(e)} name="myForm" className="grid-container f1">
                 
                 <DatePicker
-                    selected={this.props.time_in}
-                    onChange={(date) => this.props.setTimeIn(date)}
+                    selected={props.time_in}
+                    onChange={(date) => props.setTimeIn(date)}
                     showTimeSelect
                     dateFormat="dd/MM/yyyy HH:mm"
                     timeIntervals={15}
@@ -353,8 +296,8 @@ class GetVehicles extends Component {
                 />
 
                 <DatePicker
-                    selected={this.props.time_out}
-                    onChange={(date) => this.props.setTimeOut(date)}
+                    selected={props.time_out}
+                    onChange={(date) => props.setTimeOut(date)}
                     showTimeSelect
                     dateFormat="dd/MM/yyyy HH:mm"
                     timeIntervals={15}
@@ -420,18 +363,18 @@ class GetVehicles extends Component {
             {accordionVehicleList}
 
             <Pagination className="pagination">
-                <Pagination.First onClick={()=>this.firstPage(pagination)}/>
-                <Pagination.Prev onClick={()=>this.prevPage(pagination)}/>
+                <Pagination.First onClick={()=>firstPage(pagination)}/>
+                <Pagination.Prev onClick={()=>prevPage(pagination)}/>
                     {setVisiblePages(pagination)}
-                <Pagination.Next  onClick={()=>this.nextPage(pagination)}/>
-                <Pagination.Last  onClick={()=>this.lastPage(pagination)}/>
+                <Pagination.Next  onClick={()=>nextPage(pagination)}/>
+                <Pagination.Last  onClick={()=>lastPage(pagination)}/>
             </Pagination>
             
             {altPagination}
 
         </div>
-      )
-  }
+    )
+  
 }
 
 setPageNumber.propTypes = {
