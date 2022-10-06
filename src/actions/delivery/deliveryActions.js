@@ -1,4 +1,4 @@
-import { CREATE_DELIVERY, LIST_DELIVERIES, ERRORS, ALERT_SHOW, ALERT_HIDE } from "../types";
+import { CREATE_DELIVERY, LIST_DELIVERIES, ERRORS, ALERT_SHOW, ALERT_HIDE, DELIVERYITEMID, SETTIMEIN, SETTIMEOUT, ADDNOTEFIELD, REMOVENOTEFIELD  } from "../types";
 import store from "../../store";
 
 let auth = null;
@@ -328,3 +328,67 @@ export const update_delivery = (data) => dispatch => {
     });
 
 }
+
+export const handleChange = (itemId) => dispatch => {
+    
+    let state = store.getState();
+    let labelIds = state.deliveries.labelIds;
+    let arr1 = [...labelIds];
+
+    let index = arr1.indexOf(itemId);
+    if(index > -1){
+        arr1.splice(index, 1);
+    }
+    else{
+        arr1.push(itemId);
+    }
+
+    dispatch({
+        type: DELIVERYITEMID,
+        payload: [...arr1]
+    });
+
+}
+
+export const setTimeIn = (date) => dispatch => {
+
+    dispatch({
+        type: SETTIMEIN,
+        payload: date
+    });
+
+}
+
+export const setTimeOut = (date) => dispatch => {
+
+    dispatch({
+        type: SETTIMEOUT,
+        payload: date
+    });
+
+}
+
+export const addNoteField = () => dispatch => {
+    
+    let state = store.getState();
+    let cnt = state.deliveries.cnt;
+    console.log("addNoteField:", cnt);
+    dispatch({
+        type: ADDNOTEFIELD,
+        payload: cnt+1
+    });
+
+}
+
+export const removeNoteField = () => dispatch => {
+
+    let state = store.getState();
+    let cnt = state.deliveries.cnt;
+
+    dispatch({
+        type: REMOVENOTEFIELD,
+        payload: cnt>0 ? cnt-1 : 0
+    });
+
+}
+

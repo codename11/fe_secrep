@@ -1,4 +1,3 @@
-import { Component } from 'react'
 import {connect} from "react-redux";
 import PropTypes from "prop-types";
 import Accordion from 'react-bootstrap/Accordion';
@@ -10,67 +9,53 @@ import GetDeliveries from '../custom_reports/get_deliveries';
 import GetEmployees from '../custom_reports/get_employees';
 import GetUsers from '../custom_reports/get_users';
 
-class CustomReports extends Component {
+function CustomReports(props){
 
-    constructor(props) {
-
-        super(props);
-        this.state = {
-          
-        };
-
-    }
-
-    render() {
-      //console.log("customRepProps: ", this.props);
-      //let list_permissions = this.props && this.props.special_permissions && this.props.special_permissions.list_permissions && this.props.special_permissions.list_permissions.length > 0 ? this.props.special_permissions.list_permissions : null;
-      
-      return (
+    return (
         <div>
-          
-          <Accordion defaultActiveKey="0">
+            
+            <Accordion defaultActiveKey="0">
 
-            <Accordion.Item eventKey="0">
-                <Accordion.Header>List vehicles</Accordion.Header>
-                <Accordion.Body className="accordion-custom">
+                <Accordion.Item eventKey="0">
+                    <Accordion.Header>List vehicles</Accordion.Header>
+                    <Accordion.Body className="accordion-custom">
 
-                    <GetVehicles/>
+                        <GetVehicles/>
 
-                </Accordion.Body>
-            </Accordion.Item>
+                    </Accordion.Body>
+                </Accordion.Item>
 
-            <Accordion.Item eventKey="1">
-                <Accordion.Header>List deliveries</Accordion.Header>
-                <Accordion.Body>
+                <Accordion.Item eventKey="1">
+                    <Accordion.Header>List deliveries</Accordion.Header>
+                    <Accordion.Body>
 
-                    <GetDeliveries get_deliveries={this.props.get_deliveries}/>
-                    
-                </Accordion.Body>
-            </Accordion.Item>
+                        <GetDeliveries get_deliveries={props.get_deliveries}/>
+                        
+                    </Accordion.Body>
+                </Accordion.Item>
 
-            <Accordion.Item eventKey="2">
-                <Accordion.Header>List employees</Accordion.Header>
-                <Accordion.Body>
-                    
-                    <GetEmployees get_employees={this.props.get_employees}/>
+                <Accordion.Item eventKey="2">
+                    <Accordion.Header>List employees</Accordion.Header>
+                    <Accordion.Body>
+                        
+                        <GetEmployees get_employees={props.get_employees}/>
 
-                </Accordion.Body>
-            </Accordion.Item>
+                    </Accordion.Body>
+                </Accordion.Item>
 
-            <Accordion.Item eventKey="3">
-                <Accordion.Header>List users</Accordion.Header>
-                <Accordion.Body>
+                <Accordion.Item eventKey="3">
+                    <Accordion.Header>List users</Accordion.Header>
+                    <Accordion.Body>
 
-                <GetUsers get_users={this.props.get_users}/>
-                    
-                </Accordion.Body>
-            </Accordion.Item>
+                    <GetUsers get_users={props.get_users}/>
+                        
+                    </Accordion.Body>
+                </Accordion.Item>
 
-          </Accordion>
+            </Accordion>
         
         </div>
-      )
-  }
+    )
 }
 
 get_deliveries.propTypes = {

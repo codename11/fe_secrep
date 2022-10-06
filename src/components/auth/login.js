@@ -5,56 +5,45 @@ import {connect} from "react-redux";
 import { login } from "../../actions/auth/authActions";
 import PropTypes from "prop-types";
 
-class Login extends Component {
+function Login(props){
+    
+    const handleSubmit = (e) => {
+        e.preventDefault();
 
-    constructor(props) {
-
-        super(props);
-    
-        this.handleSubmit = this.handleSubmit.bind(this);
-    
-    }
-    
-      async handleSubmit(event) {
-        event.preventDefault();
-    
-        let target = event.target;
+        let target = e.target;
         const data = {
-          email: target.elements["email"].value,
-          password: target.elements["password"].value
+            email: target.elements["email"].value,
+            password: target.elements["password"].value
         }
         
-        this.props.login(data);
+        props.login(data);
 
         target.elements["email"].value = "";
         target.elements["password"].value = "";
-    
-      }
 
-    render() {
-        
-        return (
-            <Form onSubmit={this.handleSubmit}>
-
-                <Form.Group className="mb-3" controlId="login-email">
-                    <Form.Label>Email address</Form.Label>
-                    <Form.Control type="email" placeholder="Enter email" name="email"/>
-                    <Form.Text className="text-muted">
-                    We'll never share your email with anyone else.
-                    </Form.Text>
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="login-password">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control type="password" placeholder="Password"  name="password"/>
-                </Form.Group>
-
-                <Button variant="outline-primary" type="submit">
-                    Submit
-                </Button>
-            </Form>
-        )
     }
+        
+    return (
+        <Form onSubmit={(e)=>handleSubmit(e)}>
+
+            <Form.Group className="mb-3" controlId="login-email">
+                <Form.Label>Email address</Form.Label>
+                <Form.Control type="email" placeholder="Enter email" name="email"/>
+                <Form.Text className="text-muted">
+                We'll never share your email with anyone else.
+                </Form.Text>
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="login-password">
+                <Form.Label>Password</Form.Label>
+                <Form.Control type="password" placeholder="Password"  name="password"/>
+            </Form.Group>
+
+            <Button variant="outline-primary" type="submit">
+                Submit
+            </Button>
+        </Form>
+    )
 }
 
 login.propTypes = {
