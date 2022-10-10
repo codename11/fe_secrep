@@ -4,12 +4,12 @@ import { useEffect } from 'react';
 
 function GetUsers(props){
     //console.log("GetUsers: ", props);
-    
+    const { get_users } = props;
     useEffect(() => {
         
-        props.get_users();
+        get_users();
         //Mora array kao dodatni argument da se ne bi ponavljalo.
-    }, []);
+    }, [get_users]);
 
     const chart = ()=> {
         

@@ -35,8 +35,9 @@ export default function(state = initialState, action){
         case DELIVERYITEMID:
             
             labelIds = action.payload;
-            console.log("DELIVERYITEMID: ", action);
+            //console.log("DELIVERYITEMID: ", action);
             myState = {
+                list_deliveries: state.list_deliveries,
                 labelIds: labelIds,
                 time_in: state.time_in,
                 time_out: state.time_out,
@@ -48,8 +49,9 @@ export default function(state = initialState, action){
         case SETTIMEIN:
         
             time_in = action.payload;
-            console.log("SETTIMEIN: ", action);
+            //console.log("SETTIMEIN: ", action);
             myState = {
+                list_deliveries: state.list_deliveries,
                 time_in: time_in,
                 time_out: state.time_out,
                 labelIds: state.labelIds,
@@ -61,8 +63,9 @@ export default function(state = initialState, action){
         case SETTIMEOUT:
     
             time_out = action.payload;
-            console.log("SETTIMEOUT: ", action);
+            //console.log("SETTIMEOUT: ", action);
             myState = {
+                list_deliveries: state.list_deliveries,
                 time_out: time_out,
                 time_in: state.time_in,
                 labelIds: state.labelIds,
@@ -74,8 +77,9 @@ export default function(state = initialState, action){
         case ADDNOTEFIELD:
 
             cnt = action.payload;
-            console.log("ADDNOTEFIELD: ", action);
+            //console.log("ADDNOTEFIELD: ", action);
             myState = {
+                list_deliveries: state.list_deliveries,
                 cnt: cnt,
                 time_out: state.time_out,
                 time_in: state.time_in,
@@ -87,8 +91,9 @@ export default function(state = initialState, action){
         case REMOVENOTEFIELD:
 
             cnt = action.payload;
-            console.log("REMOVENOTEFIELD: ", action);
+            
             myState = {
+                list_deliveries: state.list_deliveries,
                 cnt: cnt,
                 time_out: state.time_out,
                 time_in: state.time_in,

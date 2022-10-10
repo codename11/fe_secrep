@@ -4,12 +4,12 @@ import { useEffect } from 'react';
 
 function GetEmployees(props){
     //console.log("GetEmployees: ", props);
-    
+    const { get_employees } = props;
     useEffect(() => {
         
-        props.get_employees();
+        get_employees();
         //Mora array kao dodatni argument da se ne bi ponavljalo.
-    }, []);
+    }, [get_employees]);
 
     const chart = ()=> {
         

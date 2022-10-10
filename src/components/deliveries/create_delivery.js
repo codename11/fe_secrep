@@ -73,7 +73,7 @@ function CreateDelivery(props){
 
     }
 
-    console.log("create_deliveryProps: ", props);
+    //console.log("create_deliveryProps: ", props);
     
     let option1 = [<option key={""} value={""}>Choose employee</option>];
     let employees = props.employees && props.employees.list_employees ? props.employees.list_employees.map((item, i) => {
@@ -102,7 +102,7 @@ function CreateDelivery(props){
       });
       return <Dropdown.Item key={item.id} href={"#"+item.id}>
         <div className="form-check">
-          <input className="form-check-input" type="checkbox" key={"x"+item.id} value={obj} checked={labelIds.indexOf(item.id) > -1 ? true : false} onChange={() => {return;}}/>
+          <input className="form-check-input" type="checkbox" key={"x"+item.id} value={obj} checked={labelIds.indexOf(item.id) > -1 ? true : false} onChange={() => {props.handleChange(item.id)}}/>
           <label key={"y"+item.id} className="form-check-label" htmlFor="flexCheckDefault" onClick={() => {props.handleChange(item.id)}}>
             {item.registration}
           </label>
@@ -193,7 +193,7 @@ function CreateDelivery(props){
           </Button>
         </Form>
 
-        {errors && errors.length ? <Alert className="mt-2" variant="danger" show={this.props.alertState} onClick={() => props.alertHide([false])} dismissible>
+        {errors && errors.length ? <Alert className="mt-2" variant="danger" show={props.alertState} onClick={() => props.alertHide([false])} dismissible>
         <Alert.Heading>There were {errors && errors.length ? "errors:" : null}</Alert.Heading>
         
         <ListGroup variant="flush">

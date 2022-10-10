@@ -1,50 +1,39 @@
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { Component } from 'react';
 import { deleteDelivery } from "../../actions/delivery/deliveryActions";
 import { modalHide } from "../../actions/modalActions";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 
-class DeleteDelivery extends Component {
+function DeleteDelivery(props){
 
-  constructor(props) {
-
-    super(props);
-
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  handleClick(event){
+  const handleClick = (event) => {
 
     event.preventDefault();
 
     let target = event.target;
     let deliveryid = target.parentElement.elements["deliveryid"].value;
-    this.props.deleteDelivery(deliveryid);
-    this.props.modalHide([false]);
+    props.deleteDelivery(deliveryid);
+    props.modalHide([false]);
 
   }
 
-  render() {
-
-    let deliveryid = this.props.deliveryid ? this.props.deliveryid : 0;
+  let deliveryid = this.props.deliveryid ? this.props.deliveryid : 0;
+  
+  return (
     
-    return (
-      
-        <Form>
-            <Form.Group className="mb-3" controlId="deliveryid">
-                <Form.Label>Delivery with internal id of "{deliveryid}" will be deleted.</Form.Label>
-                <Form.Control type="hidden" name="deliveryid" value={deliveryid}/>
-            </Form.Group>
+      <Form>
+          <Form.Group className="mb-3" controlId="deliveryid">
+              <Form.Label>Delivery with internal id of "{deliveryid}" will be deleted.</Form.Label>
+              <Form.Control type="hidden" name="deliveryid" value={deliveryid}/>
+          </Form.Group>
 
-            <Button onClick={this.handleClick} variant="outline-danger" type="button">
-                Delete
-            </Button>
-        </Form>
+          <Button onClick={(event)=>handleClick(event)} variant="outline-danger" type="button">
+              Delete
+          </Button>
+      </Form>
 
-    )
-  }
+  )
 }
 
 deleteDelivery.propTypes = {

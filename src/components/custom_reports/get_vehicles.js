@@ -15,11 +15,12 @@ import {set_per_page} from "../../actions/custom_reports/customReportsActions";
 
 function GetVehicles(props){
 
+    const { get_vehicles_custom } = props;
     useEffect(() => {
         
-        props.get_vehicles_custom({page: 1});
+        get_vehicles_custom({page: 1});
         //Mora array kao dodatni argument da se ne bi ponavljalo.
-    }, []);
+    }, [get_vehicles_custom]);
 
     const firstPage = (pagination) => {
         props.setPageNumber(1, 0);

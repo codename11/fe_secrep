@@ -188,7 +188,7 @@ class UpdateDelivery extends Component {
             return <Dropdown.Item key={item.id} href={"#"+item.id}>
             <div className="form-check">
                 <input className="form-check-input" type="checkbox" key={"x"+item.id} value={obj} checked={this.state.labelIds.indexOf(item.id) > -1 ? true : false} onChange={() => this.handleChange(item.id)}/>
-                <label key={"y"+item.id} class="form-check-label" for="flexCheckDefault" onClick={() => this.labelCheck(item.id)}>
+                <label key={"y"+item.id} className="form-check-label" htmlFor="flexCheckDefault" onClick={() => this.labelCheck(item.id)}>
                 {item.registration}
                 </label>
             </div>

@@ -3,13 +3,13 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'r
 import { useEffect } from 'react';
 
 function GetDeliveries(props){
-    //console.log("props: ", props);
     
+    const { get_deliveries } = props;
     useEffect(() => {
         
-        props.get_deliveries();
+        get_deliveries();
         //Mora array kao dodatni argument da se ne bi ponavljalo.
-    }, []);
+    }, [get_deliveries]);
 
     const chart = ()=> {
         

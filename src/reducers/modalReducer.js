@@ -3,7 +3,8 @@ import { MODAL_SHOW, MODAL_HIDE } from "../actions/types";
 const initialState = {
     modalState: false,
     itemId: null,
-    modal_purpose: null
+    modal_purpose: null,
+    labelIds: null
 };
 
 let myState = null;
@@ -36,7 +37,8 @@ export default function(state = initialState, action){
             myState = {
                 modalState: modalState,
                 itemId: null,
-                modal_purpose: null
+                modal_purpose: null,
+                labelIds: null
             };
             
             return myState;

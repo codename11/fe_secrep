@@ -1,4 +1,3 @@
-import { Component } from 'react'
 import {connect} from "react-redux";
 import { get_vehicles } from "../../actions/vehicles/vehicleActions";
 import { get_employees } from "../../actions/employees/employeeActions";
@@ -8,56 +7,47 @@ import { get_deliveries } from "../../actions/delivery/deliveryActions";
 import CreateDelivery from '../deliveries/create_delivery';
 import ListDeliveries from '../deliveries/list_deliveries';
 import { list_permissions } from "../../actions/special_permission/special_permissionActions";
-import Button from 'react-bootstrap/Button';
+import { useEffect } from 'react'
 
-class Deliveries extends Component {
+function Deliveries(props){
 
-    constructor(props) {
-
-        super(props);
-        this.state = {
-          
-        };
-
-    }
-
-    componentDidMount(){
-      this.props.get_employees();
-      this.props.get_vehicles();
-      this.props.get_deliveries();
-      this.props.list_permissions()
-    }
-
-    render() {
-      
-      return (
-        <div>
-          
-          <Accordion defaultActiveKey="0">
-
-            <Accordion.Item eventKey="0">
-                <Accordion.Header>Create new delivery</Accordion.Header>
-                <Accordion.Body className="accordion-custom">
-
-                  <CreateDelivery sec_id={this.props.auth.user.id} employees={this.props.employees} vehicles={this.props.vehicles} errors={this.props.errors}/>
-
-                </Accordion.Body>
-            </Accordion.Item>
-
-            <Accordion.Item eventKey="1">
-                <Accordion.Header>List deliveries</Accordion.Header>
-                <Accordion.Body>
-
-                    <ListDeliveries sec_id={this.props.auth.user.id} access_token={this.props.auth.access_token} list_deliveries={this.props.deliveries.list_deliveries}/>
-                    
-                </Accordion.Body>
-            </Accordion.Item>
-
-          </Accordion>
+  const { get_employees, get_vehicles, get_deliveries, list_permissions } = props;
+  useEffect(() => {
         
-        </div>
-      )
-  }
+    get_employees();
+    get_vehicles();
+    get_deliveries();
+    list_permissions();
+    //Mora array kao dodatni argument da se ne bi ponavljalo.
+  }, [get_employees, get_vehicles, get_deliveries, list_permissions]);
+
+  return (
+    <div>
+      
+      <Accordion defaultActiveKey="0">
+
+        <Accordion.Item eventKey="0">
+            <Accordion.Header>Create new delivery</Accordion.Header>
+            <Accordion.Body className="accordion-custom">
+
+              <CreateDelivery sec_id={props.auth.user.id} employees={props.employees} vehicles={props.vehicles} errors={props.errors}/>
+
+            </Accordion.Body>
+        </Accordion.Item>
+
+        <Accordion.Item eventKey="1">
+            <Accordion.Header>List deliveries</Accordion.Header>
+            <Accordion.Body>
+
+                <ListDeliveries sec_id={props.auth.user.id} access_token={props.auth.access_token} list_deliveries={props.deliveries.list_deliveries}/>
+                
+            </Accordion.Body>
+        </Accordion.Item>
+
+      </Accordion>
+    
+    </div>
+  )
 }
 
 list_permissions.propTypes = {

@@ -333,8 +333,11 @@ export const handleChange = (itemId) => dispatch => {
     
     let state = store.getState();
     let labelIds = state.deliveries.labelIds;
+    
     let arr1 = [...labelIds];
 
+    console.log("itemId: ", itemId, "labelIds: ", labelIds);
+    
     let index = arr1.indexOf(itemId);
     if(index > -1){
         arr1.splice(index, 1);
@@ -388,6 +391,18 @@ export const removeNoteField = () => dispatch => {
     dispatch({
         type: REMOVENOTEFIELD,
         payload: cnt>0 ? cnt-1 : 0
+    });
+
+}
+
+export const setLabelIds = (itemId, labelIds) => dispatch => {
+    console.clear();
+    console.log("setLabelIds1: ", itemId, labelIds);
+    let arr1 = labelIds.filter((item, i)=> item!==itemId);
+    console.log("setLabelIds2: ", arr1);
+    dispatch({
+        type: DELIVERYITEMID,
+        payload: arr1
     });
 
 }
