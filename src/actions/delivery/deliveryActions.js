@@ -319,7 +319,7 @@ export const update_delivery = (data) => dispatch => {
                 type: LIST_DELIVERIES,
                 payload: [...list_deliveries]
             });
-
+            console.log("test: ", data);
         }
 
     })
@@ -334,10 +334,9 @@ export const handleChange = (itemId) => dispatch => {
     let state = store.getState();
     let labelIds = state.deliveries.labelIds;
     
-    let arr1 = [...labelIds];
-
-    console.log("itemId: ", itemId, "labelIds: ", labelIds);
+    console.log("itemId: ", itemId);
     
+    let arr1 = [...labelIds];
     let index = arr1.indexOf(itemId);
     if(index > -1){
         arr1.splice(index, 1);
@@ -346,6 +345,34 @@ export const handleChange = (itemId) => dispatch => {
         arr1.push(itemId);
     }
 
+    dispatch({
+        type: DELIVERYITEMID,
+        payload: [...arr1]
+    });
+
+}
+
+export const setLabelIds = (itemId) => dispatch => {
+    
+    console.log("itemId: ", itemId);
+    let state = store.getState();
+    let list_deliveries = state.deliveries.list_deliveries;
+    
+    let len1 = list_deliveries.length;
+    let index = null;
+    for(let i=0;i<len1;i++){
+
+        if(list_deliveries[i].id===itemId){
+
+            index = i;
+
+        }
+
+    }
+    
+    let complements = list_deliveries.filter(item => item.id === itemId)[0].complement;
+    let arr1 = complements.map( item => item.vehicle_id);
+    
     dispatch({
         type: DELIVERYITEMID,
         payload: [...arr1]
@@ -391,18 +418,6 @@ export const removeNoteField = () => dispatch => {
     dispatch({
         type: REMOVENOTEFIELD,
         payload: cnt>0 ? cnt-1 : 0
-    });
-
-}
-
-export const setLabelIds = (itemId, labelIds) => dispatch => {
-    console.clear();
-    console.log("setLabelIds1: ", itemId, labelIds);
-    let arr1 = labelIds.filter((item, i)=> item!==itemId);
-    console.log("setLabelIds2: ", arr1);
-    dispatch({
-        type: DELIVERYITEMID,
-        payload: arr1
     });
 
 }

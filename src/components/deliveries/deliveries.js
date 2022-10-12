@@ -24,7 +24,7 @@ function Deliveries(props){
   return (
     <div>
       
-      <Accordion defaultActiveKey="0">
+      <Accordion defaultActiveKey="1">
 
         <Accordion.Item eventKey="0">
             <Accordion.Header>Create new delivery</Accordion.Header>

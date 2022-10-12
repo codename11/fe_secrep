@@ -46,11 +46,11 @@ function ListDeliveries(props){
       <td className="grid-container">
         
         {props && props.access_token ? 
-          <Button variant="outline-warning m-1" itemID={item.id} onClick={() => props.modalShow([true, item.id, "update"])}>Update</Button>
+          <Button variant="outline-warning m-1" itemID={item.id} onClick={() => {props.modalShow([true, item.id, "update"]); props.setLabelIds(item.id)}}>Update</Button>
         : null}
         
         {props && props.access_token ? 
-          <Button variant="outline-danger m-1" itemID ={item.id} onClick={() => props.modalShow([true, item.id, "delete"])}>Delete</Button>
+          <Button variant="outline-danger m-1" itemID ={item.id} onClick={() => {props.modalShow([true, item.id, "delete"]); props.setLabelIds()}}>Delete</Button>
         : null}
 
       </td>
@@ -103,7 +103,7 @@ function ListDeliveries(props){
 
       }
 
-      form = props && props.modal_purpose && props.modal_purpose==="update" ? <UpdateDelivery sec_id={props.sec_id} chosen_delivery={chosen_delivery} labelVehicleIds={labelVehicleIds}/> : null;
+      form = props && props.modal_purpose && props.modal_purpose==="update" ? <UpdateDelivery sec_id={props.sec_id} chosen_delivery={chosen_delivery}/> : null;
 
     }
 
