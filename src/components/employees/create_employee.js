@@ -1,25 +1,21 @@
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { Component } from 'react';
 import { list_work_organizations } from "../../actions/work_organizations/workOrganizationsActions";
 import { create_employee } from "../../actions/employees/employeeActions";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
+import { useEffect } from 'react';
 
-class CreateEmployee extends Component {
+function CreateEmployee(props){
 
-    constructor(props) {
+    const { list_work_organizations } = props;
+    useEffect(() => {
+            
+        list_work_organizations();
+        //Mora array kao dodatni argument da se ne bi ponavljalo.
+    }, [list_work_organizations]);
 
-        super(props);
-
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    componentDidMount(){
-        this.props.list_work_organizations();
-    }
-
-    handleSubmit(event){
+    const handleSubmit = (event) => {
 
         event.preventDefault();
         let target = event.target;
@@ -28,7 +24,7 @@ class CreateEmployee extends Component {
             firstName: elements["firstName"].value && elements["firstName"].value.length > 0 ? elements["firstName"].value : null,
             lastName: elements["lastName"].value && elements["lastName"].value.length > 0 ? elements["lastName"].value : null,
             work_org_id: elements["workOrg"].value && elements["workOrg"].value.length > 0 ? elements["workOrg"].value : null,
-            sec_id: this.props.authId,
+            sec_id: props.authId,
             avatar: elements["avatar"] && elements["avatar"].files[0] ? elements["avatar"].files[0] : null,
         }
 
@@ -39,62 +35,60 @@ class CreateEmployee extends Component {
         formData.append('sec_id', data.sec_id);
         formData.append('avatar', data.avatar);
 
-        this.props.create_employee(formData);
+        props.create_employee(formData);
         
         for(let i=0;i<elements.length;i++){
             elements[i].value = "";
         }
+
     }
 
-  render() {
-        
-        let option2 = [<option key={""} value={""}>None</option>];
-        let workOrgs = this.props.work_organizations && this.props.work_organizations.list_work_organizations ? this.props.work_organizations.list_work_organizations.map((item, i) => {
-            return <option key={item.id} value={item.id}>{item.name}</option>
-        }) : null;
-        
-        if(workOrgs && workOrgs.length > 0){
-
-            option2.push(...workOrgs);
-
-        }
-
-        let workOrgSelect = <Form.Select id="workOrg" aria-label="Default select example" name="workOrg">
-            {option2}
-        </Form.Select>;
+    let option2 = [<option key={""} value={""}>None</option>];
+    let workOrgs = props.work_organizations && props.work_organizations.list_work_organizations ? props.work_organizations.list_work_organizations.map((item, i) => {
+        return <option key={item.id} value={item.id}>{item.name}</option>
+    }) : null;
     
+    if(workOrgs && workOrgs.length > 0){
+
+        option2.push(...workOrgs);
+
+    }
+
+    let workOrgSelect = <Form.Select id="workOrg" aria-label="Default select example" name="workOrg">
+        {option2}
+    </Form.Select>;
+
     return (
-      <div>
+        <div>
         
-        <Form onSubmit={this.handleSubmit} name="myForm" encType="multipart/form-data">
+            <Form onSubmit={(e)=>handleSubmit(e)} name="myForm" encType="multipart/form-data">
 
-            <Form.Group className="mb-1" controlId="firstName">
-                <Form.Label>Name</Form.Label>
-                <Form.Control type="text" name="firstName" placeholder="Enter first name"/>
-            </Form.Group>
+                <Form.Group className="mb-1" controlId="firstName">
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control type="text" name="firstName" placeholder="Enter first name"/>
+                </Form.Group>
 
-            <Form.Group className="mb-1" controlId="lastName">
-                <Form.Label>Name</Form.Label>
-                <Form.Control type="text" name="lastName" placeholder="Enter last name"/>
-            </Form.Group>
+                <Form.Group className="mb-1" controlId="lastName">
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control type="text" name="lastName" placeholder="Enter last name"/>
+                </Form.Group>
 
-            <Form.Group controlId="avatar" className="mb-3">
-                <Form.Label>Upload your avatar image</Form.Label>
-                <Form.Control type="file" name="avatar"/>
-            </Form.Group>
+                <Form.Group controlId="avatar" className="mb-3">
+                    <Form.Label>Upload your avatar image</Form.Label>
+                    <Form.Control type="file" name="avatar"/>
+                </Form.Group>
 
-            <Form.Group className="mb-1" controlId="workOrgSelect">
-              {workOrgSelect}
-            </Form.Group>
-            
-            <Button name="button" variant="outline-success" type="submit">
-              Create
-            </Button>
-        </Form>
+                <Form.Group className="mb-1" controlId="workOrgSelect">
+                    {workOrgSelect}
+                </Form.Group>
+                
+                <Button name="button" variant="outline-success" type="submit">
+                    Create
+                </Button>
+            </Form>
         
     </div>
     )
-  }
 }
 
 list_work_organizations.propTypes = {

@@ -1,6 +1,5 @@
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { Component } from 'react';
 import { updateVehicle } from "../../actions/vehicles/vehicleActions";
 import { get_vehicle_types } from "../../actions/vehicle_types/vehicleTypesActions";
 import { list_work_organizations } from "../../actions/work_organizations/workOrganizationsActions";
@@ -8,16 +7,9 @@ import { modalHide } from "../../actions/modalActions";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 
-class UpdateVehicle extends Component {
+function UpdateVehicle(props){
 
-  constructor(props) {
-
-    super(props);
-
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
-
-  handleSubmit(event){
+  const handleSubmit = (event) => {
 
     event.preventDefault();
     let target = event.target;
@@ -29,73 +21,82 @@ class UpdateVehicle extends Component {
       workOrg: elements["workOrg"].value && elements["workOrg"].value.length > 0 ? elements["workOrg"].value : null
     }
     
-    this.props.updateVehicle(data);
-    this.props.modalHide([false])
+    props.updateVehicle(data);
+    props.modalHide([false])
 
   }
 
-  render() {
-
-    let vehicle = this.props.vehicle ? this.props.vehicle : "";
+  let vehicle = props.vehicle ? props.vehicle : "";
     
-    let option1 = [<option key={""} value={""}>None</option>];
-      let types = this.props.vehicle_types && this.props.vehicle_types.list_vehicle_types ? this.props.vehicle_types.list_vehicle_types.map((item, i) => {
-        return <option key={item.id} value={item.id} selected={vehicle && vehicle.vehicle_type_id && vehicle.vehicle_type_id===item.id ? true : false}>{item.name}</option>
-      }) : null;
+  let option1 = [<option key={""} value={""}>None</option>];
+  let isTrueTypes = null;
+  let types = props.vehicle_types && props.vehicle_types.list_vehicle_types ? props.vehicle_types.list_vehicle_types.map((item, i) => {
+    
+    if(vehicle && vehicle.vehicle_type_id && vehicle.vehicle_type_id===item.id){
+      isTrueTypes = vehicle.vehicle_type_id;
+    }
 
-      if(types && types.length > 0){
+    return <option key={item.id} value={item.id}>{item.name}</option>
+  }) : null;
 
-        option1.push(...types);
+  if(types && types.length > 0){
 
-      }
+    option1.push(...types);
 
-      let option2 = [<option key={""} value={""}>None</option>];
-      let workOrgs = this.props.work_organizations && this.props.work_organizations.list_work_organizations ? this.props.work_organizations.list_work_organizations.map((item, i) => {
-        return <option key={item.id} value={item.id} selected={vehicle && vehicle.workOrganization_id && vehicle.workOrganization_id===item.id ? true : false}>{item.name}</option>
-      }) : null;
+  }
+
+  let option2 = [<option key={""} value={""}>None</option>];
+  let isTrueworkOrgs = null;
+  let workOrgs = props.work_organizations && props.work_organizations.list_work_organizations ? props.work_organizations.list_work_organizations.map((item, i) => {
+    
+    if(vehicle && vehicle.workOrganization_id && vehicle.workOrganization_id===item.id){
+      isTrueworkOrgs = vehicle.workOrganization_id;
+    }
+
+    return <option key={item.id} value={item.id}>{item.name}</option>
+  }) : null;
       
-      if(workOrgs && workOrgs.length > 0){
+  if(workOrgs && workOrgs.length > 0){
 
-        option2.push(...workOrgs);
+    option2.push(...workOrgs);
 
-      }
-
-      let typesSelect = <Form.Select id="type" aria-label="Default select example" name="type">
-        {option1}
-      </Form.Select>;
-      let workOrgSelect = <Form.Select id="workOrg" aria-label="Default select example" name="workOrg">
-        {option2}
-      </Form.Select>;
-    
-    return (
-      <div>
-        <Form onSubmit={this.handleSubmit} name="myForm">
-            <Form.Group className="mb-1" controlId="vehicleid">
-                <Form.Label>Vehicle with internal id of "{vehicle.id}" will be updated.</Form.Label>
-                <Form.Control type="hidden" name="vehicleid" value={vehicle.id}/>
-            </Form.Group>
-
-            <Form.Group className="mb-1" controlId="formBasicRegistration">
-                <Form.Label>Name</Form.Label>
-                <Form.Control type="text" name="name" placeholder="Enter new name" defaultValue={vehicle.registration} />
-            </Form.Group>
-
-            <Form.Group className="mb-1" controlId="type">
-              {typesSelect}
-            </Form.Group>
-
-            <Form.Group className="mb-1" controlId="workOrgSelect">
-              {workOrgSelect}
-            </Form.Group>
-            
-            <Button name="button" variant="outline-warning" type="submit">
-              Update
-            </Button>
-        </Form>
-        
-    </div>
-    )
   }
+  
+  let typesSelect = <Form.Select id="type" aria-label="Default select example" name="type" defaultValue={isTrueTypes}>
+    {option1}
+  </Form.Select>;
+  let workOrgSelect = <Form.Select id="workOrg" aria-label="Default select example" name="workOrg" defaultValue={isTrueworkOrgs}>
+    {option2}
+  </Form.Select>;
+    
+  return (
+    <div>
+      <Form onSubmit={(e)=>handleSubmit(e)} name="myForm">
+          <Form.Group className="mb-1" controlId="vehicleid">
+              <Form.Label>Vehicle with internal id of "{vehicle.id}" will be updated.</Form.Label>
+              <Form.Control type="hidden" name="vehicleid" value={vehicle.id}/>
+          </Form.Group>
+
+          <Form.Group className="mb-1" controlId="formBasicRegistration">
+              <Form.Label>Name</Form.Label>
+              <Form.Control type="text" name="name" placeholder="Enter new name" defaultValue={vehicle.registration} />
+          </Form.Group>
+
+          <Form.Group className="mb-1" controlId="type">
+            {typesSelect}
+          </Form.Group>
+
+          <Form.Group className="mb-1" controlId="workOrgSelect">
+            {workOrgSelect}
+          </Form.Group>
+          
+          <Button name="button" variant="outline-warning" type="submit">
+            Update
+          </Button>
+      </Form>
+      
+    </div>
+  )
 }
 
 updateVehicle.propTypes = {

@@ -1,6 +1,5 @@
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { Component } from 'react';
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import { update_employee } from "../../actions/employees/employeeActions";
@@ -10,22 +9,18 @@ import Alert from 'react-bootstrap/Alert';
 import { alertShow } from "../../actions/alertActions";
 import { alertHide } from "../../actions/alertActions";
 import ListGroup from 'react-bootstrap/ListGroup';
+import { useEffect } from 'react';
 
-class UpdateEmployee extends Component {
+function UpdateEmployee(props){
 
-    constructor(props) {
+    const { list_work_organizations } = props;
+    useEffect(() => {
+            
+        list_work_organizations();
+        //Mora array kao dodatni argument da se ne bi ponavljalo.
+    }, [list_work_organizations]);
 
-        super(props);
-
-        this.handleSubmit = this.handleSubmit.bind(this);
-
-    }
-
-    componentDidMount(){
-        this.props.list_work_organizations();
-    }
-
-    handleSubmit(event){
+    const handleSubmit = (event) => {
 
         event.preventDefault();
         let target = event.target;
@@ -35,7 +30,7 @@ class UpdateEmployee extends Component {
             firstName: elements["firstName"].value && elements["firstName"].value.length > 0 ? elements["firstName"].value : null,
             lastName: elements["lastName"].value && elements["lastName"].value.length > 0 ? elements["lastName"].value : null,
             work_org_id: elements["workOrg"].value && elements["workOrg"].value.length > 0 ? elements["workOrg"].value : null,
-            sec_id: this.props.authId,
+            sec_id: props.authId,
             avatar: elements["avatar"] && elements["avatar"].files[0] ? elements["avatar"].files[0] : null,
         }
         
@@ -48,17 +43,16 @@ class UpdateEmployee extends Component {
         formData.append('sec_id', data.sec_id);
         formData.append('avatar', data.avatar);
 
-        this.props.update_employee(formData);
-        this.props.modalHide([false]);
+        props.update_employee(formData);
+        props.modalHide([false]);
+
     }
 
-  render() {
-
-        let chosen_employee = this.props && this.props.chosen_employee ? this.props.chosen_employee : "";
+        let chosen_employee = props && props.chosen_employee ? props.chosen_employee : "";
         let option1 = [<option key={""} value={""}>None</option>];
 
         let tmp = null;
-        let workOrgs = this.props.work_organizations && this.props.work_organizations.list_work_organizations ? this.props.work_organizations.list_work_organizations.map((item, i) => {
+        let workOrgs = props.work_organizations && props.work_organizations.list_work_organizations ? props.work_organizations.list_work_organizations.map((item, i) => {
             
             if(chosen_employee.work_organization.id===item.id){
                 tmp = item.id;
@@ -77,52 +71,51 @@ class UpdateEmployee extends Component {
             {option1}
         </Form.Select>;
 
-        let chosen_employee_id = this.props && this.props.chosen_employee && this.props.chosen_employee.id ? this.props.chosen_employee.id : null;
-        let errors = this.props && this.props.errors && this.props.errors.errors && this.props.errors.errors.messages ? this.props.errors.errors.messages : null;
+        let chosen_employee_id = props && props.chosen_employee && props.chosen_employee.id ? props.chosen_employee.id : null;
+        let errors = props && props.errors && props.errors.errors && props.errors.errors.messages ? props.errors.errors.messages : null;
 
     return (
       <div>
-        <Form onSubmit={this.handleSubmit} name="myForm" encType="multipart/form-data">
+            <Form onSubmit={(e)=>handleSubmit(e)} name="myForm" encType="multipart/form-data">
 
-            <Form.Control type="hidden" name="id" value={chosen_employee_id} required/>
+                <Form.Control type="hidden" name="id" value={chosen_employee_id} required/>
+                
+                <Form.Group className="mb-1" controlId="firstName">
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control type="text" name="firstName" placeholder="Enter first name" defaultValue={chosen_employee.firstName}/>
+                </Form.Group>
+
+                <Form.Group className="mb-1" controlId="lastName">
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control type="text" name="lastName" placeholder="Enter last name" defaultValue={chosen_employee.lastName}/>
+                </Form.Group>
+
+                <Form.Group controlId="avatar" className="mb-3">
+                    <Form.Label>Upload your avatar image</Form.Label>
+                    <Form.Control type="file" name="avatar"/>
+                </Form.Group>
+
+                <Form.Group className="mb-1" controlId="workOrgSelect">
+                {workOrgSelect}
+                </Form.Group>
+                
+                <Button name="button" variant="outline-success" type="submit">
+                Update
+                </Button>
+            </Form>
             
-            <Form.Group className="mb-1" controlId="firstName">
-                <Form.Label>Name</Form.Label>
-                <Form.Control type="text" name="firstName" placeholder="Enter first name" defaultValue={chosen_employee.firstName}/>
-            </Form.Group>
+            {errors && errors.length ? <Alert className="mt-2" variant="danger" show={props.alertState} onClick={() => this.props.alertHide([false])} dismissible>
+                <Alert.Heading>There were {errors && errors.length ? "errors:" : null}</Alert.Heading>
+                
+                <ListGroup variant="flush">
+                    {errors && errors.length>0 ? errors.map((item, i) => {
+                        return <ListGroup.Item variant="danger" key={i}>{item}</ListGroup.Item>;
+                    }) : null}
+                </ListGroup>
+            </Alert> : null}
 
-            <Form.Group className="mb-1" controlId="lastName">
-                <Form.Label>Name</Form.Label>
-                <Form.Control type="text" name="lastName" placeholder="Enter last name" defaultValue={chosen_employee.lastName}/>
-            </Form.Group>
-
-            <Form.Group controlId="avatar" className="mb-3">
-                <Form.Label>Upload your avatar image</Form.Label>
-                <Form.Control type="file" name="avatar"/>
-            </Form.Group>
-
-            <Form.Group className="mb-1" controlId="workOrgSelect">
-              {workOrgSelect}
-            </Form.Group>
-            
-            <Button name="button" variant="outline-success" type="submit">
-              Update
-            </Button>
-        </Form>
-        
-        {errors && errors.length ? <Alert className="mt-2" variant="danger" show={this.props.alertState} onClick={() => this.props.alertHide([false])} dismissible>
-            <Alert.Heading>There were {errors && errors.length ? "errors:" : null}</Alert.Heading>
-            
-            <ListGroup variant="flush">
-                {errors && errors.length>0 ? errors.map((item, i) => {
-                    return <ListGroup.Item variant="danger" key={i}>{item}</ListGroup.Item>;
-                }) : null}
-            </ListGroup>
-        </Alert> : null}
-
-    </div>
+        </div>
     )
-  }
 }
   
 update_employee.propTypes = {

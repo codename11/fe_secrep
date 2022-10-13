@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import {connect} from "react-redux";
@@ -6,21 +5,9 @@ import PropTypes from "prop-types";
 import { delete_employee } from "../../actions/employees/employeeActions";
 import { modalHide } from "../../actions/modalActions";
 
-class DeleteEmployee extends Component {
+function DeleteEmployee(props){
 
-    constructor(props) {
-
-        super(props);
-
-        this.handleSubmit = this.handleSubmit.bind(this);
-
-    }
-
-    componentDidMount(){
-        //this.props.get_employees();
-    }
-    
-    async handleSubmit(event) {
+    const handleSubmit = (event) => {
       event.preventDefault();
       let forma = event.target; 
 
@@ -29,32 +16,30 @@ class DeleteEmployee extends Component {
         id: chosen_employee_id,
       };
       
-      this.props.delete_employee(data);
-      this.props.modalHide([false]);
-    }
+      props.delete_employee(data);
+      props.modalHide([false]);
 
-    render() {
+    }
       
-      let chosen_employee_id = this.props && this.props.chosen_employee && this.props.chosen_employee.id ? this.props.chosen_employee.id : null;
-      let authId = this.props && this.props.authId ? this.props.authId : null;
+    let chosen_employee_id = props && props.chosen_employee && props.chosen_employee.id ? props.chosen_employee.id : null;
+    let authId = props && props.authId ? props.authId : null;
 
-      return (
-        <div>
-            
-          <Form onSubmit={this.handleSubmit} name="myForm">
+    return (
+      <div>
+          
+        <Form onSubmit={(e)=>handleSubmit(e)} name="myForm">
 
-            <Form.Control type="hidden" name="id" value={chosen_employee_id} required/>
-        
-            <Button name="button" variant="outline-success" type="submit">
-              Delete
-            </Button>
+          <Form.Control type="hidden" name="id" value={chosen_employee_id} required/>
+      
+          <Button name="button" variant="outline-success" type="submit">
+            Delete
+          </Button>
 
-          </Form>
+        </Form>
 
-        </div>
-      )
-    }
-}
+      </div>
+    )
+  }
 
 delete_employee.propTypes = {
   delete_employee: PropTypes.func.isRequired,

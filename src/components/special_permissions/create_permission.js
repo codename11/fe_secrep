@@ -1,6 +1,5 @@
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
-import { Component } from 'react'
 import {connect} from "react-redux";
 import ListGroup from 'react-bootstrap/ListGroup';
 import Alert from 'react-bootstrap/Alert';
@@ -9,28 +8,14 @@ import PropTypes from "prop-types";
 import { alertShow } from "../../actions/alertActions";
 import { alertHide } from "../../actions/alertActions";
 
-class CreatePermission extends Component {
-
-    constructor(props) {
-
-        super(props);
-        this.state = {
-          
-        };
-        this.handleSubmit = this.handleSubmit.bind(this);
-
-    }
-
-    componentDidMount(){
-   
-    }
+function CreatePermission(props){
     
-    async handleSubmit(event) {
+    const handleSubmit = (event) => {
       event.preventDefault();
       let forma = event.target; 
       let elements = forma.elements;
 
-      let sec_id = this.props && this.props.sec_id ? this.props.sec_id : null;
+      let sec_id = props && props.sec_id ? props.sec_id : null;
       
       const data = {
         sec_id: sec_id ? sec_id : null,
@@ -38,45 +23,42 @@ class CreatePermission extends Component {
         permission_description: elements["permission_description"].value ? elements["permission_description"].value : null,
       };
       
-      this.props.create_permission(data);
+      props.create_permission(data);
 
     }
-
-    render() {
       
-      let errors = this.props && this.props.errors && this.props.errors.errors && this.props.errors.errors.messages ? this.props.errors.errors.messages : null;
+    let errors = props && props.errors && props.errors.errors && props.errors.errors.messages ? props.errors.errors.messages : null;
 
-      return (
-        <div>
+    return (
+      <div>
 
-                <Form onSubmit={this.handleSubmit} className="grid-container">
+              <Form onSubmit={(e)=>handleSubmit(e)} className="grid-container">
 
-                  <Form.Group className="" controlId="permission_name">
-                    <Form.Control type="text" placeholder="Permission name" name="permission_name" />
-                  </Form.Group>
+                <Form.Group className="" controlId="permission_name">
+                  <Form.Control type="text" placeholder="Permission name" name="permission_name" />
+                </Form.Group>
 
-                  <Form.Group className="" controlId="permission_description">
-                    <Form.Control type="text" placeholder="Permission description" name="permission_description" />
-                  </Form.Group>
+                <Form.Group className="" controlId="permission_description">
+                  <Form.Control type="text" placeholder="Permission description" name="permission_description" />
+                </Form.Group>
 
-                  <Button variant="outline-primary" type="submit" className="item5">
-                      Submit
-                  </Button>
-                </Form>
+                <Button variant="outline-primary" type="submit" className="item5">
+                    Submit
+                </Button>
+              </Form>
 
-            {errors && errors.length ? <Alert className="mt-2" variant="danger" show={this.props.alertState} onClick={() => this.props.alertHide([false])} dismissible>
-            <Alert.Heading>There were {errors && errors.length ? "errors:" : null}</Alert.Heading>
-            
-            <ListGroup variant="flush">
-                {errors && errors.length>0 ? errors.map((item, i) => {
-                    return <ListGroup.Item variant="danger" key={i}>{item}</ListGroup.Item>;
-                }) : null}
-            </ListGroup>
-            </Alert> : null}
+          {errors && errors.length ? <Alert className="mt-2" variant="danger" show={props.alertState} onClick={() => props.alertHide([false])} dismissible>
+          <Alert.Heading>There were {errors && errors.length ? "errors:" : null}</Alert.Heading>
+          
+          <ListGroup variant="flush">
+              {errors && errors.length>0 ? errors.map((item, i) => {
+                  return <ListGroup.Item variant="danger" key={i}>{item}</ListGroup.Item>;
+              }) : null}
+          </ListGroup>
+          </Alert> : null}
 
-        </div>
-      )
-  }
+      </div>
+    )
 }
 
 create_permission.propTypes = {

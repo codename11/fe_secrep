@@ -1,50 +1,40 @@
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { Component } from 'react';
 import { deleteVehicle } from "../../actions/vehicles/vehicleActions";
 import { modalHide } from "../../actions/modalActions";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 
-class DeleteVehicle extends Component {
+function DeleteVehicle(props){
 
-  constructor(props) {
-
-    super(props);
-
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  handleClick(event){
+  const handleClick = (event) => {
 
     event.preventDefault();
 
     let target = event.target;
     let vehicleid = target.parentElement.elements["vehicleid"].value;
-    this.props.deleteVehicle(vehicleid);
-    this.props.modalHide([false]);
+    props.deleteVehicle(vehicleid);
+    props.modalHide([false]);
 
   }
 
-  render() {
-
-    let vehicleId = this.props.vehicleid ? this.props.vehicleid : 0;
+  let vehicleId = props.vehicleid ? props.vehicleid : 0;
+  
+  return (
     
-    return (
-      
-        <Form>
-            <Form.Group className="mb-3" controlId="vehicleid">
-                <Form.Label>Vehicle with internal id of "{vehicleId}" will be deleted.</Form.Label>
-                <Form.Control type="hidden" name="vehicleid" value={vehicleId}/>
-            </Form.Group>
+      <Form>
+          <Form.Group className="mb-3" controlId="vehicleid">
+              <Form.Label>Vehicle with internal id of "{vehicleId}" will be deleted.</Form.Label>
+              <Form.Control type="hidden" name="vehicleid" value={vehicleId}/>
+          </Form.Group>
 
-            <Button onClick={this.handleClick} variant="outline-danger" type="button">
-                Delete
-            </Button>
-        </Form>
+          <Button onClick={(e)=>handleClick(e)} variant="outline-danger" type="button">
+              Delete
+          </Button>
+      </Form>
 
-    )
-  }
+  )
+  
 }
 
 deleteVehicle.propTypes = {

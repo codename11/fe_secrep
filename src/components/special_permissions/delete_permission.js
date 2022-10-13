@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import {connect} from "react-redux";
@@ -6,17 +5,9 @@ import PropTypes from "prop-types";
 import { delete_permission } from "../../actions/special_permission/special_permissionActions";
 import { modalHide } from "../../actions/modalActions";
 
-class DeletePermission extends Component {
-
-    constructor(props) {
-
-        super(props);
-
-        this.handleSubmit = this.handleSubmit.bind(this);
-
-    }
+function DeletePermission(props){
     
-    async handleSubmit(event) {
+    const handleSubmit = (event) => {
       event.preventDefault();
       let forma = event.target; 
 
@@ -25,28 +16,26 @@ class DeletePermission extends Component {
         id: Number(chosen_permission_id),
       };
       
-      this.props.delete_permission(data);
-      this.props.modalHide([false]);
+      props.delete_permission(data);
+      props.modalHide([false]);
+
     }
 
-    render() {
+    return (
+      <div>
+          
+        <Form onSubmit={(e)=>handleSubmit(e)} name="myForm">
+
+          <Form.Control type="hidden" name="id" value={props.itemId} required/>
       
-      return (
-        <div>
-            
-          <Form onSubmit={this.handleSubmit} name="myForm">
+          <Button name="button" variant="outline-success" type="submit">
+            Delete
+          </Button>
 
-            <Form.Control type="hidden" name="id" value={this.props.itemId} required/>
-        
-            <Button name="button" variant="outline-success" type="submit">
-              Delete
-            </Button>
+        </Form>
 
-          </Form>
-
-        </div>
-      )
-    }
+      </div>
+    )
 }
 
 delete_permission.propTypes = {

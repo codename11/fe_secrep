@@ -7,7 +7,7 @@ import { get_deliveries } from "../../actions/delivery/deliveryActions";
 import CreateDelivery from '../deliveries/create_delivery';
 import ListDeliveries from '../deliveries/list_deliveries';
 import { list_permissions } from "../../actions/special_permission/special_permissionActions";
-import { useEffect } from 'react'
+import { useEffect } from 'react';
 
 function Deliveries(props){
 
