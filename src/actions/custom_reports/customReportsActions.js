@@ -432,7 +432,7 @@ export const get_roles = () => dispatch => {
 
         }
         else{
-            console.log("prazno");
+            console.log("prazno/Niste verifikovani.");
         }
 
     })

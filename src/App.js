@@ -44,10 +44,12 @@ class App extends Component {
     
     let tabKey = this.props.tabKey;
     let access_token = this.props && this.props.auth && this.props.auth.access_token ? this.props.auth.access_token : null;
-
+    let user_role = this.props && this.props.auth && this.props.auth.role ? this.props.auth.role.name : null;
+    
     return (
       <Container fluid className="container1">
 
+        {user_role !== "admin" ? <h3 className="alert alert-warning">If you are not an Administrator, you can only peruse pages. All other funcionalities are disabled.</h3> : null}
         {access_token!==null ? <Button className="logout" variant="outline-warning" onClick={this.props.logout}>logout</Button> : null}
 
         <Tabs id="controlled-tab-example" activeKey={tabKey} onSelect={(tabKey)=> {
