@@ -89,7 +89,7 @@ function ListDeliveries(props){
     }
 
     if(props.modal_purpose === "update"){
-      //console.log("update: ", chosen_delivery);
+      
       let modalHeaderTextUpdateDelivery = props && props.modal_purpose && props.modal_purpose === "update" ? "You are trying to update an item with an id of "+chosen_delivery.id : "";
       modalHeaderText = modalHeaderTextUpdateDelivery;
 

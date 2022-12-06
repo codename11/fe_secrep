@@ -58,7 +58,6 @@ function UpdateDelivery(props){
 
         if(value){
 
-          
 
         }
         else{
@@ -73,8 +72,6 @@ function UpdateDelivery(props){
       props.modalHide([false]);
 
     }
-
-    console.log("update_delivery: ", props);
     
     let chosen_delivery = props.chosen_delivery;
 

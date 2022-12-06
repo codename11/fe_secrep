@@ -72,8 +72,6 @@ function CreateDelivery(props){
       props.create_delivery(data);
 
     }
-
-    //console.log("create_deliveryProps: ", props);
     
     let option1 = [<option key={""} value={""}>Choose employee</option>];
     let employees = props.employees && props.employees.list_employees ? props.employees.list_employees.map((item, i) => {

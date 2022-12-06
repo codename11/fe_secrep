@@ -23,7 +23,7 @@ function GetVehicles(props){
     }, [get_vehicles_custom]);
 
     const firstPage = (pagination) => {
-        props.setPageNumber(1, 0);
+        props.setPageNumber(1, 0);//Poziva se sa props u nekoj funkciji, dok u useEffect bez props-a.
         props.get_vehicles_custom({page: 1});      
     }
 
@@ -162,6 +162,10 @@ function GetVehicles(props){
     let per_page = pagination && pagination.per_page ? pagination.per_page : null;
     let checkIfUtility = props && props.auth && props.auth.user && props.auth.user.utility && props.auth.user.utility.id && Number.isInteger(props.auth.user.utility.id) ? true : false;
 
+    /*Necessary for limiting visible buttons for pagination, since it can have many page, hence many buttons introduce new problem.
+        Siblings variable represents left and right visible button around currently active page.
+        1 means that here is one on each side of active page.
+    */
     const setVisiblePages = (paginacija) =>{
         
         let pageIndex = null;
@@ -255,7 +259,7 @@ function GetVehicles(props){
 
     };
 
-    let altPagination = null;//Default Laravel pagination implementation in React. Slower then mine take on it.
+    let altPagination = null;//Default Laravel pagination implementation in React. Slower then my take on it. Preredered buttons and styling from Laravel.
 
     return (
         <div>

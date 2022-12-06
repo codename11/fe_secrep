@@ -56,3 +56,7 @@ export const TIME_OUT = "TIME_OUT";
 export const HREF = "HREF";
 export const PAGINATION = "PAGINATION";
 export const LINKOVI = "LINKOVI";
+
+export const DASHBOARD_TAB = "DASHBOARD_TAB";
+
+export const LIST_ROLES = "LIST_ROLES";

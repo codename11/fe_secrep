@@ -43,7 +43,7 @@ let pagination = {
 let linkovi = null;
 
 export default function(state = initialState, action){
-    //console.log("paginationReducer: ", action);
+    
     switch(action.type){
 
         case TIME_IN:

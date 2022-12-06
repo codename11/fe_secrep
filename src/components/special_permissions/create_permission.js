@@ -32,20 +32,20 @@ function CreatePermission(props){
     return (
       <div>
 
-              <Form onSubmit={(e)=>handleSubmit(e)} className="grid-container">
+          <Form onSubmit={(e)=>handleSubmit(e)} className="grid-container">
 
-                <Form.Group className="" controlId="permission_name">
-                  <Form.Control type="text" placeholder="Permission name" name="permission_name" />
-                </Form.Group>
+            <Form.Group className="" controlId="permission_name">
+              <Form.Control type="text" placeholder="Permission name" name="permission_name" />
+            </Form.Group>
 
-                <Form.Group className="" controlId="permission_description">
-                  <Form.Control type="text" placeholder="Permission description" name="permission_description" />
-                </Form.Group>
+            <Form.Group className="" controlId="permission_description">
+              <Form.Control type="text" placeholder="Permission description" name="permission_description" />
+            </Form.Group>
 
-                <Button variant="outline-primary" type="submit" className="item5">
-                    Submit
-                </Button>
-              </Form>
+            <Button variant="outline-primary" type="submit" className="item5">
+                Submit
+            </Button>
+          </Form>
 
           {errors && errors.length ? <Alert className="mt-2" variant="danger" show={props.alertState} onClick={() => props.alertHide([false])} dismissible>
           <Alert.Heading>There were {errors && errors.length ? "errors:" : null}</Alert.Heading>

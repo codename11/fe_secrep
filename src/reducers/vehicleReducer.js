@@ -12,7 +12,7 @@ let deleted_vehicle_id = null;
 let updated_vehicle_id = null;
 
 export default function(state = initialState, action){
-    //console.log("vehicleReducer: ", action);
+    
     switch(action.type){
 
         case LIST_VEHICLES:

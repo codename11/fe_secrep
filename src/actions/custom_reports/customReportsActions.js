@@ -1,12 +1,10 @@
-import { LIST_VEHICLES, LIST_EMPLOYEES, LIST_DELIVERIES, LIST_USERS, TIME_IN, TIME_OUT, HREF, PAGINATION, LINKOVI } from "../types";
+import { LIST_VEHICLES, LIST_EMPLOYEES, LIST_DELIVERIES, LIST_USERS, TIME_IN, TIME_OUT, HREF, PAGINATION, LINKOVI,  LIST_ROLES} from "../types";
 import store from "../../store";
 import { json2csv } from 'json-2-csv';
 
 let auth = null;
 
 export const get_vehicles_custom = (data) => dispatch => {
-    
-    console.log("get_vehicles_custom: ", data);
 
     auth = store.getState().auth.auth;
     let page = data && data.page ? data.page : null;
@@ -30,15 +28,11 @@ export const get_vehicles_custom = (data) => dispatch => {
 
     })// parses JSON response into native JavaScript objects
     .then((data) => {
-        //console.log("customVehiclesActions: ", data);
 
         dispatch({
             type: LINKOVI,
             payload: data.linkovi
         });
-
-        /* 17/07/2022 00:00 */
-        /* 30/07/2022 00:00 */
 
         if(data && data.hasOwnProperty("vehicles") && data.vehicles.hasOwnProperty("data")){
 
@@ -114,7 +108,6 @@ export const get_deliveries = (data) => dispatch => {
 
     })// parses JSON response into native JavaScript objects
     .then((data) => {
-        //console.log("customDeliveries: ", data);
       
         if(data && data.deliveries && data.deliveries.length>0){
 
@@ -174,7 +167,6 @@ export const get_employees = (data) => dispatch => {
 
     })// parses JSON response into native JavaScript objects
     .then((data) => {
-        //console.log("customEmployees: ", data);
 
         if(data && data.employees && data.employees.length>0){
 
@@ -234,7 +226,6 @@ export const get_users = (data) => dispatch => {
 
     })// parses JSON response into native JavaScript objects
     .then((data) => {
-        //console.log("customUsers: ", data);
 
         if(data && data.users && data.users.length>0){
 
@@ -349,7 +340,7 @@ export const setPageNumber = (e, i) => dispatch => {
 }
 
 export const set_per_page = (data) => dispatch => {
-    //console.log("set_per_page1: ", data);
+
     auth = store.getState().auth.auth;
     
     const create_url = "http://secrep.test/api/create_per_page";//post
@@ -384,7 +375,7 @@ export const set_per_page = (data) => dispatch => {
     })// parses JSON response into native JavaScript objects
     .then((data) => {
 
-        //console.log("set_per_page2: ", data);
+        console.log("set_per_page: ", data);
 
     })
     .catch((error) => {
@@ -393,6 +384,60 @@ export const set_per_page = (data) => dispatch => {
 
 }
 
-export const test = (data) => dispatch => {
-    console.log("myData: ", data);
+export const get_roles = () => dispatch => {
+    
+    auth = store.getState().auth.auth;
+    
+    const url = "http://secrep.test/api/list_roles";
+    fetch(url, {
+        method: 'GET', // *GET, POST, PUT, DELETE, etc.
+        crossDomain : true,
+        headers: {
+            "X-Requested-With": "XMLHttpRequest",
+            "Content-Type": 'application/json',
+            "Accept": 'application/json',
+            "Authorization": "Bearer " + auth.access_token
+        }
+        
+    })
+    .then((response) => {
+
+        return response.json();
+
+    })// parses JSON response into native JavaScript objects
+    .then((data) => {
+
+        if(data && data.roles && data.roles.length>0){
+
+            dispatch({
+                type: LIST_ROLES,
+                payload: [...data.roles]
+            });
+
+        }
+        else if(data && data.roles && data.roles.length===1){
+
+            dispatch({
+                type: LIST_ROLES,
+                payload: [data.roles]
+            });
+
+        }
+        else if(data && data.roles && data.roles.length===0){
+
+            dispatch({
+                type: LIST_ROLES,
+                payload: []
+            });
+
+        }
+        else{
+            console.log("prazno");
+        }
+
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+
 }

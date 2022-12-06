@@ -319,7 +319,7 @@ export const update_delivery = (data) => dispatch => {
                 type: LIST_DELIVERIES,
                 payload: [...list_deliveries]
             });
-            console.log("test: ", data);
+            
         }
 
     })
@@ -333,8 +333,6 @@ export const handleChange = (itemId) => dispatch => {
     
     let state = store.getState();
     let labelIds = state.deliveries.labelIds;
-    
-    console.log("itemId: ", itemId);
     
     let arr1 = [...labelIds];
     let index = arr1.indexOf(itemId);
@@ -354,7 +352,6 @@ export const handleChange = (itemId) => dispatch => {
 
 export const setLabelIds = (itemId) => dispatch => {
     
-    console.log("itemId: ", itemId);
     let state = store.getState();
     let list_deliveries = state.deliveries.list_deliveries;
     
@@ -402,7 +399,7 @@ export const addNoteField = () => dispatch => {
     
     let state = store.getState();
     let cnt = state.deliveries.cnt;
-    console.log("addNoteField:", cnt);
+    
     dispatch({
         type: ADDNOTEFIELD,
         payload: cnt+1

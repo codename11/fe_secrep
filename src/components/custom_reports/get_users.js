@@ -3,7 +3,7 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts'
 import { useEffect } from 'react';
 
 function GetUsers(props){
-    //console.log("GetUsers: ", props);
+    
     const { get_users } = props;
     useEffect(() => {
         
@@ -14,18 +14,7 @@ function GetUsers(props){
     const chart = ()=> {
         
         let list_users = props && props.users && props.users.list_users && props.users.list_users.length && props.users.list_users.length>0 ? props.users.list_users.map((item, i) => {
-            
-            /*let createdAtYear = new Date(item.created_at).getFullYear();
-            let createdAtMonth = new Date(item.created_at).getMonth();
-            let createdAtDay = new Date(item.created_at).getDate();
-            
-            let updatedAtYear = new Date(item.updated_at).getFullYear();
-            let updatedAtMonth = new Date(item.updated_at).getMonth();
-            let updatedAtDay = new Date(item.updated_at).getDate();
 
-            item.createdAt = createdAtDay+"/"+createdAtMonth+"/"+createdAtYear;
-            item.updatedAt = updatedAtDay+"/"+updatedAtMonth+"/"+updatedAtYear;
-            */
             item.createdAt = new Date(item.created_at).getTime();
             item.updatedAt = new Date(item.updated_at).getTime();
 

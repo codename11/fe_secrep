@@ -18,6 +18,7 @@ import SpecialPermissions from './components/special_permissions/special_permiss
 import CustomReports from './components/custom_reports/custom_reports';
 import { logout } from "./actions/auth/authActions";
 import Button from 'react-bootstrap/Button';
+import Dashboard from './components/auth/dashboard';
 
 class App extends Component {
 
@@ -94,6 +95,12 @@ class App extends Component {
           {access_token!==null ?
             <Tab eventKey="custom_reports_tab" title="Custom Reports">
                 {tabKey==="custom_reports_tab" ? <CustomReports/> : null}
+            </Tab> 
+          : null}
+
+          {access_token!==null ?
+            <Tab eventKey="dashboard_tab" title="Dashboard">
+                {tabKey==="dashboard_tab" ? <Dashboard/> : null}
             </Tab> 
           : null}
           
