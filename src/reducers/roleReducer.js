@@ -5,7 +5,7 @@ const initialState = {
 };
 
 let myState = null;
-let roles = null;
+let list_roles = null;
 
 export default function(state = initialState, action){
     
@@ -13,10 +13,10 @@ export default function(state = initialState, action){
 
         case LIST_ROLES:
 
-            roles = action.payload
+            list_roles = action.payload
         
         myState = {
-            roles: roles
+            list_roles: list_roles
         };
         
         return myState;

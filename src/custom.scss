@@ -195,3 +195,23 @@
     justify-content: center;
     display: flex;
 }
+
+.grid-container3{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5px;
+    padding: 5px;
+    justify-content: space-evenly;
+    width: 80%;
+    margin: auto;
+}
+
+.gc3-item3, .gc3-item4{
+    grid-column: 1 / span 2;
+    justify-content: center;
+    text-align: center;
+}
+
+.textCenter{
+    text-align: center;
+}

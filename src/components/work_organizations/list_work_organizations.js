@@ -156,8 +156,6 @@ function WorkOrgs(props){
                     </Accordion.Body>
                 </Accordion.Item>
 
-                
-
             </Accordion>
             {myModal}
         </div>

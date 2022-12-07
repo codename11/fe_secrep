@@ -226,7 +226,7 @@ export const get_users = (data) => dispatch => {
 
     })// parses JSON response into native JavaScript objects
     .then((data) => {
-
+        console.log("state: ", store.getState());
         if(data && data.users && data.users.length>0){
 
             dispatch({
@@ -434,6 +434,57 @@ export const get_roles = () => dispatch => {
         else{
             console.log("prazno/Niste verifikovani.");
         }
+
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+
+}
+
+export const update_user_role = (data) => dispatch => {
+    
+    auth = store.getState().auth.auth;
+    
+    const url = "http://secrep.test/api/update_user_role";
+    
+    fetch(url, {
+        method: 'PATCH', // *GET, POST, PUT, DELETE, etc.
+        crossDomain : true,
+        headers: {
+            "X-Requested-With": "XMLHttpRequest",
+            "Content-Type": 'application/json',
+            "Accept": 'application/json',
+            "Authorization": "Bearer " + auth.access_token
+        },
+        body: JSON.stringify(data)
+        
+    })
+    .then((response) => {
+
+        return response.json();
+
+    })// parses JSON response into native JavaScript objects
+    .then((data) => {
+
+        
+        let user = data.user[0];
+
+        let list_users = store.getState().users.list_users.map((item, i) => {
+
+            if(item.id===user.id && item.role_id!==user.role_id){
+                return user;
+            }
+            else{
+                return item;
+            }
+
+        });
+
+        dispatch({
+            type: LIST_USERS,
+            payload: [...list_users]
+        });
 
     })
     .catch((error) => {

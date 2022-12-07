@@ -20,97 +20,89 @@ import { logout } from "./actions/auth/authActions";
 import Button from 'react-bootstrap/Button';
 import Dashboard from './components/auth/dashboard';
 
-class App extends Component {
+function App(props){
 
-  constructor(props) {
+  const handleSelect = (tabKey) => {
 
-    super(props);
-    this.handleSelect = this.handleSelect.bind(this);
-  }
+    if(props && props.auth && props.auth.access_token && tabKey==="vehicles_tab"){
 
-  handleSelect(tabKey){
-
-    if(this.props && this.props.auth && this.props.auth.access_token && tabKey==="vehicles_tab"){
-
-      this.props.get_vehicles(); 
-      this.props.get_vehicle_types(); 
-      this.props.list_work_organizations();
+      props.get_vehicles(); 
+      props.get_vehicle_types(); 
+      props.list_work_organizations();
 
     }
     
   }
-
-  render() {
     
-    let tabKey = this.props.tabKey;
-    let access_token = this.props && this.props.auth && this.props.auth.access_token ? this.props.auth.access_token : null;
-    let user_role = this.props && this.props.auth && this.props.auth.role ? this.props.auth.role.name : null;
+  let tabKey = props.tabKey;
+  let access_token = props && props.auth && props.auth.access_token ? props.auth.access_token : null;
+  let user_role = props && props.auth && props.auth.role ? props.auth.role.name : null;
     
-    return (
-      <Container fluid className="container1">
+  return (
+    <Container fluid className="container1">
 
-        {user_role !== "admin" ? <h3 className="alert alert-warning">If you are not an Administrator, you can only peruse pages. All other funcionalities are disabled.</h3> : null}
-        {access_token!==null ? <Button className="logout" variant="outline-warning" onClick={this.props.logout}>logout</Button> : null}
+      {user_role !== "admin" ? <h3 className="alert alert-warning">If you are not an Administrator, you can only peruse pages. All other funcionalities are disabled.</h3> : null}
+      {access_token!==null ? <Button className="logout" variant="outline-warning" onClick={props.logout}>logout</Button> : null}
 
-        <Tabs id="controlled-tab-example" activeKey={tabKey} onSelect={(tabKey)=> {
-          this.props.setTab(tabKey); this.handleSelect(tabKey);
-          }} className="mb-3">
-          
-          <Tab eventKey="register_tab" title="Register">
-            <Register/>
-          </Tab>
+      <Tabs id="controlled-tab-example" activeKey={tabKey} onSelect={(tabKey)=> {
+          props.setTab(tabKey); handleSelect(tabKey);
+        }} className="mb-3">
+        
+        <Tab eventKey="register_tab" title="Register">
+          <Register/>
+        </Tab>
 
-          <Tab eventKey="login_tab" title="Login">
-            <Login/>
-          </Tab>
+        <Tab eventKey="login_tab" title="Login">
+          <Login/>
+        </Tab>
 
-          {access_token!==null ? 
-            <Tab eventKey="vehicles_tab" title="Vehicles">
-              {tabKey==="vehicles_tab" ? <Vehicles/> : null}
-            </Tab> 
-          : null}
+        {access_token!==null ? 
+          <Tab eventKey="vehicles_tab" title="Vehicles">
+            {tabKey==="vehicles_tab" ? <Vehicles/> : null}
+          </Tab> 
+        : null}
 
-          {access_token!==null ?
-            <Tab eventKey="work_organization_tab" title="Work_Organizations">
-              {tabKey==="work_organization_tab" ? <WorkOrgs/> : null}
-            </Tab> 
-          : null}
+        {access_token!==null ?
+          <Tab eventKey="work_organization_tab" title="Work_Organizations">
+            {tabKey==="work_organization_tab" ? <WorkOrgs/> : null}
+          </Tab> 
+        : null}
 
-          {access_token!==null ?
-            <Tab eventKey="employees_tab" title="Employees">
-              {tabKey==="employees_tab" ? <Employees/> : null}
-            </Tab> 
-          : null}
+        {access_token!==null ?
+          <Tab eventKey="employees_tab" title="Employees">
+            {tabKey==="employees_tab" ? <Employees/> : null}
+          </Tab> 
+        : null}
 
-          {access_token!==null ?
-            <Tab eventKey="deliveries_tab" title="Deliveries">
-                {tabKey==="deliveries_tab" ? <Deliveries/> : null}
-            </Tab> 
-          : null}
+        {access_token!==null ?
+          <Tab eventKey="deliveries_tab" title="Deliveries">
+              {tabKey==="deliveries_tab" ? <Deliveries/> : null}
+          </Tab> 
+        : null}
 
-          {access_token!==null ?
-            <Tab eventKey="special_permissions_tab" title="Special Permissions">
-                {tabKey==="special_permissions_tab" ? <SpecialPermissions/> : null}
-            </Tab> 
-          : null}
+        {access_token!==null ?
+          <Tab eventKey="special_permissions_tab" title="Special Permissions">
+              {tabKey==="special_permissions_tab" ? <SpecialPermissions/> : null}
+          </Tab> 
+        : null}
 
-          {access_token!==null ?
-            <Tab eventKey="custom_reports_tab" title="Custom Reports">
-                {tabKey==="custom_reports_tab" ? <CustomReports/> : null}
-            </Tab> 
-          : null}
+        {access_token!==null ?
+          <Tab eventKey="custom_reports_tab" title="Custom Reports">
+              {tabKey==="custom_reports_tab" ? <CustomReports/> : null}
+          </Tab> 
+        : null}
 
-          {access_token!==null ?
-            <Tab eventKey="dashboard_tab" title="Dashboard">
-                {tabKey==="dashboard_tab" ? <Dashboard/> : null}
-            </Tab> 
-          : null}
-          
-        </Tabs>
+        {access_token!==null ?
+          <Tab eventKey="dashboard_tab" title="Dashboard">
+              {tabKey==="dashboard_tab" ? <Dashboard/> : null}
+          </Tab> 
+        : null}
+        
+      </Tabs>
 
-      </Container>
-    )
-  }
+    </Container>
+  )
+
 }
 
 get_vehicles.propTypes = {
