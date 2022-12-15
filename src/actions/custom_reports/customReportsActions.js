@@ -365,7 +365,7 @@ export const set_per_page = (data) => dispatch => {
             "Accept": 'application/json',
             "Authorization": "Bearer " + auth.access_token
         },
-        body: JSON.stringify({per_page_id: data.per_page_id, per_page: data.per_page})
+        body: JSON.stringify({per_page_id: data.per_page_id, per_page: data.per_page, user_id: data.user_id})
         
     })
     .then((response) => {
