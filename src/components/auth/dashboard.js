@@ -23,8 +23,6 @@ function Dashboard(props){
         //Mora array kao dodatni argument da se ne bi ponavljalo.
     }, []);
 
-    console.log(props);
-
     const handleSubmit = (event) => {
         event.preventDefault();
         let forma = event.target; 
@@ -98,8 +96,6 @@ function Dashboard(props){
     let listRolesSelect = <Form.Select id="listRoles" className="m-1" aria-label="Default select example" name="role">
         {option2}
     </Form.Select>;
-
-    console.log("dashboard1: ", props);
 
     return (
         <div>

@@ -226,7 +226,7 @@ export const get_users = (data) => dispatch => {
 
     })// parses JSON response into native JavaScript objects
     .then((data) => {
-        console.log("state: ", store.getState());
+        
         if(data && data.users && data.users.length>0){
 
             dispatch({
