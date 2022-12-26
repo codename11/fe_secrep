@@ -48,13 +48,13 @@ function App(props){
           props.setTab(tabKey); handleSelect(tabKey);
         }} className="mb-3">
         
-        <Tab eventKey="register_tab" title="Register">
+        {access_token===null ? <Tab eventKey="register_tab" title="Register">
           <Register/>
-        </Tab>
+        </Tab>: null}
 
-        <Tab eventKey="login_tab" title="Login">
+        {access_token===null ? <Tab eventKey="login_tab" title="Login">
           <Login/>
-        </Tab>
+        </Tab>: null}
 
         {access_token!==null ? 
           <Tab eventKey="vehicles_tab" title="Vehicles">
