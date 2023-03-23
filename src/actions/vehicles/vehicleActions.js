@@ -78,7 +78,7 @@ export const deleteVehicle = (data) => dispatch => {
 }
 
 export const updateVehicle = (data) => dispatch => {
-
+    
     let url = "http://secrep.test/api/update_vehicle";
 
     auth = store.getState().auth.auth;
@@ -100,10 +100,29 @@ export const updateVehicle = (data) => dispatch => {
 
     })
     .then((data) => {
+
+        let changed_vehicle = data.vehicle;
+
+        let vehicles_list = store.getState() && store.getState().vehicles && store.getState().vehicles.list_vehicles && store.getState().vehicles.list_vehicles.length>0 ? store.getState().vehicles.list_vehicles.map((item, i) => {
+            
+            if(changed_vehicle.id==item.id){
+
+                return changed_vehicle;
+
+            }
+            else{
+                return item;
+            }
+
+        }) : null;
+
+        let new_data = {};
+        new_data.vehicle = changed_vehicle;
+        new_data.vehicles = vehicles_list;
         
         dispatch({
             type: UPDATE_VEHICLE,
-            payload: data
+            payload: new_data
         });
 
     })

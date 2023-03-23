@@ -12,15 +12,25 @@ import {setTimeOut} from "../../actions/custom_reports/customReportsActions";
 import Pagination from 'react-bootstrap/Pagination';
 import {setPageNumber} from "../../actions/custom_reports/customReportsActions";
 import {set_per_page} from "../../actions/custom_reports/customReportsActions";
+import Table from 'react-bootstrap/Table';
+import CustomModal from '../subcomponents/CustomModal';
+import { modalShow } from "../../actions/modalActions";
+import { modalHide } from "../../actions/modalActions";
+import DeleteVehicle from '../vehicles/delete_vehicle';
+import UpdateVehicle from '../vehicles/update_vehicle';
+import { get_vehicle_types } from "../../actions/vehicle_types/vehicleTypesActions";
+import { list_work_organizations } from "../../actions/work_organizations/workOrganizationsActions";
 
 function GetVehicles(props){
 
-    const { get_vehicles_custom } = props;
+    const { get_vehicle_types, list_work_organizations, get_vehicles_custom } = props;
     useEffect(() => {
         
         get_vehicles_custom({page: 1});
+        get_vehicle_types();
+        list_work_organizations();
         //Mora array kao dodatni argument da se ne bi ponavljalo.
-    }, [get_vehicles_custom]);
+    }, [get_vehicle_types, list_work_organizations, get_vehicles_custom]);
 
     const firstPage = (pagination) => {
         props.setPageNumber(1, 0);//Poziva se sa props u nekoj funkciji, dok u useEffect bez props-a.
@@ -154,11 +164,12 @@ function GetVehicles(props){
 
     let href = props && props.href ? props.href : null;
 
-    let accordionVehicleList = <div className="grid-container2"><div className="itemGV6 grid-container1 gc2-item1">{tmp1}</div>
+    let accordionVehicleList = null;
+    /*let accordionVehicleList = <div className="grid-container2"><div className="itemGV6 grid-container1 gc2-item1">{tmp1}</div>
         <a className="btn btn-outline-info ReportPageDownload" href={href} download="wholeReport" onClick={(e)=> props.toCSV(e, vehicleList)}>
             ReportPageDownload
         </a>
-    </div>;
+    </div>;*/
         
     let per_page = pagination && pagination.per_page ? pagination.per_page : null;
     let checkIfUtility = props && props.auth && props.auth.user && props.auth.user.utility && props.auth.user.utility.id && Number.isInteger(props.auth.user.utility.id) ? true : false;
@@ -261,6 +272,143 @@ function GetVehicles(props){
     };
 
     let altPagination = null;//Default Laravel pagination implementation in React. Slower then my take on it. Preredered buttons and styling from Laravel.
+
+    let vehicle_types = props && props.vehicle_types && props.vehicle_types.list_vehicle_types && props.vehicle_types.list_vehicle_types.length>0 ? props.vehicle_types.list_vehicle_types : null;
+    let work_organization = props && props.work_organizations && props.work_organizations.list_work_organizations && props.work_organizations.list_work_organizations.length>0 ? props.work_organizations.list_work_organizations : null;
+    //Odavde pocinje tabela
+
+    let vehicle_thead = <tr>
+    <th>registration</th>
+    <th>type</th>
+    <th>work_organization.name</th>
+    <th>created_at</th>
+    <th>updated_at</th>
+    <th>actions</th>
+    </tr>;
+
+    let thead = <thead>{vehicle_thead}</thead>;
+
+    let vehicle_tbody = vehicleList ? vehicleList.map((item, i) => {
+
+        item.type = vehicle_types ? vehicle_types.filter((item1, i) => {
+
+            if(item.vehicle_type_id===item1.id){
+                return item;
+            }
+        })[0] : null;
+    
+        item.work_organization = work_organization ? work_organization.filter((item1, i) => {
+    
+            if(item.workOrganization_id===item1.id){
+                return item;
+            }
+        })[0] : null;
+
+        let x1 = new Date(item.created_at);
+        let d1Day = x1.getDate();
+        let d1Month = x1.getMonth();
+        let d1Year = x1.getFullYear();
+        let created_at = d1Day+"/"+d1Month+"/"+d1Year;
+  
+        let x2 = new Date(item.updated_at);
+        let d2Day = x2.getDate();
+        let d2Month = x2.getMonth();
+        let d2Year = x2.getFullYear();
+        let updated_at = d2Day+"/"+d2Month+"/"+d2Year;
+  
+        let vehicleId = item && item.id ? item.id : null;
+        let registration = item && item.registration ? item.registration : null;
+        let typeName = item && item.type && item.type.name ? item.type.name : null;
+        let work_organizationName = item && item.work_organization && item.work_organization.name ? item.work_organization.name : null;
+  
+        return <tr key={vehicleId}>
+            <td>{registration}</td>
+            <td>{typeName}</td>
+            <td>{work_organizationName}</td>
+            <td>{created_at}</td>
+            <td>{updated_at}</td>
+            <td className="grid-container">
+              
+              {props && props.auth && props.auth.access_token ? 
+                <Button variant="outline-warning m-1" itemID={vehicleId} onClick={() => props.modalShow([true, item.id, "update"])}>Update</Button>
+              : null}
+              
+              {props && props.auth && props.auth.access_token ? 
+                <Button variant="outline-danger m-1" itemID ={vehicleId} onClick={() => props.modalShow([true, item.id, "delete"])}>Delete</Button>
+                : null}
+  
+            </td>
+          </tr>
+  
+    }) : null;
+
+    let tbody = <tbody>{vehicle_tbody}</tbody>;
+
+    let vehicle_table = <Table striped bordered hover size="sm" responsive="md">
+        {thead}
+        {tbody}
+    </Table>;
+
+    let modalHeaderText = "";
+    let modalBodyText = "";
+    let form = null;
+
+    let chosen_vehicle = props && props.list_vehicles && props.list_vehicles.length > 0 && props.itemId ? props.list_vehicles.find((item, i) => {
+        return props.itemId==item.id;
+    }) : null;
+
+    if(chosen_vehicle){
+
+        chosen_vehicle.type = chosen_vehicle && vehicle_types ? vehicle_types.filter((item, i) => {
+
+            if(chosen_vehicle.vehicle_type_id==item.id){
+                return item;
+            }
+        })[0] : null;
+    
+        chosen_vehicle.work_organization = chosen_vehicle && work_organization ? work_organization.filter((item, i) => {
+    
+            if(chosen_vehicle.workOrganization_id==item.id){
+                return item;
+            }
+        })[0] : null;
+
+    }
+
+
+    if(props && props.modal_purpose){
+
+        if(props.modal_purpose === "delete"){
+  
+          let modalHeaderTextDeleteVehicle = props && props.modal_purpose && props.modal_purpose === "delete" ? "You are trying to delete an item: " : "";
+          let modalBodyTextDeleteVehicle = props && props.modal_purpose && props.modal_purpose === "delete" && chosen_vehicle ? <div><h6>An vehicle: </h6> 
+            <div>
+              <div><strong>Name:</strong> {chosen_vehicle.registration}</div>
+              <div><strong>Type:</strong> {chosen_vehicle.type.name}</div>
+              <div><strong>Organization:</strong> {chosen_vehicle.work_organization.name}</div>
+              <div><strong>Created_at:</strong> {chosen_vehicle.created_at}</div>
+              <div><strong>Updated_at:</strong> {chosen_vehicle.updated_at}</div>
+            </div>
+          </div>
+          : "";
+          modalHeaderText = modalHeaderTextDeleteVehicle;
+          
+          modalBodyText = modalBodyTextDeleteVehicle;
+          form = props && props.modal_purpose && props.modal_purpose==="delete" ? <DeleteVehicle vehicleid={props.itemId}/> : null;
+  
+        }
+  
+        if(props.modal_purpose === "update"){
+  
+          form = props && props.modal_purpose && props.modal_purpose==="update" ? <UpdateVehicle vehicle={chosen_vehicle}/> : null;
+  
+        }
+  
+    }
+
+    let myModal = props && props.auth && props.auth.access_token ? 
+      <CustomModal modalheadertext={modalHeaderText} modalbodytext={modalBodyText} form={form} chosen_vehicle={chosen_vehicle} show={props.modalState} vehicleid={props.itemId} purpose={props.modal_purpose} onHide={() => props.modalHide([false])}/> 
+    : null;
     
     return (
         <div>
@@ -367,6 +515,7 @@ function GetVehicles(props){
 
             </Form>
             {accordionVehicleList}
+            {vehicle_table}
 
             <Pagination className="pagination">
                 <Pagination.First onClick={()=>firstPage(pagination)}/>
@@ -377,7 +526,7 @@ function GetVehicles(props){
             </Pagination>
             
             {altPagination}
-
+            {myModal}
         </div>
     )
   
@@ -416,7 +565,14 @@ const mapStateToProps = (state) =>{
         time_in: state.customReports.time_in,
         time_out: state.customReports.time_out,
         auth: state.auth.auth,
-        linkovi: state.customReports.linkovi
+        linkovi: state.customReports.linkovi,
+        vehicle_types: state.list_vehicle_types,
+        work_organizations: state.list_work_organizations,
+        modalState: state.modalState.modalState,
+        itemId: state.modalState.itemId,
+        deleted_vehicle_id: state.deleted_vehicle_id,
+        modal_purpose: state.modalState.modal_purpose,
+        updated_vehicle_id: state.updated_vehicle_id
     });
 
 };
@@ -427,5 +583,9 @@ export default connect(mapStateToProps, {
     setTimeIn,
     setPageNumber,
     setTimeOut,
-    set_per_page
+    set_per_page, 
+    modalShow,
+    modalHide,
+    get_vehicle_types, 
+    list_work_organizations,
 })(GetVehicles);

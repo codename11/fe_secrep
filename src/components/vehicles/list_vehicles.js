@@ -134,7 +134,7 @@ function Vehicles(props){
     let vehicle_table = <Table striped bordered hover size="sm" responsive="md">
         {thead}
         {tbody}
-      </Table>;
+    </Table>;
 
     let modalHeaderText = "";
     let modalBodyText = "";
