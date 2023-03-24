@@ -1,4 +1,4 @@
-import { LIST_WORK_ORGANIZATIONS, CREATE_WORK_ORGANIZATION, UPDATE_WORK_ORGANIZATION, DELETE_WORK_ORGANIZATION } from "../types";
+import { LIST_WORK_ORGANIZATIONS, CREATE_WORK_ORGANIZATION, UPDATE_WORK_ORGANIZATION, DELETE_WORK_ORGANIZATION, PAGINATION } from "../types";
 import store from "../../store";
 
 let auth = null;
@@ -6,17 +6,20 @@ let auth = null;
 export const list_work_organizations = (data) => dispatch => {
 
     auth = store.getState().auth.auth;
-    
+    let page = data && data.page ? data.page : null;
+    let index = page && page>0 ? page-1 : null;
+
     const url = "http://secrep.test/api/list_work_organizations";
     fetch(url, {
-        method: 'GET', // *GET, POST, PUT, DELETE, etc.
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
         crossDomain : true,
         headers: {
             "X-Requested-With": "XMLHttpRequest",
             "Content-Type": 'application/json',
             "Authorization": "Bearer " + auth.access_token
         },
-        redirect: 'follow', // manual, *follow, erro
+        redirect: 'follow', // manual, *follow, erro,
+        body: JSON.stringify(data)
         
     })
     .then((response) => {
@@ -25,10 +28,21 @@ export const list_work_organizations = (data) => dispatch => {
 
     })// parses JSON response into native JavaScript objects
     .then((data) => {
+        console.log("data: ", data);
+        
+        let workOrganizations = data && data.workOrganizations && data.workOrganizations.data ? data.workOrganizations.data : null;
         
         dispatch({
             type: LIST_WORK_ORGANIZATIONS,
-            payload: [...data.workOrganizations]
+            payload: workOrganizations
+        });
+
+        let pagination = data && data.workOrganizations ? data.workOrganizations : null;
+        delete pagination.data;
+        pagination.index = index;
+        dispatch({
+            type: PAGINATION,
+            payload: pagination
         });
 
     })

@@ -22,17 +22,24 @@ function GetEmployees(props){
 
         }) : null;
 
-        return <div className="chart1">
-            <div>
-                <h6 className="pagination">Employees Chart</h6>
-                <RadarChart cx={300} cy={250} outerRadius={150} width={600} height={600} data={list_employees}>
-                    <PolarGrid />
-                    <PolarAngleAxis dataKey="firstName" />
-                    <PolarRadiusAxis />
-                    <Radar name="Employees" dataKey="id" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6}/>
-                </RadarChart>
-            </div>
-        </div>;
+        if(list_employees){
+
+            return <div className="chart1">
+                <div>
+                    <h6 className="pagination">Employees Chart</h6>
+                    <RadarChart cx={300} cy={250} outerRadius={150} width={600} height={600} data={list_employees ? list_employees : ""}>
+                        <PolarGrid />
+                        <PolarAngleAxis dataKey="firstName" />
+                        <PolarRadiusAxis />
+                        <Radar name="Employees" dataKey="id" stroke="#8884d8" fill="#8884d8" fillOpacity={0.6}/>
+                    </RadarChart>
+                </div>
+            </div>;
+            
+        }
+        else{
+            return "";
+        }
 
     };
 

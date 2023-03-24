@@ -22,29 +22,36 @@ function GetUsers(props){
 
         }) : null;
 
-        return <div className="chart1">
-            <div>
-                <h6 className="pagination">Users Chart</h6>
-                <AreaChart
-                    width={500}
-                    height={400}
-                    data={list_users}
-                    margin={{
-                        top: 10,
-                        right: 30,
-                        left: 0,
-                        bottom: 0,
-                    }}
-                    >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <Tooltip />
-                    <Area type="monotone" dataKey="createdAt" stroke="#8884d8" fill="#8884d8" />
-                </AreaChart>
-            </div>
-        </div>;
+        if(list_users){
 
+            return <div className="chart1">
+                <div>
+                    <h6 className="pagination">Users Chart</h6>
+                    <AreaChart
+                        width={500}
+                        height={400}
+                        data={list_users ? list_users : ""}
+                        margin={{
+                            top: 10,
+                            right: 30,
+                            left: 0,
+                            bottom: 0,
+                        }}
+                        >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="name" />
+                        <YAxis />
+                        <Tooltip />
+                        <Area type="monotone" dataKey="createdAt" stroke="#8884d8" fill="#8884d8" />
+                    </AreaChart>
+                </div>
+            </div>;
+
+        }
+        else{
+            return "";
+        }
+        
     };
 
     return chart();

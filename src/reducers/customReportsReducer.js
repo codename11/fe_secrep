@@ -111,9 +111,8 @@ export default function(state = initialState, action){
                 linkovi: state.linkovi
             };
         
-        return myState;
+            return myState;
 
-        
         case LINKOVI:
             
             linkovi = action.payload;

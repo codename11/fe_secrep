@@ -22,13 +22,15 @@ function GetDeliveries(props){
 
         }) : null;
 
-        return <div className="chart1">
+        if(list_deliveries){
+
+            return <div className="chart1">
             <div>
                 <h6 className="pagination">Deliveries Chart</h6>
                 <LineChart
                     width={500}
                     height={300}
-                    data={list_deliveries}
+                    data={list_deliveries ? list_deliveries : ""}
                     margin={{
                         top: 5,
                         right: 30,
@@ -47,7 +49,12 @@ function GetDeliveries(props){
                 </div>
             </div>;
 
-        };
+        }
+        else{
+            return "";
+        }
+        
+    };
 
     return chart();
 

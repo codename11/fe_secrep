@@ -14,6 +14,8 @@ import PropTypes from "prop-types";
 import CreateWorkOrgs from '../work_organizations/create_work_organization';
 import Accordion from 'react-bootstrap/Accordion';
 import { useEffect } from 'react';
+import Pagination from 'react-bootstrap/Pagination';
+import {setPageNumber} from "../../actions/custom_reports/customReportsActions";
 
 function WorkOrgs(props){
 
@@ -23,6 +25,61 @@ function WorkOrgs(props){
         list_work_organizations();
         //Mora array kao dodatni argument da se ne bi ponavljalo.
     }, [list_work_organizations]);
+
+    const firstPage = (pagination) => {
+        props.setPageNumber(1, 0);//Poziva se sa props u nekoj funkciji, dok u useEffect bez props-a.
+        props.list_work_organizations({page: 1});      
+    }
+
+
+    const lastPage = (pagination) => {
+
+        let last = pagination.last_page;
+        props.list_work_organizations({page: last});
+        props.setPageNumber(last, last-1);
+
+    }
+
+    const prevPage = (pagination) => {
+
+        let last = pagination.last_page;
+        let index = pagination.index;
+
+        if(index>0){
+            index = index-1;
+        }
+        else if(index<=0){
+            index = last-1;
+        }
+        props.list_work_organizations({page: index+1});
+        props.setPageNumber(index+1, index);
+        
+    }
+
+    const nextPage = (pagination) => {
+
+        let first = 0;
+        let last = pagination.last_page;
+        let index = pagination.index;
+
+        if(index+1<last){
+            index = index+1;
+        }
+        else{
+            index = first;
+        }
+        
+        props.list_work_organizations({page: index+1});
+        props.setPageNumber(index+1, index);
+
+    }
+
+    const setActive = (e, i) => {
+
+        props.setPageNumber(e, i);
+        props.list_work_organizations({page: i+1});
+
+    }
 
     const handleChange = (event) => {
 
@@ -76,7 +133,7 @@ function WorkOrgs(props){
             <Button variant="outline-warning m-1" itemID={item.id} onClick={() => props.modalShow([true, item.id, "update"])}>Update</Button>
             : null}
             
-            {this.props && this.props.auth && this.props.auth.access_token ? 
+            {props && props.auth && props.auth.access_token ? 
             <Button variant="outline-danger m-1" itemID ={item.id} onClick={() => props.modalShow([true, item.id, "delete"])}>Delete</Button>
             : null}
 
@@ -132,9 +189,107 @@ function WorkOrgs(props){
 
     }
 
-    let myModal = props && this.props.auth && this.props.auth.access_token ? 
+    let myModal = props && props.auth && props.auth.access_token ? 
         <CustomModal modalheadertext={modalHeaderText} modalbodytext={modalBodyText} modalfootertext={modalFooterText} form={form} show={props.modalState} purpose={props.modal_purpose} onHide={() => props.modalHide([false])}/> 
     : null;
+    console.log("workorg: ", props);
+
+    let linkovi = props && props.work_organizations && props.work_organizations.linkovi ? <div dangerouslySetInnerHTML={{ __html: props.work_organizations.linkovi }} /> : null;
+    let pagination = props && props.pagination ? props.pagination : null;
+    console.log("pagination: ", pagination);
+
+    const setVisiblePages = (paginacija) =>{
+        
+        let pageIndex = null;
+        let last_page = null;
+        let siblings = 1;
+        
+        pageIndex = pagination && pagination.index ? pagination.index : 0;
+        last_page = paginacija && paginacija.last_page && paginacija.last_page ? paginacija.last_page : null;
+        
+        let myPages = [];
+
+        if(pageIndex===0 && pageIndex<=last_page && pageIndex+siblings<=last_page && pageIndex+(siblings*2)<=last_page){
+            
+            myPages = [
+                <Pagination.Item key={pageIndex} active={true} page={pageIndex+1} onClick={(e)=>{setActive(e, pageIndex)}}>
+                    {pageIndex+1}
+                </Pagination.Item>,
+    
+                <Pagination.Item key={pageIndex+siblings} page={pageIndex+1+siblings} onClick={(e)=>{setActive(e, pageIndex+siblings)}}>
+                    {pageIndex+1+siblings}
+                </Pagination.Item>,
+    
+                <Pagination.Item key={pageIndex+(2*siblings)} page={pageIndex+1+(2*siblings)} onClick={(e)=>{setActive(e, pageIndex+(siblings*2))}}>
+                    {pageIndex+1+(2*siblings)}
+                </Pagination.Item>,
+
+                <Pagination.Ellipsis key={"elip"+(pageIndex+3)}/>].filter(Boolean);
+
+        }
+        
+        if(pageIndex>=0 && pageIndex<=last_page && pageIndex-siblings>=0 && pageIndex+siblings<=last_page){
+            
+            let ellipsis1 = pageIndex-siblings> 0 ? <Pagination.Ellipsis key={"elip"+(pageIndex+3)}/> : null;
+            let ellipsis2 = (pageIndex+siblings)<last_page-1 ? <Pagination.Ellipsis key={"elip"+(pageIndex+4)}/> : null;
+            myPages = [
+
+                ellipsis1,
+
+                <Pagination.Item key={pageIndex-siblings} page={pageIndex+1-siblings} onClick={(e)=>{setActive(e, pageIndex-siblings)}}>
+                    {pageIndex+1-siblings}
+                </Pagination.Item>,
+    
+                <Pagination.Item key={pageIndex} active={true} page={pageIndex+1} onClick={(e)=>{setActive(e, pageIndex)}}>
+                    {pageIndex+1}
+                </Pagination.Item>,
+    
+                <Pagination.Item key={pageIndex+siblings} page={pageIndex+1+siblings} onClick={(e)=>{setActive(e, pageIndex+siblings)}}>
+                    {pageIndex+1+siblings}
+                </Pagination.Item>,
+
+                ellipsis2].filter(Boolean);
+
+        }
+        
+        if(pageIndex+1===last_page && pageIndex-(2*siblings)>=0){
+
+            myPages = [
+                <Pagination.Ellipsis key={"elip"+(pageIndex+3)}/>,
+
+                <Pagination.Item key={pageIndex-(2*siblings)} page={pageIndex+1-(2*siblings)} onClick={(e)=>{setActive(e, pageIndex-(siblings*2))}}>
+                    {pageIndex+1-(2*siblings)}
+                </Pagination.Item>,
+    
+                <Pagination.Item key={pageIndex-siblings} page={pageIndex+1-siblings} onClick={(e)=>{setActive(e, pageIndex)}}>
+                    {pageIndex+1-siblings}
+                </Pagination.Item>,
+    
+                <Pagination.Item key={pageIndex} active={true} page={pageIndex+1} onClick={(e)=>{setActive(e, pageIndex-siblings)}}>
+                    {pageIndex+1}
+                </Pagination.Item>].filter(Boolean);
+
+        }
+
+        if(pageIndex>=0 && pageIndex<=last_page && last_page<=3){
+            
+            let pages = [];
+            for(let i=0;i<last_page;i++){
+
+                pages.push(
+                    <Pagination.Item key={i} active={i===pageIndex} page={i+1} onClick={(e)=>{setActive(e, i)}}>
+                        {i+1}
+                    </Pagination.Item>
+                );
+                
+            }
+            myPages = [...pages].filter(Boolean)
+
+        }
+        
+        return myPages;
+
+    };
 
     return (
         <div>
@@ -153,6 +308,15 @@ function WorkOrgs(props){
                     <Accordion.Header>List work organizations</Accordion.Header>
                     <Accordion.Body>
                         {workOrgs_table}
+                        
+                        <Pagination className="pagination">
+                            <Pagination.First onClick={()=>firstPage(pagination)}/>
+                            <Pagination.Prev onClick={()=>prevPage(pagination)}/>
+                                {setVisiblePages(pagination)}
+                            <Pagination.Next  onClick={()=>nextPage(pagination)}/>
+                            <Pagination.Last  onClick={()=>lastPage(pagination)}/>
+                        </Pagination>
+
                     </Accordion.Body>
                 </Accordion.Item>
 
@@ -182,6 +346,10 @@ update_work_organization.propTypes = {
     update_work_organization: PropTypes.func.isRequired,
 };
 
+setPageNumber.propTypes = {
+    setPageNumber: PropTypes.func.isRequired,
+};
+
 const mapStateToProps = (state) =>{ 
     
     return ({
@@ -190,7 +358,8 @@ const mapStateToProps = (state) =>{
         modalState: state.modalState.modalState,
         tabKey: state.key.tabKey,
         modal_purpose: state.modalState.modal_purpose,
-        select_option: state.form.select_option
+        select_option: state.form.select_option,
+        pagination: state.list_work_organizations.pagination
     });
 
 };
@@ -199,5 +368,6 @@ export default connect(mapStateToProps, {
     list_work_organizations,
     modalShow,
     modalHide,
-    select_option
+    select_option,
+    setPageNumber
 })(WorkOrgs);
