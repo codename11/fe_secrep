@@ -1,4 +1,4 @@
-import { LIST_EMPLOYEES, CREATE_EMPLOYEE, UPDATE_EMPLOYEE, ERRORS, ALERT_SHOW, ALERT_HIDE, DELETE_EMPLOYEE } from "../types";
+import { LIST_EMPLOYEES, CREATE_EMPLOYEE, UPDATE_EMPLOYEE, ERRORS, ALERT_SHOW, ALERT_HIDE, DELETE_EMPLOYEE, PAGINATION } from "../types";
 import store from "../../store";
 
 let auth = null;
@@ -7,9 +7,12 @@ export const get_employees = (data) => dispatch => {
     
     auth = store.getState().auth.auth;
     
+    let page = data && data.page ? data.page : null;
+    let index = page && page>0 ? page-1 : null;
+
     const url = "http://secrep.test/api/list_employees";
     fetch(url, {
-        method: 'GET', // *GET, POST, PUT, DELETE, etc.
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
         crossDomain : true,
         headers: {
             "X-Requested-With": "XMLHttpRequest",
@@ -26,10 +29,22 @@ export const get_employees = (data) => dispatch => {
 
     })// parses JSON response into native JavaScript objects
     .then((data) => {
+        console.log("data: ", data);
+
+        let employees = data && data.employees && data.employees.data ? data.employees.data : null;
         
         dispatch({
             type: LIST_EMPLOYEES,
-            payload: [...data.employees]
+            payload: employees
+        });
+
+        let pagination = data && data.employees ? data.employees : null;
+        delete pagination.data;
+        pagination.index = index;
+
+        dispatch({
+            type: PAGINATION,
+            payload: pagination
         });
 
     })

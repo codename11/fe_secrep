@@ -28,7 +28,6 @@ export const list_work_organizations = (data) => dispatch => {
 
     })// parses JSON response into native JavaScript objects
     .then((data) => {
-        console.log("data: ", data);
         
         let workOrganizations = data && data.workOrganizations && data.workOrganizations.data ? data.workOrganizations.data : null;
         
@@ -40,6 +39,7 @@ export const list_work_organizations = (data) => dispatch => {
         let pagination = data && data.workOrganizations ? data.workOrganizations : null;
         delete pagination.data;
         pagination.index = index;
+
         dispatch({
             type: PAGINATION,
             payload: pagination

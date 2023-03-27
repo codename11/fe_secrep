@@ -14,6 +14,7 @@ import PropTypes from "prop-types";
 import CreateWorkOrgs from '../work_organizations/create_work_organization';
 import Accordion from 'react-bootstrap/Accordion';
 import { useEffect } from 'react';
+//Needed for pagination
 import Pagination from 'react-bootstrap/Pagination';
 import {setPageNumber} from "../../actions/custom_reports/customReportsActions";
 
