@@ -1,4 +1,4 @@
-import { CREATE_DELIVERY, LIST_DELIVERIES, ERRORS, ALERT_SHOW, ALERT_HIDE, DELIVERYITEMID, SETTIMEIN, SETTIMEOUT, ADDNOTEFIELD, REMOVENOTEFIELD  } from "../types";
+import { CREATE_DELIVERY, LIST_DELIVERIES, ERRORS, ALERT_SHOW, ALERT_HIDE, DELIVERYITEMID, SETTIMEIN, SETTIMEOUT, ADDNOTEFIELD, REMOVENOTEFIELD, PAGINATION  } from "../types";
 import store from "../../store";
 
 let auth = null;
@@ -131,16 +131,20 @@ export const get_deliveries = (data) => dispatch => {
     
     auth = store.getState().auth.auth;
     
+    let page = data && data.page ? data.page : null;
+    let index = page && page>0 ? page-1 : null;
+    
     const url = "http://secrep.test/api/list_deliveries";
     fetch(url, {
-        method: 'GET', // *GET, POST, PUT, DELETE, etc.
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
         crossDomain : true,
         headers: {
             "X-Requested-With": "XMLHttpRequest",
             "Content-Type": 'application/json',
             "Accept": 'application/json',
             "Authorization": "Bearer " + auth.access_token
-        }
+        },
+        body: JSON.stringify(data)
         
     })
     .then((response) => {
@@ -149,16 +153,22 @@ export const get_deliveries = (data) => dispatch => {
 
     })// parses JSON response into native JavaScript objects
     .then((data) => {
+        
+        let deliveries = data && data.deliveries && data.deliveries.data ? data.deliveries.data : null;
+        
+        dispatch({
+            type: LIST_DELIVERIES,
+            payload: deliveries
+        });
 
-        if(data && data.deliveries && data.deliveries.length>0){
-            dispatch({
-                type: LIST_DELIVERIES,
-                payload: [...data.deliveries]
-            });
-        }
-        else{
-            console.log("prazno");
-        }
+        let pagination = data && data.deliveries ? data.deliveries : null;
+        delete pagination.data;
+        pagination.index = index;
+
+        dispatch({
+            type: PAGINATION,
+            payload: pagination
+        });
         
     })
     .catch((error) => {

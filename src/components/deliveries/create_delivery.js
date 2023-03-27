@@ -16,9 +16,18 @@ import { removeNoteField } from "../../actions/delivery/deliveryActions";
 import PropTypes from "prop-types";
 import { alertShow } from "../../actions/alertActions";
 import { alertHide } from "../../actions/alertActions";
+import { get_vehicles } from "../../actions/vehicles/vehicleActions";
+import { useEffect } from 'react';
 
 function CreateDelivery(props){
     
+    const { get_vehicles } = props;
+    useEffect(() => {
+            
+      get_vehicles();
+        //Mora array kao dodatni argument da se ne bi ponavljalo.
+    }, [get_vehicles]);
+
     const handleSubmit = (e) => {
       e.preventDefault();
       let forma = e.target; 
@@ -94,6 +103,7 @@ function CreateDelivery(props){
     let time_out = props && props.time_out ? props.time_out : null;
 
     let option2 = [];
+    //console.log("props.labelIds: ", props);
     let vehicles = props.vehicles && props.vehicles.list_vehicles ? props.vehicles.list_vehicles.map((item, i) => {
       let obj = JSON.stringify({
         vehicle_id: item.id
@@ -237,6 +247,10 @@ alertHide.propTypes = {
     alertHide: PropTypes.func.isRequired,
 };
 
+get_vehicles.propTypes = {
+  get_vehicles: PropTypes.func.isRequired,
+};
+
 const mapStateToProps = (state) =>{ 
 
     return ({
@@ -258,5 +272,6 @@ export default connect(mapStateToProps, {
     setTimeIn,
     setTimeOut,
     addNoteField,
-    removeNoteField
+    removeNoteField,
+    get_vehicles
 })(CreateDelivery);

@@ -29,7 +29,6 @@ export const get_employees = (data) => dispatch => {
 
     })// parses JSON response into native JavaScript objects
     .then((data) => {
-        console.log("data: ", data);
 
         let employees = data && data.employees && data.employees.data ? data.employees.data : null;
         

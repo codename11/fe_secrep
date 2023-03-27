@@ -7,12 +7,174 @@ import Table from 'react-bootstrap/Table';
 import CustomModal from '../subcomponents/CustomModal';
 import UpdatePermission from './update_permission';
 import DeletePermission from './delete_permission';
+import { useEffect } from 'react';
+//Needed for pagination
+import Pagination from 'react-bootstrap/Pagination';
+import {setPageNumber} from "../../actions/custom_reports/customReportsActions";
+import { list_permissions } from "../../actions/special_permission/special_permissionActions";
 
 function ListPermissions(props){
       
-    let listPermissions = props && props.list_permissions ? props.list_permissions : null;
+    const { list_permissions } = props;
+    useEffect(() => {
+            
+      list_permissions();
+        //Mora array kao dodatni argument da se ne bi ponavljalo.
+    }, [list_permissions]);
+
+    const firstPage = (pagination) => {
+      props.setPageNumber(1, 0);//Poziva se sa props u nekoj funkciji, dok u useEffect bez props-a.
+      props.list_permissions({page: 1});      
+  }
+
+
+  const lastPage = (pagination) => {
+
+      let last = pagination.last_page;
+      props.list_permissions({page: last});
+      props.setPageNumber(last, last-1);
+
+  }
+
+  const prevPage = (pagination) => {
+
+      let last = pagination.last_page;
+      let index = pagination.index;
+
+      if(index>0){
+          index = index-1;
+      }
+      else if(index<=0){
+          index = last-1;
+      }
+      props.list_permissions({page: index+1});
+      props.setPageNumber(index+1, index);
       
-    let chosen_permission = props && props.list_permissions && props.list_permissions.length > 0 && props.itemId ? props.list_permissions.find((item, i) => {
+  }
+
+  const nextPage = (pagination) => {
+
+      let first = 0;
+      let last = pagination.last_page;
+      let index = pagination.index;
+
+      if(index+1<last){
+          index = index+1;
+      }
+      else{
+          index = first;
+      }
+      
+      props.list_permissions({page: index+1});
+      props.setPageNumber(index+1, index);
+
+  }
+
+  const setActive = (e, i) => {
+
+      props.setPageNumber(e, i);
+      props.list_permissions({page: i+1});
+
+  }
+
+  let pagination = props && props.pagination ? props.pagination : null;
+
+  const setVisiblePages = (paginacija) =>{
+      
+      let pageIndex = null;
+      let last_page = null;
+      let siblings = 1;
+      
+      pageIndex = pagination && pagination.index ? pagination.index : 0;
+      last_page = paginacija && paginacija.last_page && paginacija.last_page ? paginacija.last_page : null;
+      
+      let myPages = [];
+
+      if(pageIndex===0 && pageIndex<=last_page && pageIndex+siblings<=last_page && pageIndex+(siblings*2)<=last_page){
+          
+          myPages = [
+              <Pagination.Item key={pageIndex} active={true} page={pageIndex+1} onClick={(e)=>{setActive(e, pageIndex)}}>
+                  {pageIndex+1}
+              </Pagination.Item>,
+  
+              <Pagination.Item key={pageIndex+siblings} page={pageIndex+1+siblings} onClick={(e)=>{setActive(e, pageIndex+siblings)}}>
+                  {pageIndex+1+siblings}
+              </Pagination.Item>,
+  
+              <Pagination.Item key={pageIndex+(2*siblings)} page={pageIndex+1+(2*siblings)} onClick={(e)=>{setActive(e, pageIndex+(siblings*2))}}>
+                  {pageIndex+1+(2*siblings)}
+              </Pagination.Item>,
+
+              <Pagination.Ellipsis key={"elip"+(pageIndex+3)}/>].filter(Boolean);
+
+      }
+      
+      if(pageIndex>=0 && pageIndex<=last_page && pageIndex-siblings>=0 && pageIndex+siblings<=last_page){
+          
+          let ellipsis1 = pageIndex-siblings> 0 ? <Pagination.Ellipsis key={"elip"+(pageIndex+3)}/> : null;
+          let ellipsis2 = (pageIndex+siblings)<last_page-1 ? <Pagination.Ellipsis key={"elip"+(pageIndex+4)}/> : null;
+          myPages = [
+
+              ellipsis1,
+
+              <Pagination.Item key={pageIndex-siblings} page={pageIndex+1-siblings} onClick={(e)=>{setActive(e, pageIndex-siblings)}}>
+                  {pageIndex+1-siblings}
+              </Pagination.Item>,
+  
+              <Pagination.Item key={pageIndex} active={true} page={pageIndex+1} onClick={(e)=>{setActive(e, pageIndex)}}>
+                  {pageIndex+1}
+              </Pagination.Item>,
+  
+              <Pagination.Item key={pageIndex+siblings} page={pageIndex+1+siblings} onClick={(e)=>{setActive(e, pageIndex+siblings)}}>
+                  {pageIndex+1+siblings}
+              </Pagination.Item>,
+
+              ellipsis2].filter(Boolean);
+
+      }
+      
+      if(pageIndex+1===last_page && pageIndex-(2*siblings)>=0){
+
+          myPages = [
+              <Pagination.Ellipsis key={"elip"+(pageIndex+3)}/>,
+
+              <Pagination.Item key={pageIndex-(2*siblings)} page={pageIndex+1-(2*siblings)} onClick={(e)=>{setActive(e, pageIndex-(siblings*2))}}>
+                  {pageIndex+1-(2*siblings)}
+              </Pagination.Item>,
+  
+              <Pagination.Item key={pageIndex-siblings} page={pageIndex+1-siblings} onClick={(e)=>{setActive(e, pageIndex)}}>
+                  {pageIndex+1-siblings}
+              </Pagination.Item>,
+  
+              <Pagination.Item key={pageIndex} active={true} page={pageIndex+1} onClick={(e)=>{setActive(e, pageIndex-siblings)}}>
+                  {pageIndex+1}
+              </Pagination.Item>].filter(Boolean);
+
+      }
+
+      if(pageIndex>=0 && pageIndex<=last_page && last_page<=3){
+          
+          let pages = [];
+          for(let i=0;i<last_page;i++){
+
+              pages.push(
+                  <Pagination.Item key={i} active={i===pageIndex} page={i+1} onClick={(e)=>{setActive(e, i)}}>
+                      {i+1}
+                  </Pagination.Item>
+              );
+              
+          }
+          myPages = [...pages].filter(Boolean)
+
+      }
+      
+      return myPages;
+
+    };
+
+    let listPermissions = props && props.permissions ? props.permissions : null;
+      
+    let chosen_permission = props && props.permissions && props.permissions.length > 0 && props.itemId ? props.permissions.find((item, i) => {
       return props.itemId===item.id;
     }) : null;
 
@@ -43,11 +205,11 @@ function ListPermissions(props){
           }).toString() : null}</td>
           <td className="grid-container">
             
-            {this.props && this.props.access_token ? 
+            {props && props.access_token ? 
               <Button variant="outline-warning m-1" itemID={item && item.id ? item.id : null} onClick={() => props.modalShow([true, item.id, "update"])}>Update</Button>
             : null}
             
-            {this.props && this.props.access_token ? 
+            {props && props.access_token ? 
               <Button variant="outline-danger m-1" itemID ={item && item.id ? item.id : null} onClick={() => props.modalShow([true, item.id, "delete"])}>Delete</Button>
             : null}
   
@@ -102,13 +264,20 @@ function ListPermissions(props){
     let myModal = props && props.access_token ? 
       <CustomModal modalheadertext={modalHeaderText} modalbodytext={modalBodyText} form={form} chosen_permission={chosen_permission} show={props.modalState} permissionid={props.itemId} purpose={props.modal_purpose} onHide={() => props.modalHide([false])}/> 
     : null;
-
+    
     return (
       <div className="accord">
         <Table striped bordered hover size="sm" responsive="sm">
           {thead}
           {tbody}
         </Table>
+        <Pagination className="pagination">
+            <Pagination.First onClick={()=>firstPage(pagination)}/>
+            <Pagination.Prev onClick={()=>prevPage(pagination)}/>
+                {setVisiblePages(pagination)}
+            <Pagination.Next  onClick={()=>nextPage(pagination)}/>
+            <Pagination.Last  onClick={()=>lastPage(pagination)}/>
+        </Pagination>
         {myModal}
       </div>
     )
@@ -122,17 +291,29 @@ modalHide.propTypes = {
   modalHide: PropTypes.func.isRequired,
 };
 
+list_permissions.propTypes = {
+  list_permissions: PropTypes.func.isRequired,
+};
+
+setPageNumber.propTypes = {
+  setPageNumber: PropTypes.func.isRequired,
+};
+
 const mapStateToProps = (state) =>{ 
     
     return ({
       modalState: state.modalState.modalState,
       itemId: state.modalState.itemId,
       modal_purpose: state.modalState.modal_purpose,
+      pagination: state.special_permissions.pagination,
+      permissions: state.special_permissions.list_permissions
     });
 
 };
 
 export default connect(mapStateToProps, { 
   modalShow,
-  modalHide
+  modalHide,
+  list_permissions,
+  setPageNumber
 })(ListPermissions);

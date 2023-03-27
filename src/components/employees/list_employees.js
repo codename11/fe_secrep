@@ -23,7 +23,7 @@ function Employees(props){
         get_employees();
         //Mora array kao dodatni argument da se ne bi ponavljalo.
     }, [get_employees]);
-    console.log("propsemployees1: ", props);
+    
     const firstPage = (pagination) => {
         props.setPageNumber(1, 0);//Poziva se sa props u nekoj funkciji, dok u useEffect bez props-a.
         props.get_employees({page: 1});      

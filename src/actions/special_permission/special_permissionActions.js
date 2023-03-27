@@ -1,4 +1,4 @@
-import { LIST_PERMISSIONS, ERRORS, ALERT_SHOW, ALERT_HIDE } from "../types";
+import { LIST_PERMISSIONS, ERRORS, ALERT_SHOW, ALERT_HIDE, PAGINATION } from "../types";
 import store from "../../store";
 
 let auth = null;
@@ -7,16 +7,20 @@ export const list_permissions = (data) => dispatch => {
     
     auth = store.getState().auth.auth;
     
+    let page = data && data.page ? data.page : null;
+    let index = page && page>0 ? page-1 : null;
+
     const url = "http://secrep.test/api/list_special_permissions";
     fetch(url, {
-        method: 'GET', // *GET, POST, PUT, DELETE, etc.
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
         crossDomain : true,
         headers: {
             "X-Requested-With": "XMLHttpRequest",
             "Content-Type": 'application/json',
             "Accept": 'application/json',
             "Authorization": "Bearer " + auth.access_token
-        }
+        },
+        body: JSON.stringify(data)
         
     })
     .then((response) => {
@@ -26,15 +30,22 @@ export const list_permissions = (data) => dispatch => {
     })// parses JSON response into native JavaScript objects
     .then((data) => {
 
-        if(data && data.specialPermission && data.specialPermission.length>0){
-            dispatch({
-                type: LIST_PERMISSIONS,
-                payload: [...data.specialPermission]
-            });
-        }
-        else{
-            console.log("prazno");
-        }
+        let specialPermission = data && data.specialPermission && data.specialPermission.data ? data.specialPermission.data : null;
+        
+        dispatch({
+            type: LIST_PERMISSIONS,
+            payload: specialPermission
+        });
+
+        let pagination = data && data.specialPermission ? data.specialPermission : null;
+        delete pagination.data;
+        pagination.index = index;
+
+        dispatch({
+            type: PAGINATION,
+            payload: pagination
+        });
+
         
     })
     .catch((error) => {
