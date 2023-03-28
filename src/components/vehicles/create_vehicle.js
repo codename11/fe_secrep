@@ -5,8 +5,11 @@ import { get_vehicle_types } from "../../actions/vehicle_types/vehicleTypesActio
 import { list_work_organizations } from "../../actions/work_organizations/workOrganizationsActions";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
+import { if_submitted } from "../../actions/custom_actions/ifSubmitted";
 
 function CreateVehicle(props){
+
+  
 
   const handleSubmit = (event) => {
 
@@ -18,9 +21,9 @@ function CreateVehicle(props){
       vehicle_type_id: elements["type"].value && elements["type"].value.length > 0 ? elements["type"].value : null,
       workOrg: elements["workOrg"].value && elements["workOrg"].value.length > 0 ? elements["workOrg"].value : null
     }
-    
-    props.createVehicle(data);
-
+    props.if_submitted("You created new vehicle!", data.registration);
+    //props.createVehicle(data);
+    console.log(props);
   }
 
   let vehicle = props.vehicle ? props.vehicle : "";
@@ -54,6 +57,8 @@ function CreateVehicle(props){
     {option2}
   </Form.Select>;
     
+  let ifSubmitted = props && props.ifSubmitted && props.ifSubmitted.ifSubmitted ? props.ifSubmitted.ifSubmitted : null;
+  
   return (
     <div>
       
@@ -75,9 +80,10 @@ function CreateVehicle(props){
           <Button name="button" variant="outline-success" type="submit">
             Create
           </Button>
+
       </Form>
       
-  </div>
+    </div>
   )
 }
 
@@ -93,12 +99,17 @@ list_work_organizations.propTypes = {
   list_work_organizations: PropTypes.func.isRequired,
 };
   
+if_submitted.propTypes = {
+  if_submitted: PropTypes.func.isRequired,
+};
+
 const mapStateToProps = (state) =>{ 
   
     return ({
         vehicles: state.vehicles,
         vehicle_types: state.list_vehicle_types,
-        work_organizations: state.list_work_organizations
+        work_organizations: state.list_work_organizations,
+        ifSubmitted: state.ifSubmitted
     });
 
 };
@@ -106,4 +117,5 @@ const mapStateToProps = (state) =>{
 export default connect(mapStateToProps, { 
     createVehicle, get_vehicle_types, 
     list_work_organizations, 
+    if_submitted
 })(CreateVehicle);

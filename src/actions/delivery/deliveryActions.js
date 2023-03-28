@@ -4,7 +4,7 @@ import store from "../../store";
 let auth = null;
 
 export const create_delivery = (data) => dispatch => {
-
+    
     let url = "http://secrep.test/api/create_delivery";
 
     auth = store.getState().auth.auth;
@@ -26,99 +26,13 @@ export const create_delivery = (data) => dispatch => {
 
     })
     .then((data) => {
-
-        let errors = {
-            type: "",
-            origin: "",
-            messages: []
-        };
         
-        if("errors" in data){
-            
-            let flattenedObj = (obj) => {
-                const flattened = {}
-              
-                Object.keys(obj).forEach((key) => {
-                  
-                    const value = obj[key];
-              
-                  if(typeof value === 'object' && value !== null && !Array.isArray(value)){
-                    Object.assign(flattened, flattenedObj(value))
-                  } 
-                  else{
-                    flattened[key] = value
-                  }
-
-                })
-              
-                return flattened;
-
-            }
-            
-            errors = {
-                type: "validation",
-                origin: "create_delivery",
-                messages: Object.values(flattenedObj(data))
-            };
-            
-            dispatch({
-                type: ERRORS,
-                payload: errors
-            });
-            
-            dispatch({
-                type: ALERT_SHOW,
-                payload: {
-                    alertState: true,
-                    alert_purpose: "create_delivery"
-                }
-            });
-            
-        }
-        else if("message" in data){
-
-            errors = {
-                type: "validation",
-                origin: "create_delivery",
-                messages: [data.exception+". "+data.message]
-            };
-            
-            dispatch({
-                type: ERRORS,
-                payload: errors
-            });
-            
-            dispatch({
-                type: ALERT_SHOW,
-                payload: {
-                    alertState: true,
-                    alert_purpose: "create_delivery"
-                }
-            });
-
-        }
-        else{
-            
-            let list_deliveries = store.getState() && store.getState().deliveries && store.getState().deliveries.list_deliveries && store.getState().deliveries.list_deliveries.length>0 ? store.getState().deliveries.list_deliveries : [];
-            let delivery = data.delivery;
-            if(list_deliveries){
-                list_deliveries.push(delivery);
-            }
-            else{
-                list_deliveries[0] = delivery;
-            }
-            
-            dispatch({
-                type: ERRORS,
-                payload: null
-            });
-
-            dispatch({
-                type: LIST_DELIVERIES,
-                payload: [...list_deliveries]
-            });
-
-        }
+        let list_deliveries = store.getState() && store.getState().deliveries && store.getState().deliveries.list_deliveries && store.getState().deliveries.list_deliveries.length>0 ? store.getState().deliveries.list_deliveries : [];
+        
+        dispatch({
+            type: LIST_DELIVERIES,
+            payload: [...list_deliveries, data.delivery]
+        });
 
     })
     .catch((error) => {
@@ -180,7 +94,9 @@ export const get_deliveries = (data) => dispatch => {
 export const deleteDelivery = (data) => dispatch => {
     
     auth = store.getState().auth.auth;
-    let list_deliveries = store.getState().deliveries.list_deliveries;
+
+    let page = data && data.page ? data.page : null;
+    let index = page && page>0 ? page-1 : null;
     
     const url = "http://secrep.test/api/delete_delivery";
     fetch(url, {
@@ -201,15 +117,31 @@ export const deleteDelivery = (data) => dispatch => {
 
     })// parses JSON response into native JavaScript objects
     .then((data) => {
+        /*console.log("deldel: ", data);
+        let deliveries = list_deliveries.filter((item, i) => {
+            return data.delivery.id !== item.id;
+        });*/
+
+        let list_deliveries = store.getState() && store.getState().deliveries && store.getState().deliveries.list_deliveries ? store.getState().deliveries.list_deliveries : [];
         
         let deliveries = list_deliveries.filter((item, i) => {
             return data.delivery.id !== item.id;
         });
-       
+
         dispatch({
             type: LIST_DELIVERIES,
             payload: [...deliveries]
         });
+
+        let pagination = data && data.deliveries ? data.deliveries : null;
+        delete pagination.data;
+        pagination.index = index;
+
+        dispatch({
+            type: PAGINATION,
+            payload: pagination
+        });
+        
     })
     .catch((error) => {
         console.error('Error:', error);
@@ -240,14 +172,27 @@ export const update_delivery = (data) => dispatch => {
 
     })
     .then((data) => {
+        console.log("update1: ", data);
+        let delivery = data && data.delivery ? data.delivery : null;
 
-        let errors = {
+        let list_deliveries = store.getState() && store.getState().deliveries && store.getState().deliveries.list_deliveries && store.getState().deliveries.list_deliveries.length>0 ? store.getState().deliveries.list_deliveries.map((item, i) => {
+
+            return item.id===delivery.id ? delivery : item;
+
+        }) : [];
+
+        dispatch({
+            type: LIST_DELIVERIES,
+            payload: [...list_deliveries]
+        });
+
+        /*let errors = {
             type: "",
             origin: "",
             messages: []
-        };
+        };*/
         
-        if("errors" in data){
+        /*if("errors" in data){
             
             let flattenedObj = (obj) => {
                 const flattened = {}
@@ -330,7 +275,7 @@ export const update_delivery = (data) => dispatch => {
                 payload: [...list_deliveries]
             });
             
-        }
+        }*/
 
     })
     .catch((error) => {
@@ -363,8 +308,9 @@ export const handleChange = (itemId) => dispatch => {
 export const setLabelIds = (itemId) => dispatch => {
     
     let state = store.getState();
-    let list_deliveries = state.deliveries.list_deliveries;
     
+    let list_deliveries = state.deliveries.list_deliveries;
+
     let len1 = list_deliveries.length;
     let index = null;
     for(let i=0;i<len1;i++){
@@ -377,7 +323,7 @@ export const setLabelIds = (itemId) => dispatch => {
 
     }
     
-    let complements = list_deliveries.filter(item => item.id === itemId)[0].complement;
+    let complements = list_deliveries[0].complement;
     let arr1 = complements.map( item => item.vehicle_id);
     
     dispatch({

@@ -193,7 +193,7 @@ function ListDeliveries(props){
       </tr>;
 
   let thead = <thead>{deliveries_thead}</thead>;
-
+  console.log("list_deliveries: ", list_deliveries);
   let deliveries_tbody = list_deliveries ? list_deliveries.map((item, i) => {
 
   return <tr key={item.id}>

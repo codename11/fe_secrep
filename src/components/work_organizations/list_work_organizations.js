@@ -193,11 +193,9 @@ function WorkOrgs(props){
     let myModal = props && props.auth && props.auth.access_token ? 
         <CustomModal modalheadertext={modalHeaderText} modalbodytext={modalBodyText} modalfootertext={modalFooterText} form={form} show={props.modalState} purpose={props.modal_purpose} onHide={() => props.modalHide([false])}/> 
     : null;
-    console.log("workorg: ", props);
 
     let linkovi = props && props.work_organizations && props.work_organizations.linkovi ? <div dangerouslySetInnerHTML={{ __html: props.work_organizations.linkovi }} /> : null;
     let pagination = props && props.pagination ? props.pagination : null;
-    console.log("pagination: ", pagination);
 
     const setVisiblePages = (paginacija) =>{
         
@@ -291,7 +289,7 @@ function WorkOrgs(props){
         return myPages;
 
     };
-
+    
     return (
         <div>
             <Accordion defaultActiveKey="0">

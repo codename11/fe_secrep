@@ -18,6 +18,7 @@ import { alertShow } from "../../actions/alertActions";
 import { alertHide } from "../../actions/alertActions";
 import { get_vehicles } from "../../actions/vehicles/vehicleActions";
 import { useEffect } from 'react';
+import { if_submitted } from "../../actions/custom_actions/ifSubmitted";
 
 function CreateDelivery(props){
     
@@ -48,7 +49,7 @@ function CreateDelivery(props){
       const data = {
         operator_id: elements["employees"].value ? elements["employees"].value : null,
         vehicles: labelIds ? labelIds : null,
-        delivery_note: delivery_notes ? delivery_notes : null,
+        delivery_notes: delivery_notes ? delivery_notes : null,
         sec_id: sec_id ? sec_id : null,
         time_in: elements["time_in"].value ? elements["time_in"].value : null,
         time_out: elements["time_out"].value ? elements["time_out"].value : null,
@@ -56,6 +57,8 @@ function CreateDelivery(props){
         load_place: elements["load_place"].value ? elements["load_place"].value : null,
         unload_place: elements["unload_place"].value ? elements["unload_place"].value : null,
       };
+      
+      props.if_submitted("You added new delivery! ", data.firstName);
 
       let errors = {
         type: "validation",
@@ -251,6 +254,10 @@ get_vehicles.propTypes = {
   get_vehicles: PropTypes.func.isRequired,
 };
 
+if_submitted.propTypes = {
+  if_submitted: PropTypes.func.isRequired,
+};
+
 const mapStateToProps = (state) =>{ 
 
     return ({
@@ -259,7 +266,8 @@ const mapStateToProps = (state) =>{
         cnt: state.deliveries.cnt,
         time_in: state.deliveries.time_in,
         time_out: state.deliveries.time_out,
-        labelIds: state.deliveries.labelIds
+        labelIds: state.deliveries.labelIds,
+        ifSubmitted: state.ifSubmitted
     });
 
 };
@@ -273,5 +281,6 @@ export default connect(mapStateToProps, {
     setTimeOut,
     addNoteField,
     removeNoteField,
-    get_vehicles
+    get_vehicles,
+    if_submitted
 })(CreateDelivery);

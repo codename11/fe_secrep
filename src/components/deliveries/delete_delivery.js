@@ -18,7 +18,7 @@ function DeleteDelivery(props){
 
   }
 
-  let deliveryid = this.props.deliveryid ? this.props.deliveryid : 0;
+  let deliveryid = props.deliveryid ? props.deliveryid : 0;
   
   return (
     

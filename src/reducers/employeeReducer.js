@@ -48,7 +48,7 @@ export default function(state = initialState, action){
             
             myState = {
                 list_employees: list_employees,
-                linkovi: linkovi
+                pagination: state.pagination,
             };
             
             return myState;

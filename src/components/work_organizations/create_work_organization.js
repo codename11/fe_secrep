@@ -2,6 +2,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import {connect} from "react-redux";
 import { create_work_organization } from "../../actions/work_organizations/workOrganizationsActions";
+import { if_submitted } from "../../actions/custom_actions/ifSubmitted";
 
 import PropTypes from "prop-types";
 
@@ -17,7 +18,7 @@ function CreateWorkOrgs(props){
       };
       
       props.create_work_organization(data);
-
+      props.if_submitted("You created new work organization! ", data.name);
     }
 
     return (
@@ -43,8 +44,15 @@ create_work_organization.propTypes = {
     create_work_organization: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state) =>{return ({});};
+if_submitted.propTypes = {
+    if_submitted: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) =>{return ({
+    ifSubmitted: state.ifSubmitted
+});};
 
 export default connect(mapStateToProps, { 
-    create_work_organization
+    create_work_organization,
+    if_submitted
 })(CreateWorkOrgs);

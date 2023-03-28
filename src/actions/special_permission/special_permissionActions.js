@@ -77,8 +77,15 @@ export const create_permission = (data) => dispatch => {
 
     })
     .then((data) => {
-        
-        let errors = {
+        console.log("createperm: ", data);
+
+        let list_permissions = store.getState() && store.getState().special_permissions && store.getState().special_permissions.list_permissions && store.getState().special_permissions.list_permissions.length>0 ? store.getState().special_permissions.list_permissions : [];
+        let permission = data.specialPermission;
+        dispatch({
+            type: LIST_PERMISSIONS,
+            payload: [...list_permissions, permission]
+        });
+        /*let errors = {
             type: "",
             origin: "",
             messages: []
@@ -170,7 +177,7 @@ export const create_permission = (data) => dispatch => {
                 payload: [...list_permissions]
             });
 
-        }
+        }*/
 
     })
     .catch((error) => {
@@ -185,6 +192,9 @@ export const update_permission = (data) => dispatch => {
 
     auth = store.getState().auth.auth;
     
+    let page = data && data.page ? data.page : null;
+    let index = page && page>0 ? page-1 : null;
+
     fetch(url, {
         method: 'PATCH',
         crossDomain : true,
@@ -202,8 +212,20 @@ export const update_permission = (data) => dispatch => {
 
     })
     .then((data) => {
-        
-        let errors = {
+        console.log("updperm: ", data.specialPermission);
+        let permission = data && data.specialPermission ? data.specialPermission : null;
+        let list_permissions = store.getState() && store.getState().special_permissions && store.getState().special_permissions.list_permissions && store.getState().special_permissions.list_permissions.length>0 ? store.getState().special_permissions.list_permissions.map((item, i) => {
+
+            return item.id===permission.id ? permission : item;
+
+        }) : [];
+
+        dispatch({
+            type: LIST_PERMISSIONS,
+            payload: [...list_permissions]
+        });
+
+        /*let errors = {
             type: "",
             origin: "",
             messages: []
@@ -292,7 +314,7 @@ export const update_permission = (data) => dispatch => {
                 payload: [...list_permissions]
             });
 
-        }
+        }*/
 
     })
     .catch((error) => {

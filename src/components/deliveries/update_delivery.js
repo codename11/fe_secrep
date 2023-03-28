@@ -198,7 +198,7 @@ function UpdateDelivery(props){
             </Button>
         </Form>
 
-        {errors && errors.length ? <Alert className="mt-2" variant="danger" show={this.props.alertState} onClick={() => props.alertHide([false])} dismissible>
+        {errors && errors.length ? <Alert className="mt-2" variant="danger" show={props.alertState} onClick={() => props.alertHide([false])} dismissible>
         <Alert.Heading>There were {errors && errors.length ? "errors:" : null}</Alert.Heading>
         
         <ListGroup variant="flush">

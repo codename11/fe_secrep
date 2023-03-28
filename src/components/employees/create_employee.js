@@ -5,6 +5,7 @@ import { create_employee } from "../../actions/employees/employeeActions";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 import { useEffect } from 'react';
+import { if_submitted } from "../../actions/custom_actions/ifSubmitted";
 
 function CreateEmployee(props){
 
@@ -40,6 +41,8 @@ function CreateEmployee(props){
         for(let i=0;i<elements.length;i++){
             elements[i].value = "";
         }
+
+        props.if_submitted("You added new employee! ", data.firstName);
 
     }
 
@@ -99,17 +102,23 @@ create_employee.propTypes = {
     create_employee: PropTypes.func.isRequired,
 };
 
+if_submitted.propTypes = {
+    if_submitted: PropTypes.func.isRequired,
+};
+
 const mapStateToProps = (state) =>{ 
   
     return ({
         work_organizations: state.list_work_organizations,
         latest_employee: state.latest_employee,
         employees: state.employees.list_employees,
+        ifSubmitted: state.ifSubmitted
     });
 
 };
 
 export default connect(mapStateToProps, { 
     list_work_organizations, 
-    create_employee
+    create_employee,
+    if_submitted
 })(CreateEmployee);

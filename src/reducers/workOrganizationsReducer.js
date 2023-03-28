@@ -49,7 +49,7 @@ export default function(state = initialState, action){
 
             myState = {
                 list_work_organizations: list_work_organizations,
-                linkovi: linkovi
+                pagination: state.pagination,
             };
             
             return myState;
@@ -60,6 +60,7 @@ export default function(state = initialState, action){
             
             myState = {
                 list_work_organizations: list_work_organizations,
+                pagination: state.pagination,
             };
             
             return myState;
@@ -70,6 +71,7 @@ export default function(state = initialState, action){
             
             myState = {
                 list_work_organizations: list_work_organizations,
+                pagination: state.pagination,
             };
             
             return myState;
@@ -80,6 +82,7 @@ export default function(state = initialState, action){
             
             myState = {
                 list_work_organizations: list_work_organizations,
+                pagination: state.pagination,
             };
             
             return myState;

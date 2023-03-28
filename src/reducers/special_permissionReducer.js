@@ -48,7 +48,7 @@ export default function(state = initialState, action){
 
             myState = {
                 list_permissions: list_permissions,
-                linkovi: linkovi
+                pagination: state.pagination
             };
             
             return myState;

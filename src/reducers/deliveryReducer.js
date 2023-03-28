@@ -59,7 +59,8 @@ export default function(state = initialState, action){
                 time_in: state.time_in,
                 time_out: state.time_out,
                 cnt: state.cnt,
-                linkovi: linkovi
+                linkovi: linkovi,
+                pagination: state.pagination
             };
             
             return myState;
@@ -73,7 +74,8 @@ export default function(state = initialState, action){
                 labelIds: labelIds,
                 time_in: state.time_in,
                 time_out: state.time_out,
-                cnt: state.cnt
+                cnt: state.cnt,
+                pagination: state.pagination
             };
             
             return myState;
@@ -87,7 +89,8 @@ export default function(state = initialState, action){
                 time_in: time_in,
                 time_out: state.time_out,
                 labelIds: state.labelIds,
-                cnt: state.cnt
+                cnt: state.cnt,
+                pagination: state.pagination
             };
             
             return myState;
@@ -101,7 +104,8 @@ export default function(state = initialState, action){
                 time_out: time_out,
                 time_in: state.time_in,
                 labelIds: state.labelIds,
-                cnt: state.cnt
+                cnt: state.cnt,
+                pagination: state.pagination
             };
             
             return myState;
@@ -116,6 +120,7 @@ export default function(state = initialState, action){
                 time_out: state.time_out,
                 time_in: state.time_in,
                 labelIds: state.labelIds,
+                pagination: state.pagination
             };
             
             return myState;
@@ -130,6 +135,7 @@ export default function(state = initialState, action){
                 time_out: state.time_out,
                 time_in: state.time_in,
                 labelIds: state.labelIds,
+                pagination: state.pagination
             };
             
             return myState;
@@ -153,6 +159,9 @@ export default function(state = initialState, action){
                 list_deliveries: state.list_deliveries,
                 pagination: pagination,
                 labelIds: state.labelIds,
+                cnt: state.cnt,
+                time_out: state.time_out,
+                time_in: state.time_in
             };
         
             return myState;

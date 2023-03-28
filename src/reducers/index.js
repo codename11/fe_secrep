@@ -14,6 +14,7 @@ import special_permissionReducer from "./special_permissionReducer";
 import userReducer from "./userReducer";
 import customReportsReducer from "./customReportsReducer";
 import roleReducer from "./roleReducer";
+import ifSubmittedReducer from "./ifSubmittedReducer";
 
 export default combineReducers({
     auth: authReducer,
@@ -30,5 +31,6 @@ export default combineReducers({
     special_permissions: special_permissionReducer,
     users: userReducer,
     customReports: customReportsReducer,
-    roles: roleReducer
+    roles: roleReducer,
+    ifSubmitted: ifSubmittedReducer
 });

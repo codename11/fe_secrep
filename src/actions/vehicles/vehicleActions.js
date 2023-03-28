@@ -1,4 +1,4 @@
-import { LIST_VEHICLES, DELETE_VEHICLE, UPDATE_VEHICLE, CREATE_VEHICLE } from "../types";
+import { LIST_VEHICLES, DELETE_VEHICLE, UPDATE_VEHICLE, CREATE_VEHICLE, PAGINATION } from "../types";
 import store from "../../store";
 
 let auth = null;
@@ -7,6 +7,9 @@ export const get_vehicles = (data) => dispatch => {
     
     auth = store.getState().auth.auth;
     
+    let page = data && data.page ? data.page : null;
+    let index = page && page>0 ? page-1 : null;
+
     const url = "http://secrep.test/api/list_vehicles";
     fetch(url, {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -26,10 +29,21 @@ export const get_vehicles = (data) => dispatch => {
 
     })// parses JSON response into native JavaScript objects
     .then((data) => {
+
+        let vehicles = data && data.vehicles && data.vehicles.data ? data.vehicles.data : null;
         
         dispatch({
             type: LIST_VEHICLES,
-            payload: [...data.vehicles]
+            payload: vehicles
+        });
+
+        let pagination = data && data.vehicles ? data.vehicles : null;
+        delete pagination.data;
+        pagination.index = index;
+
+        dispatch({
+            type: PAGINATION,
+            payload: pagination
         });
 
     })
