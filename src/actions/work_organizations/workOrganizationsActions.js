@@ -58,6 +58,9 @@ export const create_work_organization = (data) => dispatch => {
 
     auth = store.getState().auth.auth;
 
+    let page = data && data.page ? data.page : null;
+    let index = page && page>0 ? page-1 : null;
+
     fetch(url, {
         method: 'POST',
         crossDomain : true,
@@ -75,10 +78,30 @@ export const create_work_organization = (data) => dispatch => {
 
     })
     .then((data) => {
+        console.log("wo: ", data);
+        
+        let pagination = {};
+        let list_work_organizations = [];
+        Object.entries(data.workOrganizations).forEach(([name, value], index) => {
+            
+            if(name!=="data"){
+                pagination[name] = value;
+            }
+
+            if(name==="data"){
+                list_work_organizations = [...value];
+            }
+            
+        });
 
         dispatch({
-            type: CREATE_WORK_ORGANIZATION,
-            payload: data
+            type: LIST_WORK_ORGANIZATIONS,
+            payload: list_work_organizations
+        });
+
+        dispatch({
+            type: PAGINATION,
+            payload: pagination
         });
 
     })

@@ -22,7 +22,7 @@ function CreateVehicle(props){
       workOrg: elements["workOrg"].value && elements["workOrg"].value.length > 0 ? elements["workOrg"].value : null
     }
     props.if_submitted("You created new vehicle!", data.registration);
-    //props.createVehicle(data);
+    props.createVehicle(data);
     console.log(props);
   }
 

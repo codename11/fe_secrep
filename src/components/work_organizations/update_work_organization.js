@@ -9,12 +9,12 @@ import { useEffect } from 'react';
 
 function UpdateWorkOrgs(props){
 
-    const { list_work_organizations } = props;
+    /*const { list_work_organizations } = props;
     useEffect(() => {
             
         list_work_organizations();
         //Mora array kao dodatni argument da se ne bi ponavljalo.
-    }, [list_work_organizations]);
+    }, [list_work_organizations]);*/
     
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -34,11 +34,11 @@ function UpdateWorkOrgs(props){
         props.modalHide([false]);
 
     }
-        
-    let selectedWorkOrg = props && props.work_organizations && props.work_organizations.list_work_organizations ? props.work_organizations.list_work_organizations.find((item, i) => {
+
+    let chosen_organization = props && props.work_organizations && props.work_organizations.list_work_organizations ? props.work_organizations.list_work_organizations.find((item, i) => {
         return props.itemId===item.id;
     }) : null;
-        
+        console.log("selectedWorkOrg: ", props);
     return (
 
         <div className="frame1 container updateWorkOrgs">
@@ -46,13 +46,13 @@ function UpdateWorkOrgs(props){
             <Form onSubmit={(e)=>handleSubmit(e)} className="m-1">
                 
                 <Form.Group className="mb-1" controlId="workorgid">
-                    <Form.Label>Work organization with internal id of "{selectedWorkOrg.id}" will be updated.</Form.Label>
-                    <Form.Control type="hidden" name="workorgid" value={selectedWorkOrg.id}/>
+                    <Form.Label>Work organization with internal id of "{chosen_organization.id}" will be updated.</Form.Label>
+                    <Form.Control type="hidden" name="workorgid" value={chosen_organization.id}/>
                 </Form.Group>
 
-                <Form.Group className="mb-1" controlId="workOrgName" key={selectedWorkOrg.name}>
+                <Form.Group className="mb-1" controlId="workOrgName" key={chosen_organization.name}>
                     <Form.Label>Name</Form.Label>
-                    <Form.Control type="text" name="name" placeholder="Enter new work organization" defaultValue={selectedWorkOrg.name}/>
+                    <Form.Control type="text" name="name" placeholder="Enter new work organization" defaultValue={chosen_organization.name}/>
                 </Form.Group>
 
                 <Button variant="outline-warning" type="submit" className="m-1">

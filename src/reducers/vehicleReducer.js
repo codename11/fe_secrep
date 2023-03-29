@@ -1,8 +1,7 @@
-import { LIST_VEHICLES, DELETE_VEHICLE, UPDATE_VEHICLE, PAGINATION } from "../actions/types";
+import { LIST_VEHICLES, DELETE_VEHICLE, UPDATE_VEHICLE, PAGINATION, CREATE_VEHICLE } from "../actions/types";
 
 const initialState = {
     list_vehicles: null,
-    deleted_vehicle_id: null,
     updated_vehicle_id: null,
     pagination: {
         current_page: null,
@@ -22,7 +21,7 @@ const initialState = {
 
 let myState = null;
 let list_vehicles = null;
-let deleted_vehicle_id = null;
+
 let updated_vehicle_id = null;
 let pagination = {
     current_page: null,
@@ -53,15 +52,24 @@ export default function(state = initialState, action){
             };
             
             return myState;
-        
-        case DELETE_VEHICLE:
+
+        case CREATE_VEHICLE:
             
-            deleted_vehicle_id = action.payload.vehicle.id;
-            list_vehicles = action.payload.vehicles;
+            list_vehicles = action.payload;
             
             myState = {
                 list_vehicles: list_vehicles,
-                deleted_vehicle_id: deleted_vehicle_id,
+                pagination: state.pagination
+            };
+            
+            return myState;
+        
+        case DELETE_VEHICLE:
+            
+            list_vehicles = action.payload;
+            
+            myState = {
+                list_vehicles: list_vehicles,
                 pagination: state.pagination
             }
 

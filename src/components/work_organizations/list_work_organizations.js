@@ -190,6 +190,8 @@ function WorkOrgs(props){
 
     }
 
+    console.log("workrgs: ", props);
+
     let myModal = props && props.auth && props.auth.access_token ? 
         <CustomModal modalheadertext={modalHeaderText} modalbodytext={modalBodyText} modalfootertext={modalFooterText} form={form} show={props.modalState} purpose={props.modal_purpose} onHide={() => props.modalHide([false])}/> 
     : null;

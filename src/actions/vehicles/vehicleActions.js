@@ -59,6 +59,9 @@ export const deleteVehicle = (data) => dispatch => {
 
     auth = store.getState().auth.auth;
 
+    let page = data && data.page ? data.page : null;
+    let index = page && page>0 ? page-1 : null;
+
     fetch(url, {
         method: 'DELETE',
         crossDomain : true,
@@ -78,10 +81,21 @@ export const deleteVehicle = (data) => dispatch => {
 
     })
     .then((data) => {
-        
+
+        let vehicles = data && data.vehicles && data.vehicles.data ? data.vehicles.data : null;
+
         dispatch({
             type: DELETE_VEHICLE,
-            payload: data
+            payload: vehicles
+        });
+
+        let pagination = data && data.vehicles ? data.vehicles : null;
+        delete pagination.data;
+        pagination.index = index;
+
+        dispatch({
+            type: PAGINATION,
+            payload: pagination
         });
 
     })
@@ -152,6 +166,9 @@ export const createVehicle = (data) => dispatch => {
 
     auth = store.getState().auth.auth;
     
+    let page = data && data.page ? data.page : null;
+    let index = page && page>0 ? page-1 : null;
+    
     fetch(url, {
         method: 'POST',
         crossDomain : true,
@@ -170,9 +187,11 @@ export const createVehicle = (data) => dispatch => {
     })
     .then((data) => {
         
+        let list_vehicles = store && store.getState() && store.getState().vehicles && store.getState().vehicles.list_vehicles ? store.getState().vehicles.list_vehicles : null;
+
         dispatch({
             type: CREATE_VEHICLE,
-            payload: data
+            payload: list_vehicles
         });
 
     })

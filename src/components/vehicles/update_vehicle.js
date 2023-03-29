@@ -25,7 +25,7 @@ function UpdateVehicle(props){
     props.modalHide([false])
 
   }
-
+  console.log("veh: ", props);
   let vehicle = props.vehicle ? props.vehicle : "";
     
   let option1 = [<option key={""} value={""}>None</option>];
