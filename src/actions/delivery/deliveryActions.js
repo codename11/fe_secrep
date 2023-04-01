@@ -9,6 +9,9 @@ export const create_delivery = (data) => dispatch => {
 
     auth = store.getState().auth.auth;
     
+    let page = data && data.page ? data.page : null;
+    let index = page && page>0 ? page-1 : null;
+
     fetch(url, {
         method: 'POST',
         crossDomain : true,
@@ -26,12 +29,21 @@ export const create_delivery = (data) => dispatch => {
 
     })
     .then((data) => {
-        
-        let list_deliveries = store.getState() && store.getState().deliveries && store.getState().deliveries.list_deliveries && store.getState().deliveries.list_deliveries.length>0 ? store.getState().deliveries.list_deliveries : [];
+        console.log("data: ", data);
+        let deliveries = data && data.deliveries && data.deliveries.data ? data.deliveries.data : null;
         
         dispatch({
             type: LIST_DELIVERIES,
-            payload: [...list_deliveries, data.delivery]
+            payload: deliveries
+        });
+
+        let pagination = data && data.deliveries ? data.deliveries : null;
+        delete pagination.data;
+        pagination.index = index;
+
+        dispatch({
+            type: PAGINATION,
+            payload: pagination
         });
 
     })
@@ -117,20 +129,16 @@ export const deleteDelivery = (data) => dispatch => {
 
     })// parses JSON response into native JavaScript objects
     .then((data) => {
-        /*console.log("deldel: ", data);
-        let deliveries = list_deliveries.filter((item, i) => {
+        console.log("deldel: ", data);
+        /*let deliveries = list_deliveries.filter((item, i) => {
             return data.delivery.id !== item.id;
         });*/
 
-        let list_deliveries = store.getState() && store.getState().deliveries && store.getState().deliveries.list_deliveries ? store.getState().deliveries.list_deliveries : [];
+        let list_deliveries = data && data.deliveries && data.deliveries.data ? data.deliveries.data : null;
         
-        let deliveries = list_deliveries.filter((item, i) => {
-            return data.delivery.id !== item.id;
-        });
-
         dispatch({
             type: LIST_DELIVERIES,
-            payload: [...deliveries]
+            payload: [...list_deliveries]
         });
 
         let pagination = data && data.deliveries ? data.deliveries : null;

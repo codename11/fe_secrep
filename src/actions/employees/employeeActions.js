@@ -58,7 +58,7 @@ export const create_employee = (data) => dispatch => {
     let url = "http://secrep.test/api/create_employee";
     
     auth = store.getState().auth.auth;
-    let list_employees = store.getState().employees.list_employees;
+    
     
     fetch(url, {
         method: 'POST',
@@ -75,9 +75,9 @@ export const create_employee = (data) => dispatch => {
 
     })
     .then((data) => {
-        
-        list_employees.push(data.employee);
-        
+    
+        let list_employees = store && store.getState() && store.getState().employees && store.getState().employees.list_employees ? store.getState().employees.list_employees : null;
+
         dispatch({
             type: LIST_EMPLOYEES,
             payload: [...list_employees]

@@ -9,12 +9,12 @@ import { useEffect } from 'react';
 
 function DeleteWorkOrgs(props){
 
-    const { list_work_organizations } = props;
+    /*const { list_work_organizations } = props;
     useEffect(() => {
             
         list_work_organizations();
         //Mora array kao dodatni argument da se ne bi ponavljalo.
-    }, [list_work_organizations]);
+    }, [list_work_organizations]);*/
     
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -33,7 +33,7 @@ function DeleteWorkOrgs(props){
     let selectedWorkOrg = props && props.work_organizations && props.work_organizations.list_work_organizations ? props.work_organizations.list_work_organizations.find((item, i) => {
         return props.itemId===item.id;
     }) : null;
-        
+        console.log("WorkOrg: ", props);
     return (
 
         <div className="frame1 container updateWorkOrgs">
