@@ -86,7 +86,7 @@ function GetVehicles(props){
         let forma = event.target; 
         let elements = forma.elements;
         let per_page = elements[0].value;
-        let metoda = elements[1].checked ? elements[1].value : (elements[2].checked ? elements[2].value : null);
+        let metoda = elements[1].checked ? elements[1].value : (elements[2].checked ? elements[2].value.toUpperCase() : null);
         let per_page_id = 1;
         if(per_page && metoda && per_page_id){
             let data = {
@@ -95,13 +95,14 @@ function GetVehicles(props){
                 metoda: metoda,
                 "per_page_id": per_page_id
             }
+            console.log("data: ", data);
             props.set_per_page(data);
             props.get_vehicles_custom({page: 1});
             props.setPageNumber(1, 0);
 
         }
-        let pagination = this.props && this.props.pagination ? this.props.pagination :null;
-        this.firstPage(pagination);
+        let pagination = props && props.pagination ? props.pagination :null;
+        firstPage(pagination);
 
     }
 
@@ -137,9 +138,13 @@ function GetVehicles(props){
             }
 
         }
-        
+        console.log("handleSubmit: ", data);
         props.get_vehicles_custom(data);
-
+        /*
+        Dodati jos jedno dugme koje ce praviti izvestaj po onim parametrima.
+        Parametri trebaju pozivati nezavisnu funkciju koja ce vrsiti upit 
+        samo za izvestaj. Posto ovde ima i paginacija.
+        */
     }
 
     let pagination = props && props.pagination ? props.pagination : null;
@@ -409,7 +414,7 @@ function GetVehicles(props){
     let myModal = props && props.auth && props.auth.access_token ? 
       <CustomModal modalheadertext={modalHeaderText} modalbodytext={modalBodyText} form={form} chosen_vehicle={chosen_vehicle} show={props.modalState} vehicleid={props.itemId} purpose={props.modal_purpose} onHide={() => props.modalHide([false])}/> 
     : null;
-    
+    console.log("cusRep: ", props);
     return (
         <div>
             <div>

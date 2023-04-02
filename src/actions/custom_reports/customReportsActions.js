@@ -348,14 +348,14 @@ export const set_per_page = (data) => dispatch => {
 
     let metoda = data && data.metoda ? data.metoda : null;
     let url = null;
-    if(metoda==="post"){
+    if(metoda==="POST"){
         url = create_url;
     }
 
-    if(metoda==="patch"){
+    if(metoda==="PATCH"){
         url = update_url;
     }
-
+    console.log("set_per_page: ", data);
     fetch(url, {
         method: metoda, // *GET, POST, PUT, DELETE, etc.
         crossDomain : true,
