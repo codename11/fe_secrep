@@ -62,3 +62,5 @@ export const DASHBOARD_TAB = "DASHBOARD_TAB";
 export const LIST_ROLES = "LIST_ROLES";
 
 export const IF_SUBMITTED = "IF_SUBMITTED";
+
+export const CHECKED = "CHECKED";

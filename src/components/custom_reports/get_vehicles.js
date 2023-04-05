@@ -20,6 +20,7 @@ import DeleteVehicle from '../vehicles/delete_vehicle';
 import UpdateVehicle from '../vehicles/update_vehicle';
 import { get_vehicle_types } from "../../actions/vehicle_types/vehicleTypesActions";
 import { list_work_organizations } from "../../actions/work_organizations/workOrganizationsActions";
+import {handleToggle} from "../../actions/custom_reports/customReportsActions";
 
 function GetVehicles(props){
 
@@ -168,13 +169,6 @@ function GetVehicles(props){
     }) : null;
 
     let href = props && props.href ? props.href : null;
-
-    let accordionVehicleList = null;
-    /*let accordionVehicleList = <div className="grid-container2"><div className="itemGV6 grid-container1 gc2-item1">{tmp1}</div>
-        <a className="btn btn-outline-info ReportPageDownload" href={href} download="wholeReport" onClick={(e)=> props.toCSV(e, vehicleList)}>
-            ReportPageDownload
-        </a>
-    </div>;*/
         
     let per_page = pagination && pagination.per_page ? pagination.per_page : null;
     let checkIfUtility = props && props.auth && props.auth.user && props.auth.user.utility && props.auth.user.utility.id && Number.isInteger(props.auth.user.utility.id) ? true : false;
@@ -283,6 +277,7 @@ function GetVehicles(props){
     //Odavde pocinje tabela
 
     let vehicle_thead = <tr>
+    <th>Choose for report</th>
     <th>registration</th>
     <th>type</th>
     <th>work_organization.name</th>
@@ -292,6 +287,8 @@ function GetVehicles(props){
     </tr>;
 
     let thead = <thead>{vehicle_thead}</thead>;
+
+    let checkboxes = props && props.checkboxes ? props.checkboxes : null;
 
     let vehicle_tbody = vehicleList ? vehicleList.map((item, i) => {
 
@@ -325,8 +322,29 @@ function GetVehicles(props){
         let registration = item && item.registration ? item.registration : null;
         let typeName = item && item.type && item.type.name ? item.type.name : null;
         let work_organizationName = item && item.work_organization && item.work_organization.name ? item.work_organization.name : null;
-  
+
+        let len1 = checkboxes && checkboxes.length && checkboxes.length>0 ? checkboxes.length : null;
+
+        let isChecked = false;
+        for(let i=0;i<len1;i++){
+
+            if(checkboxes && checkboxes[i] && checkboxes[i].id && checkboxes[i].id===item.id){
+                isChecked = true;
+            }
+
+        }
+
         return <tr key={vehicleId}>
+            <td>
+                <Form.Check
+                    label={i+1+"."}
+                    id={"report"+i}
+                    name={"report"}
+                    type={"checkbox"}
+                    checked={isChecked}
+                    onChange={(e) => props.handleToggle(e, item)}
+                />
+            </td>
             <td>{registration}</td>
             <td>{typeName}</td>
             <td>{work_organizationName}</td>
@@ -334,12 +352,12 @@ function GetVehicles(props){
             <td>{updated_at}</td>
             <td className="grid-container">
               
-              {props && props.auth && props.auth.access_token ? 
-                <Button variant="outline-warning m-1" itemID={vehicleId} onClick={() => props.modalShow([true, item.id, "update"])}>Update</Button>
-              : null}
+                {props && props.auth && props.auth.access_token ? 
+                    <Button variant="outline-warning m-1" itemID={vehicleId} onClick={() => props.modalShow([true, item.id, "update"])}>Update</Button>
+                : null}
               
-              {props && props.auth && props.auth.access_token ? 
-                <Button variant="outline-danger m-1" itemID ={vehicleId} onClick={() => props.modalShow([true, item.id, "delete"])}>Delete</Button>
+                {props && props.auth && props.auth.access_token ? 
+                    <Button variant="outline-danger m-1" itemID ={vehicleId} onClick={() => props.modalShow([true, item.id, "delete"])}>Delete</Button>
                 : null}
   
             </td>
@@ -414,7 +432,7 @@ function GetVehicles(props){
     let myModal = props && props.auth && props.auth.access_token ? 
       <CustomModal modalheadertext={modalHeaderText} modalbodytext={modalBodyText} form={form} chosen_vehicle={chosen_vehicle} show={props.modalState} vehicleid={props.itemId} purpose={props.modal_purpose} onHide={() => props.modalHide([false])}/> 
     : null;
-    console.log("cusRep: ", props);
+    
     return (
         <div>
             <div>
@@ -519,8 +537,12 @@ function GetVehicles(props){
                 </Button>
 
             </Form>
-            {accordionVehicleList}
+            
             {vehicle_table}
+
+            <a className="btn btn-outline-info" href={href} download="wholeReport" onClick={(e)=> props.toCSV(e, checkboxes)}>
+                ReportPageDownload
+            </a>
 
             <Pagination className="pagination">
                 <Pagination.First onClick={()=>firstPage(pagination)}/>
@@ -561,6 +583,10 @@ set_per_page.propTypes = {
     set_per_page: PropTypes.func.isRequired,
 };
 
+handleToggle.propTypes = {
+    handleToggle: PropTypes.func.isRequired,
+};
+
 const mapStateToProps = (state) =>{ 
     
     return ({
@@ -577,7 +603,8 @@ const mapStateToProps = (state) =>{
         itemId: state.modalState.itemId,
         deleted_vehicle_id: state.deleted_vehicle_id,
         modal_purpose: state.modalState.modal_purpose,
-        updated_vehicle_id: state.updated_vehicle_id
+        updated_vehicle_id: state.updated_vehicle_id,
+        checkboxes: state.form.checkboxes,
     });
 
 };
@@ -593,4 +620,5 @@ export default connect(mapStateToProps, {
     modalHide,
     get_vehicle_types, 
     list_work_organizations,
+    handleToggle
 })(GetVehicles);

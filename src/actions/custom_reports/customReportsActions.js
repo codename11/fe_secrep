@@ -1,4 +1,4 @@
-import { LIST_VEHICLES, LIST_EMPLOYEES, LIST_DELIVERIES, LIST_USERS, TIME_IN, TIME_OUT, HREF, PAGINATION, LINKOVI,  LIST_ROLES} from "../types";
+import { LIST_VEHICLES, LIST_EMPLOYEES, LIST_DELIVERIES, LIST_USERS, TIME_IN, TIME_OUT, HREF, PAGINATION, LINKOVI, LIST_ROLES, CHECKED} from "../types";
 import store from "../../store";
 import { json2csv } from 'json-2-csv';
 
@@ -263,9 +263,7 @@ export const get_users = (data) => dispatch => {
 }
 
 export const toCSV = (e, data) => dispatch => {
-    let vehicleList = store.getState() && store.getState().vehicles.list_vehicles && store.getState().vehicles.list_vehicles.length>0 ? store.getState().vehicles.list_vehicles : null;
-    let data1 = data ? data : vehicleList;
-
+    
     let json2csvCallback = (err, csv) => {
         if(err){
             throw err;
@@ -278,7 +276,7 @@ export const toCSV = (e, data) => dispatch => {
         
     };
 
-    json2csv(vehicleList, json2csvCallback, {expandArrayObjects:true});
+    json2csv(data, json2csvCallback, {expandArrayObjects:true});
 
 }
 
@@ -491,4 +489,37 @@ export const update_user_role = (data) => dispatch => {
         console.error('Error:', error);
     });
 
+}
+
+export const handleToggle = (e, data) => dispatch => {
+    
+    let isChecked = e.target.checked;
+
+    let checkboxesState = store && store.getState() && store.getState().form && store.getState().form.checkboxes ? [...store.getState().form.checkboxes] : [];
+
+    //If item is in array and where it is(index).
+    let index = checkboxesState.findIndex((item, i) => {
+        return item.id===data.id;
+    })
+
+    if(isChecked===true && index===-1){
+
+        dispatch({
+            type: CHECKED,
+            payload: [...checkboxesState, data]
+        });
+
+    }
+
+    if(isChecked===false && index>-1){
+
+        checkboxesState.splice(index, 1);
+        
+        dispatch({
+            type: CHECKED,
+            payload: [...checkboxesState]
+        });
+
+    }
+    
 }

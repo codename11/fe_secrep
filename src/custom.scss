@@ -215,3 +215,11 @@
 .textCenter{
     text-align: center;
 }
+
+[id^="report"]{
+    
+}
+
+[id^="report"]+label{
+    color: #6666ff;
+}
