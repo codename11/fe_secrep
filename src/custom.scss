@@ -223,3 +223,30 @@
 [id^="report"]+label{
     color: #6666ff;
 }
+
+@keyframes myAnimation1{
+    0%{
+        display: none;
+        opacity: 0;
+    }
+    25%{
+        opacity: 0.5;
+    }
+    50%{
+        opacity: 1;
+    }
+    75%{
+        opacity: 0.5;
+    }
+    100%{
+        opacity: 0;
+    }
+}
+  
+.temporary1{
+    display: block !important;
+    animation-name: myAnimation1;
+    animation-duration: 2000ms;
+    animation-fill-mode: forwards;
+    color:red;
+}
