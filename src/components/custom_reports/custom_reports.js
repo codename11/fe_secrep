@@ -17,7 +17,7 @@ function CustomReports(props){
             <Accordion defaultActiveKey="0">
 
                 <Accordion.Item eventKey="0">
-                    <Accordion.Header>List vehicles</Accordion.Header>
+                    <Accordion.Header>Vehicles</Accordion.Header>
                     <Accordion.Body className="accordion-custom">
 
                         <GetVehicles/>
@@ -26,7 +26,7 @@ function CustomReports(props){
                 </Accordion.Item>
 
                 <Accordion.Item eventKey="1">
-                    <Accordion.Header>List deliveries</Accordion.Header>
+                    <Accordion.Header>Deliveries</Accordion.Header>
                     <Accordion.Body>
 
                         <GetDeliveries get_deliveries={props.get_deliveries}/>
@@ -35,7 +35,7 @@ function CustomReports(props){
                 </Accordion.Item>
 
                 <Accordion.Item eventKey="2">
-                    <Accordion.Header>List employees</Accordion.Header>
+                    <Accordion.Header>Employees</Accordion.Header>
                     <Accordion.Body>
                         
                         <GetEmployees get_employees={props.get_employees}/>
@@ -44,7 +44,7 @@ function CustomReports(props){
                 </Accordion.Item>
 
                 <Accordion.Item eventKey="3">
-                    <Accordion.Header>List users</Accordion.Header>
+                    <Accordion.Header>Users</Accordion.Header>
                     <Accordion.Body>
 
                     <GetUsers get_users={props.get_users}/>

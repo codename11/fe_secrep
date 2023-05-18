@@ -172,7 +172,7 @@ function ListDeliveries(props){
         return myPages;
 
     };
-
+    
   let list_deliveries = props && props.list_deliveries ? props.list_deliveries : null;
 
   let chosen_delivery = props && props.list_deliveries && props.list_deliveries.length > 0 && props.itemId ? props.list_deliveries.find((item, i) => {
@@ -201,9 +201,9 @@ function ListDeliveries(props){
       <td>{item.unload_place}</td>
       <td>{item.time_in}</td>
       <td>{item.time_out}</td>
-      <td>{item.operator.lastName+" "+item.operator.firstName}</td>
-      <td>{item.entered_by.name}</td>
-      <td>{item.operator.work_organization.name}</td>
+      <td>{item && item.operator && item.operator.lastName ? item.operator.lastName+" "+item.operator.firstName : null}</td>
+      <td>{item && item.entered_by && item.entered_by.name ? item.entered_by.name : null}</td>
+      <td>{item && item.operator && item.operator.work_organization && item.operator.work_organization.name ? item.operator.work_organization.name : null}</td>
       <td>{item.comment}</td>
       <td className="grid-container">
         

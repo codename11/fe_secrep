@@ -36,15 +36,15 @@ function App(props){
     
   let tabKey = props.tabKey;
   let access_token = props && props.auth && props.auth.access_token ? props.auth.access_token : null;
-  let user_role = props && props.auth && props.auth.role ? props.auth.role.name : null;
-    
+  let user_role = props && props.auth && props.auth.user && props.auth.user.role && props.auth.user.role.name ? props.auth.user.role.name : null;
+
   return (
     <Container fluid className="container1">
 
       {user_role !== "admin" ? <h3 className="alert alert-warning">If you are not an Administrator, you can only peruse pages. All other funcionalities are disabled.</h3> : null}
       {access_token!==null ? <Button className="logout" variant="outline-warning" onClick={props.logout}>logout</Button> : null}
 
-      <Tabs id="controlled-tab-example" activeKey={tabKey} onSelect={(tabKey)=> {
+        <Tabs id="controlled-tab-example" activeKey={tabKey} onSelect={(tabKey)=> {
           props.setTab(tabKey); handleSelect(tabKey);
         }} className="mb-3">
         

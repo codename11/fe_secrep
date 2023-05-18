@@ -1,4 +1,4 @@
-import { REGISTER, LOGIN, LOGIN_TAB, LOGOUT} from "../types";
+import { REGISTER, LOGIN, LOGIN_TAB, LOGOUT, VEHICLES_TAB} from "../types";
 
 export const register = (data) => dispatch => {
     
@@ -59,6 +59,11 @@ export const login = (data) => dispatch => {
         dispatch({
             type: LOGIN,
             payload: data
+        });
+
+        dispatch({
+            type: VEHICLES_TAB,
+            payload: "vehicles_tab"
         });
 
     })
